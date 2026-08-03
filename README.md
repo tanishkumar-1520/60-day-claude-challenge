@@ -1,6 +1,6 @@
 # 60 Days of AI
 
-Hi, I'm TK Kumar.
+Hi, I'm Tanish Kumar.
 
 I'm a 4th Year B.Tech CSE student passionate about Web Development and Artificial Intelligence.
 
