@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personal Environmental Health Analyzer</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:#07101d;color:#eef4ff;min-height:100vh}
+button,select,input{font:inherit}
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+.sidebar{background:#081321;border-right:1px solid #1c3048;padding:22px 14px;position:sticky;top:0;height:100vh}
+.brand{display:flex;gap:10px;align-items:center;font-weight:800;font-size:17px;margin:4px 10px 28px}
+.brand span{font-size:30px}
+.nav button{display:block;width:100%;padding:12px 13px;margin:5px 0;background:transparent;border:0;border-radius:9px;color:#b8c5d8;text-align:left;cursor:pointer}
+.nav button:hover,.nav button.active{background:#182d47;color:#fff}
+.main{padding:26px;overflow:hidden}
+.top{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:20px}
+h1{font-size:28px}.sub{color:#91a1b7;margin-top:5px}
+.actions{display:flex;gap:10px}.btn{border:1px solid #29415e;background:#101e31;color:#fff;padding:10px 14px;border-radius:8px;cursor:pointer}.btn.primary{background:#4d28c9;border-color:#6848e8}
+.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.card{background:#0c1828;border:1px solid #20364f;border-radius:12px;padding:17px}
+.metric .label{color:#8fa0b6;font-size:13px}.metric .value{font-size:26px;font-weight:800;margin-top:7px}.metric small{color:#7f91a7}
+.filters{margin:16px 0;display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.filter{background:#0c1828;border:1px solid #20364f;border-radius:10px;padding:11px}
+.filter label{display:block;color:#8fa0b6;font-size:12px;margin-bottom:6px}
+select,input{width:100%;background:#071321;color:#fff;border:1px solid #29415e;border-radius:7px;padding:9px}
+.grid{display:grid;grid-template-columns:1.5fr 1fr;gap:14px}
+.chart{min-height:300px}.chart h3,.table h3{margin-bottom:14px}
+.bars{height:235px;display:flex;align-items:flex-end;gap:16px;border-bottom:1px solid #29415e;padding:15px 10px 0}
+.barwrap{flex:1;height:100%;display:flex;align-items:flex-end;gap:6px;justify-content:center}
+.bar{width:34px;border-radius:6px 6px 0 0;background:#5c8cff;min-height:5px;position:relative}
+.bar.pm{background:#d99a46}.bar span{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:11px}
+.x{font-size:11px;color:#9baabd;text-align:center;margin-top:7px}
+.rank{display:flex;flex-direction:column;gap:10px}.rankrow{display:grid;grid-template-columns:30px 1fr 60px;align-items:center;gap:10px}.track{height:8px;background:#17283c;border-radius:10px;overflow:hidden}.fill{height:100%;border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:11px;border-bottom:1px solid #1d3148;text-align:left}th{color:#90a1b6;font-weight:600}
+.badge{padding:4px 8px;border-radius:20px;font-size:11px}.good{background:#173c29;color:#64df91}.moderate{background:#4b3b11;color:#ffd45c}.poor{background:#4a2018;color:#ff8a65}
+.detail{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.detail .mini{padding:13px;background:#091524;border:1px solid #1d3148;border-radius:9px}.mini b{display:block;font-size:20px;margin-top:4px}
+.insights li{list-style:none;padding:10px 0;border-bottom:1px solid #1d3148;color:#cbd6e5}
+.footer{margin-top:15px;color:#71849c;font-size:12px;display:flex;justify-content:space-between}
+@media(max-width:1100px){.metrics{grid-template-columns:repeat(3,1fr)}.filters{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:800px){.app{display:block}.sidebar{position:static;height:auto}.nav{display:grid;grid-template-columns:repeat(2,1fr)}.main{padding:16px}.top{display:block}.actions{margin-top:12px}.metrics,.filters,.grid{grid-template-columns:1fr}.bars{gap:8px}.bar{width:25px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><span>🌍</span><div>Environmental<br>Health Analyzer</div></div>
+  <div class="nav">
+    <button class="active">▦ Dashboard</button><button>♧ Air Quality</button>
+    <button>♢ Water Quality</button><button>♜ City Comparison</button>
+    <button>♡ Health Analysis</button><button>▤ Report Card</button>
+    <button>⚙ Recommendations</button><button>ⓘ About</button>
+  </div>
+</aside>
+
+<main class="main">
+<header class="top">
+  <div><h1>Personal Environmental Health Analyzer</h1><div class="sub">Interactive environmental insights dashboard</div></div>
+  <div class="actions"><button class="btn" onclick="window.print()">Print</button><button class="btn primary" onclick="downloadReport()">Download Report</button></div>
+</header>
+
+<section class="metrics">
+ <div class="card metric"><div class="label">Average AQI</div><div class="value" id="avg">—</div><small>Across selected cities</small></div>
+ <div class="card metric"><div class="label">Highest AQI City</div><div class="value" id="high">—</div><small id="highVal"></small></div>
+ <div class="card metric"><div class="label">Lowest AQI City</div><div class="value" id="low">—</div><small id="lowVal"></small></div>
+ <div class="card metric"><div class="label">Cities Analyzed</div><div class="value" id="count">—</div><small>Demo dataset</small></div>
+ <div class="card metric"><div class="label">Environmental Score</div><div class="value" id="score">—</div><small>Air + water quality</small></div>
+</section>
+
+<section class="filters">
+ <div class="filter"><label>City</label><select id="city"><option value="all">All Cities</option></select></div>
+ <div class="filter"><label>AQI Range</label><select id="aqi"><option value="all">All</option><option value="good">0–50</option><option value="mod">51–100</option><option value="poor">101+</option></select></div>
+ <div class="filter"><label>Pollutant</label><select id="pollutant"><option value="AQI">AQI</option><option value="PM2.5">PM2.5</option><option value="PM10">PM10</option></select></div>
+ <div class="filter"><label>Health Risk</label><select id="risk"><option value="all">All</option><option value="Low">Low</option><option value="Moderate">Moderate</option><option value="High">High</option></select></div>
+ <div class="filter"><label>Comparison</label><select id="compare"><option value="all">All Cities</option><option value="top2">Top 2 Cleanest</option><option value="bottom2">Top 2 Polluted</option></select></div>
+</section>
+
+<section class="grid">
+ <div class="card chart"><h3 id="chartTitle">AQI Comparison</h3><div class="bars" id="bars"></div></div>
+ <div class="card"><h3>City Ranking</h3><div class="rank" id="ranking"></div></div>
+</section>
+
+<section class="grid" style="margin-top:14px">
+ <div class="card table"><h3>Environmental Metrics</h3><div style="overflow:auto"><table><thead><tr><th>City</th><th>AQI</th><th>PM2.5</th><th>PM10</th><th>Air</th><th>Water</th><th>Health</th></tr></thead><tbody id="tbody"></tbody></table></div></div>
+ <div class="card"><h3 id="detailTitle">City Detail</h3><div class="detail" id="details"></div></div>
+</section>
+
+<section class="grid" style="margin-top:14px">
+ <div class="card insights"><h3>Insights</h3><ul id="insights"></ul></div>
+ <div class="card"><h3>Personal Recommendations</h3><ul class="insights" id="recommendations"></ul></div>
+</section>
+
+<div class="footer"><span>Demo data for dashboard practice. Verify current local AQI/water-quality sources before making health decisions.</span><span>Day 8 • AI Dashboard Project</span></div>
+</main>
+</div>
+
+<script>
+const data=[
+ {city:"Delhi",aqi:152,pm25:64,pm10:118,air:"Poor",water:"Moderate",health:38,risk:"High",waterScore:55},
+ {city:"Mumbai",aqi:96,pm25:42,pm10:78,air:"Moderate",water:"Moderate",health:62,risk:"Moderate",waterScore:62},
+ {city:"Bengaluru",aqi:32,pm25:18,pm10:36,air:"Good",water:"Good",health:85,risk:"Low",waterScore:84},
+ {city:"Hyderabad",aqi:58,pm25:26,pm10:52,air:"Moderate",water:"Good",health:70,risk:"Moderate",waterScore:78}
+];
+const $=id=>document.getElementById(id);
+const avg=a=>a.length?Math.round(a.reduce((s,x)=>s+x.aqi,0)/a.length):0;
+function category(a){return a<=50?"Good":a<=100?"Moderate":"Poor"}
+function filtered(){
+ let a=[...data], city=$("city").value, range=$("aqi").value, risk=$("risk").value, comp=$("compare").value;
+ if(city!=="all") a=a.filter(x=>x.city===city);
+ if(range==="good") a=a.filter(x=>x.aqi<=50);
+ if(range==="mod") a=a.filter(x=>x.aqi>50&&x.aqi<=100);
+ if(range==="poor") a=a.filter(x=>x.aqi>100);
+ if(risk!=="all") a=a.filter(x=>x.risk===risk);
+ if(comp==="top2") a.sort((x,y)=>x.aqi-y.aqi),a=a.slice(0,2);
+ if(comp==="bottom2") a.sort((x,y)=>y.aqi-x.aqi),a=a.slice(0,2);
+ return a;
+}
+function render(){
+ const a=filtered(), p=$("pollutant").value;
+ $("avg").textContent=avg(a); $("count").textContent=a.length;
+ const hi=a.reduce((x,y)=>y.aqi>x.aqi?y:x,a[0]), lo=a.reduce((x,y)=>y.aqi<x.aqi?y:x,a[0]);
+ $("high").textContent=hi?hi.city:"—"; $("highVal").textContent=hi?hi.aqi+" AQI":"";
+ $("low").textContent=lo?lo.city:"—"; $("lowVal").textContent=lo?lo.aqi+" AQI":"";
+ $("score").textContent=a.length?Math.round(a.reduce((s,x)=>s+x.health,0)/a.length)+"/100":"—";
+ $("chartTitle").textContent=p+" Comparison";
+ const max=Math.max(...a.map(x=>x[p==="AQI"?"aqi":p==="PM2.5"?"pm25":"pm10"]),1);
+ $("bars").innerHTML=a.map(x=>{let v=x[p==="AQI"?"aqi":p==="PM2.5"?"pm25":"pm10"];return `<div class="barwrap"><div><div class="bar" style="height:${Math.max(8,v/max*190)}px"><span>${v}</span></div><div class="x">${x.city}</div></div></div>`}).join("");
+ $("ranking").innerHTML=[...a].sort((x,y)=>x.health-y.health).map((x,i)=>`<div class="rankrow"><b>#${i+1}</b><div><div>${x.city}</div><div class="track"><div class="fill" style="width:${x.health}%;background:${x.health<50?'#e24a4a':x.health<70?'#e0a52d':'#35c866'}"></div></div></div><b>${x.health}</b></div>`).join("");
+ $("tbody").innerHTML=a.map(x=>`<tr><td>${x.city}</td><td>${x.aqi}</td><td>${x.pm25}</td><td>${x.pm10}</td><td><span class="badge ${x.air==="Good"?"good":x.air==="Moderate"?"moderate":"poor"}">${x.air}</span></td><td>${x.water}</td><td>${x.health}/100</td></tr>`).join("");
+ const selected=$("city").value!=="all"?data.find(x=>x.city===$("city").value):lo;
+ $("detailTitle").textContent=selected?selected.city+" Detail":"City Detail";
+ $("details").innerHTML=selected?[
+ ["AQI",selected.aqi],["PM2.5",selected.pm25+" µg/m³"],["PM10",selected.pm10+" µg/m³"],["Air Quality",selected.air],["Water Score",selected.waterScore+"/100"],["Health Score",selected.health+"/100"]
+ ].map(x=>`<div class="mini"><span>${x[0]}</span><b>${x[1]}</b></div>`).join(""):"<div>Select a city to view details.</div>";
+ $("insights").innerHTML=a.length?[
+  `Cleanest selected city: <b>${[...a].sort((x,y)=>x.aqi-y.aqi)[0].city}</b>.`,
+  `Highest selected AQI: <b>${hi.city}</b> at ${hi.aqi}.`,
+  `Health-score spread: <b>${Math.max(...a.map(x=>x.health))-Math.min(...a.map(x=>x.health))} points</b>.`,
+  `Most useful comparison: review AQI together with PM2.5 and water score.`
+ ].map(x=>`<li>${x}</li>`).join(""):"<li>No cities match the selected filters.</li>";
+ $("recommendations").innerHTML=[
+ "Check official local air-quality data before outdoor exercise.",
+ "Improve indoor ventilation and filtration when outdoor AQI is poor.",
+ "Use water-quality information to guide practical hair and skin-care choices.",
+ "Treat dashboard scores as educational indicators, not medical diagnoses."
+ ].map(x=>`<li>• ${x}</li>`).join("");
+}
+data.forEach(x=>$("city").insertAdjacentHTML("beforeend",`<option>${x.city}</option>`));
+["city","aqi","pollutant","risk","compare"].forEach(id=>$(id).addEventListener("change",render));
+function downloadReport(){
+ const blob=new Blob([document.documentElement.outerHTML],{type:"text/html"});
+ const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="environmental-health-analyzer.html";a.click();URL.revokeObjectURL(a.href);
+}
+render();
+</script>
+</body>
+</html>
