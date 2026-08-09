@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NutriScope MVP</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#070b14;color:#eef3fb}button,input,select{font:inherit}button{cursor:pointer}
+.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}.side{padding:22px 14px;background:#09111e;border-right:1px solid #22304a}.logo{font-size:20px;font-weight:800;margin-bottom:25px}.nav button{width:100%;padding:11px;border:0;border-radius:9px;background:transparent;color:#93a2b8;text-align:left;margin:3px 0}.nav button.active,.nav button:hover{background:#17233a;color:white}
+main{max-width:1450px;width:100%;padding:28px;margin:auto}.head{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:20px}h1{margin:0;font-size:29px}.muted{color:#91a0b8}.btn{padding:10px 14px;border:1px solid #293851;background:#111a2b;color:#fff;border-radius:9px}.primary{background:#6d50e8;border-color:#6d50e8}
+.profile,.metrics,.foodgrid,.dash{display:grid;gap:12px}.profile{grid-template-columns:repeat(6,1fr);background:#0d1422;border:1px solid #22304a;padding:15px;border-radius:15px}.field label{display:block;font-size:12px;color:#91a0b8;margin-bottom:6px}input,select{width:100%;padding:10px;background:#080f1c;border:1px solid #293851;color:#fff;border-radius:8px}
+.metrics{grid-template-columns:repeat(5,1fr);margin:15px 0}.card{background:#0d1422;border:1px solid #22304a;border-radius:15px;padding:16px}.metric small,.label{color:#91a0b8;font-size:12px}.metric b{display:block;font-size:25px;margin:7px 0}
+.foodgrid{grid-template-columns:1fr 320px}.add{display:grid;grid-template-columns:1.4fr .7fr .7fr auto;gap:8px;margin-bottom:12px}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:700px}th,td{padding:10px;border-bottom:1px solid #1c2a40;text-align:left;font-size:13px}th{color:#91a0b8}.remove{background:#321822;color:#ff8798;border:0;padding:6px 8px;border-radius:7px}.empty{text-align:center;color:#91a0b8;padding:25px}
+.dash{grid-template-columns:1fr 1fr;margin-top:14px}.chart{height:320px}.chart canvas{height:255px!important}.progress{margin-top:10px}.pr{margin:14px 0}.prtop{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}.track{height:8px;background:#172337;border-radius:10px}.fill{height:100%;background:linear-gradient(90deg,#7c5cff,#19c6a3);border-radius:10px}.list li{list-style:none;padding:10px 0;border-bottom:1px solid #1c2a40;color:#cbd5e3;font-size:13px}.tag{padding:4px 8px;border-radius:20px;font-size:11px;background:#3d1821;color:#ff8798}.good{background:#14372e;color:#55dfb0}.footer{margin-top:18px;font-size:11px;color:#718198;line-height:1.5}
+@media(max-width:1100px){.profile{grid-template-columns:repeat(3,1fr)}.metrics{grid-template-columns:repeat(3,1fr)}}@media(max-width:800px){.app{display:block}.side{border-right:0;border-bottom:1px solid #22304a}.profile,.metrics,.dash,.foodgrid{grid-template-columns:1fr}.head{display:block}.head .actions{margin-top:12px}.add{grid-template-columns:1fr}}@media(max-width:500px){.profile,.metrics{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side"><div class="logo">🥗 NutriScope</div><nav class="nav"><button class="active">▦ Dashboard</button><button>🍽 Food Log</button><button>📊 Nutrients</button><button>🎯 Targets</button><button>💡 Recommendations</button></nav></aside>
+<main>
+<div class="head"><div><h1>Nutrition Dashboard</h1><div class="muted">Track meals, macros and key micronutrients.</div></div><div class="actions"><button class="btn" id="reset">Reset Day</button> <button class="btn primary" id="demo">Load Demo</button></div></div>
+<h3>Profile</h3>
+<section class="profile">
+<div class="field"><label>Age</label><input id="age" type="number" value="22"></div><div class="field"><label>Gender</label><select id="gender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+<div class="field"><label>Height (cm)</label><input id="height" type="number" value="170"></div><div class="field"><label>Weight (kg)</label><input id="weight" type="number" value="65"></div>
+<div class="field"><label>Activity Level</label><select id="activity"><option value="1.2">Sedentary</option><option value="1.375">Light</option><option value="1.55" selected>Moderate</option><option value="1.725">Very Active</option></select></div>
+<div class="field"><label>Dietary Preference</label><select id="diet"><option>Vegetarian</option><option>Non-Vegetarian</option><option>Eggetarian</option></select></div>
+</section>
+<h3>Today's Overview</h3><section class="metrics">
+<div class="card metric"><span class="label">Calories</span><b id="cal">0</b><small id="calt">Target —</small></div><div class="card metric"><span class="label">Protein</span><b id="pro">0 g</b><small id="prot">Target —</small></div><div class="card metric"><span class="label">Carbs</span><b id="carb">0 g</b><small id="carbt">Target —</small></div><div class="card metric"><span class="label">Fat</span><b id="fat">0 g</b><small id="fatt">Target —</small></div><div class="card metric"><span class="label">Fiber</span><b id="fib">0 g</b><small>Target 25 g</small></div>
+</section>
+<h3>Food Logging</h3>
+<section class="foodgrid"><div class="card"><div class="add"><select id="food"></select><input id="qty" type="number" value="1" min=".1" step=".1"><select id="unit"><option>serving</option><option>100g</option><option>piece</option><option>cup</option></select><button class="btn primary" id="add">+ Add Food</button></div><div class="tablewrap"><table><thead><tr><th>Food</th><th>Qty</th><th>Calories</th><th>Protein</th><th>Carbs</th><th>Fat</th><th>Fiber</th><th></th></tr></thead><tbody id="rows"></tbody></table></div></div>
+<div class="card"><h3>Daily Progress</h3><div id="progress"></div></div></section>
+<h3>Nutrition Dashboard</h3>
+<section class="dash"><div class="card chart"><h3>Macro Chart</h3><canvas id="chart"></canvas></div><div class="card"><h3>Top Deficiencies</h3><ul class="list" id="def"></ul></div><div class="card"><h3>Top Excesses</h3><ul class="list" id="exc"></ul></div><div class="card"><h3>Nutrient Table</h3><div class="tablewrap"><table><thead><tr><th>Nutrient</th><th>Consumed</th><th>Target</th><th>%</th></tr></thead><tbody id="nut"></tbody></table></div></div></section>
+<h3>Recommendations</h3><section class="card"><ul class="list" id="rec"></ul></section>
+<div class="footer">NutriScope is an educational nutrition-tracking MVP. Nutrient values are approximate and may vary by recipe, brand, serving size and preparation. This app is not medical advice.</div>
+</main></div>
+<script>
+const F={
+Rice:[205,4.3,44.5,.4,.6,.8,16,0,0,0],Roti:[120,3.5,18,3,2.5,1.2,15,0,0,0],Dal:[180,12,28,2,8,3.3,45,2,0,0],Paneer:[265,18,6,20,0,.7,208,0,.1,1.2],Curd:[98,5,7,5,0,.1,121,.5,.1,.5],Chana:[164,9,27,2.6,7.6,2.9,49,1.3,0,0],Rajma:[127,8.7,22.8,.5,6.4,2.9,28,1.2,0,0],Banana:[105,1.3,27,.4,3.1,.3,6,10,0,0],Apple:[95,.5,25,.3,4.4,.2,11,8.4,0,0],Milk:[122,8,12,5,0,.1,300,0,2.5,1.1],Oats:[150,5,27,3,4,1.8,21,0,0,0],Bread:[80,3,15,1,1.2,1,40,0,0,.1],Egg:[78,6.3,.6,5.3,0,.9,25,0,1.1,.6],Chicken:[165,31,0,3.6,0,1,15,0,.1,.3],Fish:[150,25,0,5,0,.8,20,0,8,2],Potato:[130,3,30,.2,2.6,1.1,15,17,0,0],Poha:[180,3,35,3,2,1.5,20,12,0,0],Idli:[58,2,12,.2,.5,.5,10,0,0,0],Dosa:[168,4,25,5,1,1.2,20,0,0,0],Spinach:[23,2.9,3.6,.4,2.2,2.7,99,28,0,0]};
+const names=Object.keys(F), $=x=>document.getElementById(x); names.forEach(x=>$("food").innerHTML+=`<option>${x}</option>`);
+let log=[],T={cal:2100,p:100,c:260,f:70,fi:25,iron:18,ca:1000,vc:75,vd:15,b12:2.4},chart;
+function targets(){let a=+$("age").value||22,w=+$("weight").value||65,h=+$("height").value||170,m=$("gender").value==="Male"?5:-161;let cal=Math.max(1400,Math.round((10*w+6.25*h-5*a+m)*(+$("activity").value||1.55)));T.cal=cal;T.p=Math.round(w*1.5);T.c=Math.round(cal*.5/4);T.f=Math.round(cal*.27/9);$("calt").textContent="Target "+T.cal+" kcal";$("prot").textContent="Target "+T.p+" g";$("carbt").textContent="Target "+T.c+" g";$("fatt").textContent="Target "+T.f+" g"}
+function totals(){return log.reduce((s,e)=>{let f=F[e.food],q=e.q;["cal","p","c","f","fi","iron","ca","vc","vd","b12"].forEach((k,i)=>s[k]+=f[i]*q);return s},{cal:0,p:0,c:0,f:0,fi:0,iron:0,ca:0,vc:0,vd:0,b12:0})}
+function render(){targets();let t=totals();$("cal").textContent=Math.round(t.cal)+" kcal";$("pro").textContent=t.p.toFixed(1)+" g";$("carb").textContent=t.c.toFixed(1)+" g";$("fat").textContent=t.f.toFixed(1)+" g";$("fib").textContent=t.fi.toFixed(1)+" g";
+$("rows").innerHTML=log.length?log.map((e,i)=>{let f=F[e.food];return `<tr><td>${e.food}</td><td>${e.q} ${e.u}</td><td>${Math.round(f[0]*e.q)}</td><td>${(f[1]*e.q).toFixed(1)}</td><td>${(f[2]*e.q).toFixed(1)}</td><td>${(f[3]*e.q).toFixed(1)}</td><td>${(f[4]*e.q).toFixed(1)}</td><td><button class="remove" onclick="remove(${i})">Remove</button></td></tr>`}).join(""):`<tr><td colspan="8" class="empty">No foods logged yet.</td></tr>`;
+let R=[["Calories",t.cal,T.cal],["Protein",t.p,T.p],["Carbs",t.c,T.c],["Fat",t.f,T.f],["Fiber",t.fi,25],["Iron",t.iron,18],["Calcium",t.ca,1000],["Vitamin C",t.vc,75],["Vitamin D",t.vd,15],["Vitamin B12",t.b12,2.4]];
+$("progress").innerHTML=R.slice(0,5).map(x=>`<div class="pr"><div class="prtop"><b>${x[0]}</b><span>${Math.round(x[1]/x[2]*100)}%</span></div><div class="track"><div class="fill" style="width:${Math.min(100,x[1]/x[2]*100)}%"></div></div></div>`).join("");
+$("nut").innerHTML=R.map(x=>`<tr><td>${x[0]}</td><td>${x[1].toFixed(x[1]<10?1:0)}</td><td>${x[2]}</td><td>${Math.round(x[1]/x[2]*100)}%</td></tr>`).join("");
+let d=R.filter(x=>x[1]/x[2]<.6).sort((a,b)=>a[1]/a[2]-b[1]/b[2]).slice(0,4),e=R.filter(x=>x[1]/x[2]>1.1).sort((a,b)=>b[1]/b[2]-a[1]/a[2]).slice(0,4);
+$("def").innerHTML=d.length?d.map(x=>`<li>${x[0]} <span class="tag">${Math.round(x[1]/x[2]*100)}%</span></li>`).join(""):"<li>✓ No major deficiencies</li>";
+$("exc").innerHTML=e.length?e.map(x=>`<li>${x[0]} <span class="tag">${Math.round(x[1]/x[2]*100)}%</span></li>`).join(""):"<li>✓ No major excesses</li>";
+let rec=[];if(t.p<T.p*.7)rec.push($("diet").value==="Vegetarian"?"Add dal, paneer, chana or curd for protein.":"Add egg, chicken or fish for protein.");if(t.fi<18)rec.push("Add oats, fruit, spinach, dal or beans for fiber.");if(t.ca<600)rec.push("Consider milk, curd or paneer for calcium.");if(t.vc<45)rec.push("Add vitamin-C-rich fruits or vegetables.");if(!rec.length)rec.push("Your logged foods are reasonably balanced. Keep meals varied.");$("rec").innerHTML=rec.map(x=>`<li>• ${x}</li>`).join("");
+if(chart)chart.destroy();chart=new Chart($("chart"),{type:"doughnut",data:{labels:["Protein","Carbs","Fat"],datasets:[{data:[t.p*4,t.c*4,t.f*9]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:"#cbd5e3"}}}}})}
+function remove(i){log.splice(i,1);render()}$("add").onclick=()=>{log.push({food:$("food").value,q:+$("qty").value||1,u:$("unit").value});render()};$("reset").onclick=()=>{log=[];render()};$("demo").onclick=()=>{log=[{food:"Oats",q:1,u:"serving"},{food:"Banana",q:1,u:"piece"},{food:"Dal",q:1,u:"serving"},{food:"Roti",q:2,u:"serving"},{food:"Curd",q:1,u:"serving"},{food:$("diet").value==="Vegetarian"?"Paneer":"Chicken",q:1,u:"serving"}];render()};["age","gender","height","weight","activity","diet"].forEach(x=>$(x).addEventListener("change",render));["age","height","weight"].forEach(x=>$(x).addEventListener("input",render));render();
+</script>
+</body></html>
