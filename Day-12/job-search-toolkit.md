@@ -52,7 +52,7 @@ Thank you for your time and consideration.
 
 Sincerely,
 
-**[Your Name]**
+**Tanish**
 
 ---
 
@@ -60,7 +60,7 @@ Sincerely,
 
 **Subject: Application for Full Stack Developer Opportunity**
 
-Hello [Recruiter Name],
+Hello Tanish,
 
 I hope you are doing well.
 
@@ -68,20 +68,14 @@ I am an aspiring Full Stack Developer with hands-on experience in HTML, CSS, Jav
 
 I have built multiple practical web development projects and am currently looking for entry-level opportunities where I can contribute my skills while continuing to grow as a developer.
 
-I came across the [Job Title] opportunity at [Company Name] and found it relevant to my technical background.
+I came across the frontend developer opportunity at Google and found it relevant to my technical background.
 
 I would be grateful if you could consider my profile for suitable Full Stack/Web Development opportunities.
-
-Resume: [Resume Link]
-
-Portfolio: [Portfolio Link]
-
-GitHub: [GitHub Link]
 
 Thank you for your time.
 
 Best regards,  
-**[Your Name]**
+**Tanish**
 
 ---
 
@@ -89,9 +83,9 @@ Best regards,
 
 **Subject: Full Stack Developer — Application**
 
-Hello [Hiring Manager Name],
+Hello Rohan,
 
-I am reaching out regarding the Full Stack Developer opportunity at [Company Name].
+I am reaching out regarding the Full Stack Developer opportunity at google.
 
 I have hands-on experience with HTML, CSS, JavaScript, Node.js, Express.js, MongoDB, and Git/GitHub, along with practical experience developing web applications and management systems.
 
@@ -99,40 +93,30 @@ I am particularly interested in this opportunity because it would allow me to ap
 
 I would appreciate the opportunity to discuss my profile and how I could contribute to your team.
 
-Portfolio: [Portfolio Link]
-
-GitHub: [GitHub Link]
-
-Resume: [Resume Link]
-
 Thank you for your consideration.
 
 Best regards,  
-**[Your Name]**
+**Rohan**
 
 ---
 
 # 🔗 SECTION 4 — LinkedIn Connection Request
 
-Hello [Name], I'm an aspiring Full Stack Developer skilled in JavaScript, Node.js, Express.js and MongoDB. I'm currently exploring development opportunities and would be happy to connect and learn from your experience in the industry.
+Hello tkkumar23, I'm an aspiring Full Stack Developer skilled in JavaScript, Node.js, Express.js and MongoDB. I'm currently exploring development opportunities and would be happy to connect and learn from your experience in the industry.
 
 ---
 
 # 🤝 SECTION 5 — Referral Request Message
 
-Hi [Name],
+Hi Tanish,
 
 I hope you're doing well.
 
-I'm currently looking for entry-level Full Stack/Web Development opportunities and came across an opening at [Company Name] that matches my skills.
+I'm currently looking for entry-level Full Stack/Web Development opportunities and came across an opening at Google that matches my skills.
 
 I have hands-on experience with JavaScript, Node.js, Express.js, MongoDB, HTML, CSS, and Git/GitHub.
 
 If you feel my profile is relevant, I would really appreciate a referral or any guidance you could provide.
-
-Here is my resume:
-
-[Resume Link]
 
 Thank you for your support!
 
@@ -142,11 +126,11 @@ Thank you for your support!
 
 **Subject: Following Up — Full Stack Developer Application**
 
-Hello [Name],
+Hello Tkumar23,
 
 I hope you're doing well.
 
-I wanted to follow up regarding my application for the [Job Title] position at [Company Name].
+I wanted to follow up regarding my application for the frontend developer position at Google
 
 I remain very interested in the opportunity and would be happy to provide any additional information required.
 
@@ -155,13 +139,13 @@ I would appreciate any update regarding the status of my application.
 Thank you again for your time and consideration.
 
 Best regards,  
-**[Your Name]**
+**Tanish**
 
 ---
 
 # 🎤 SECTION 7 — 30-Second Professional Introduction
 
-Hi, I'm [Your Name], an aspiring Full Stack Developer with hands-on experience building web applications using HTML, CSS, JavaScript, Node.js, Express.js, and MongoDB.
+Hi, I'm Tanish, an aspiring Full Stack Developer with hands-on experience building web applications using HTML, CSS, JavaScript, Node.js, Express.js, and MongoDB.
 
 I've worked on several practical projects that have helped me develop both frontend and backend skills.
 
