@@ -114,7 +114,7 @@ Claude's logged-in UI and the user's GitHub account cannot be operated from this
 
 ## GitHub Submission
 
-**Commit URL:** `[PASTE GITHUB COMMIT URL HERE]`
+**Commit URL:** `https://github.com/tanishkumar-1520/60-day-claude-challenge/tree/main/Day-16`
 
 ## Disclaimer
 
