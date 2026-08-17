@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vehicle Cost Analysis Dashboard</title>
+<style>
+:root{
+  --bg:#0a0f1e; --panel:rgba(18,27,49,.72); --border:rgba(255,255,255,.10);
+  --text:#eef2ff; --muted:#9aa7c2; --blue:#3b82f6; --amber:#f59e0b;
+  --grey:#94a3b8; --green:#22c55e; --purple:#a855f7; --danger:#fb7185;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  min-height:100vh;background:radial-gradient(circle at top right,#172554 0,#0a0f1e 42%,#060914 100%);
+  color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;padding:24px;
+}
+.container{max-width:1440px;margin:auto}
+header{
+  padding:28px;border:1px solid var(--border);border-radius:24px;
+  background:var(--panel);backdrop-filter:blur(18px);box-shadow:0 20px 60px rgba(0,0,0,.28);
+  margin-bottom:20px
+}
+.eyebrow{color:#8fb5ff;text-transform:uppercase;letter-spacing:2px;font-size:12px;font-weight:800}
+h1{font-size:clamp(24px,4vw,42px);margin:7px 0 8px}
+.sub{color:var(--muted);font-size:14px}
+.grid{display:grid;gap:18px}
+.kpis{grid-template-columns:repeat(5,minmax(0,1fr));margin-bottom:18px}
+.card{
+  background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:20px;
+  backdrop-filter:blur(16px);box-shadow:0 12px 35px rgba(0,0,0,.22)
+}
+.kpi-label{color:var(--muted);font-size:13px}.kpi-value{font-size:27px;font-weight:800;margin-top:9px}
+.kpi-note{font-size:12px;color:#8491ad;margin-top:5px}
+.two{grid-template-columns:1.1fr .9fr}.full{grid-column:1/-1}
+.chart-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+h2{font-size:17px}.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
+svg{width:100%;height:auto;display:block}
+.chart-wrap{overflow:hidden}
+.tooltip{
+  position:fixed;display:none;padding:8px 10px;border-radius:8px;background:#111827;
+  border:1px solid #334155;color:#fff;font-size:12px;pointer-events:none;z-index:10
+}
+.age-note{color:var(--amber);font-size:12px}
+.gauge{max-width:320px;margin:auto}
+.verdict{text-align:center;margin-top:12px;color:#dbe5ff;font-size:14px;line-height:1.6}
+.fuels{grid-template-columns:repeat(5,minmax(0,1fr))}
+.fuel{position:relative;min-height:200px}
+.fuel.selected{box-shadow:0 0 0 1px var(--amber),0 0 32px rgba(245,158,11,.18)}
+.fuel h3{font-size:18px;margin-bottom:12px}
+.fuel ul{list-style:none;display:grid;gap:8px;color:#cbd5e1;font-size:13px}
+.best{margin-top:15px;padding-top:12px;border-top:1px solid var(--border);font-size:12px;color:#aebbd3}
+.badge{position:absolute;right:16px;top:16px;font-size:10px;padding:4px 8px;border-radius:99px;background:rgba(245,158,11,.15);color:#fbbf24}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:10px;border-bottom:1px solid var(--border)}
+th{color:#93a4c5;font-weight:600}
+footer{text-align:center;color:#66738f;font-size:11px;padding:24px}
+@media(max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.fuels{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:760px){body{padding:12px}.kpis,.two,.fuels{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}header{padding:20px}.card{padding:16px}}
+@media(max-width:430px){.kpis{grid-template-columns:1fr}.kpi-value{font-size:23px}h1{font-size:25px}}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+  <div class="eyebrow">Vehicle Cost Intelligence · Day 17</div>
+  <h1>Honda City · Petrol · Age: 3y · 1000 km/mo</h1>
+  <div class="sub">Sample analysis profile used because no CSV dataset was supplied. Selected fuel: Petrol · Usage: Mixed</div>
+</header>
+
+<section class="grid kpis">
+  <div class="card"><div class="kpi-label">Your fuel cost / km</div><div class="kpi-value">₹6.50</div><div class="kpi-note">Petrol</div></div>
+  <div class="card"><div class="kpi-label">E85 cost / km</div><div class="kpi-value">₹5.48</div><div class="kpi-note">Estimated comparison</div></div>
+  <div class="card"><div class="kpi-label">E85 premium vs Petrol</div><div class="kpi-value">−15.7%</div><div class="kpi-note">Running cost advantage</div></div>
+  <div class="card"><div class="kpi-label">E85 break-even price</div><div class="kpi-value">₹77.76/L</div><div class="kpi-note">Based on mileage ratio</div></div>
+  <div class="card"><div class="kpi-label">Your monthly fuel cost</div><div class="kpi-value">₹6,500</div><div class="kpi-note">1,000 km/month</div></div>
+</section>
+
+<section class="grid two">
+  <div class="card chart-wrap">
+    <div class="chart-title"><h2>Cost / km by fuel</h2><div class="legend">
+      <span><i class="dot" style="background:#f59e0b"></i>E85</span><span><i class="dot" style="background:#3b82f6"></i>Petrol</span>
+      <span><i class="dot" style="background:#94a3b8"></i>Diesel</span><span><i class="dot" style="background:#22c55e"></i>CNG</span><span><i class="dot" style="background:#a855f7"></i>EV</span>
+    </div></div>
+    <svg viewBox="0 0 680 330" role="img" aria-label="Cost per kilometer bar chart">
+      <line x1="65" y1="275" x2="650" y2="275" stroke="#334155"/>
+      <line x1="65" y1="55" x2="65" y2="275" stroke="#334155"/>
+      <g fill="#64748b" font-size="11"><text x="28" y="279">₹0</text><text x="20" y="224">₹3</text><text x="20" y="169">₹6</text><text x="20" y="114">₹9</text><text x="14" y="59">₹12</text></g>
+      <g class="bars" fill="#f59e0b"><rect x="95" y="175" width="70" height="100" rx="8"><title>E85: ₹5.48/km</title></rect></g>
+      <rect x="205" y="156" width="70" height="119" rx="8" fill="#3b82f6"><title>Petrol: ₹6.50/km</title></rect>
+      <rect x="315" y="130" width="70" height="145" rx="8" fill="#94a3b8"><title>Diesel: ₹7.91/km</title></rect>
+      <rect x="425" y="112" width="70" height="163" rx="8" fill="#22c55e"><title>CNG: ₹8.89/km</title></rect>
+      <rect x="535" y="70" width="70" height="205" rx="8" fill="#a855f7"><title>EV: ₹11.18/km</title></rect>
+      <g fill="#cbd5e1" font-size="11" text-anchor="middle"><text x="130" y="297">E85</text><text x="240" y="297">Petrol</text><text x="350" y="297">Diesel</text><text x="460" y="297">CNG</text><text x="570" y="297">EV</text></g>
+    </svg>
+  </div>
+
+  <div class="card chart-wrap">
+    <div class="chart-title"><h2>CO₂ / km</h2><span class="sub">Relative share</span></div>
+    <svg viewBox="0 0 420 330" role="img" aria-label="CO2 doughnut chart">
+      <g transform="translate(210 155) rotate(-90)">
+        <circle r="88" fill="none" stroke="#182238" stroke-width="34"/>
+        <circle r="88" fill="none" stroke="#3b82f6" stroke-width="34" stroke-dasharray="100 553" stroke-dashoffset="0"/>
+        <circle r="88" fill="none" stroke="#f59e0b" stroke-width="34" stroke-dasharray="70 583" stroke-dashoffset="-100"/>
+        <circle r="88" fill="none" stroke="#94a3b8" stroke-width="34" stroke-dasharray="130 523" stroke-dashoffset="-170"/>
+        <circle r="88" fill="none" stroke="#22c55e" stroke-width="34" stroke-dasharray="105 548" stroke-dashoffset="-300"/>
+        <circle r="88" fill="none" stroke="#a855f7" stroke-width="34" stroke-dasharray="28 625" stroke-dashoffset="-405"/>
+      </g>
+      <text x="210" y="150" text-anchor="middle" fill="#eef2ff" font-size="25" font-weight="800">CO₂</text>
+      <text x="210" y="173" text-anchor="middle" fill="#94a3b8" font-size="12">kg / km</text>
+      <g font-size="11" fill="#cbd5e1"><text x="20" y="260">● Petrol 0.151</text><text x="20" y="280">● E85 0.121</text><text x="220" y="260">● Diesel 0.175</text><text x="220" y="280">● CNG 0.105</text><text x="20" y="300">● EV 0.045</text></g>
+    </svg>
+  </div>
+
+  <div class="card full chart-wrap">
+    <div class="chart-title"><h2>Cost / km vs vehicle age</h2><span class="age-note">Selected age: 3 years</span></div>
+    <svg viewBox="0 0 1000 360" role="img" aria-label="Cost per kilometer by age">
+      <line x1="65" y1="300" x2="950" y2="300" stroke="#334155"/><line x1="65" y1="45" x2="65" y2="300" stroke="#334155"/>
+      <g fill="#64748b" font-size="11">
+        <text x="25" y="304">₹0</text><text x="20" y="240">₹4</text><text x="20" y="176">₹8</text><text x="20" y="112">₹12</text><text x="14" y="48">₹16</text>
+      </g>
+      <g fill="#64748b" font-size="10" text-anchor="middle">
+        <text x="70" y="322">0</text><text x="140" y="322">1</text><text x="210" y="322">2</text><text x="280" y="322">3</text><text x="350" y="322">4</text><text x="420" y="322">5</text><text x="490" y="322">6</text><text x="560" y="322">7</text><text x="630" y="322">8</text><text x="700" y="322">9</text><text x="770" y="322">10</text><text x="840" y="322">11</text><text x="910" y="322">12</text>
+      </g>
+      <line x1="280" y1="45" x2="280" y2="300" stroke="#f59e0b" stroke-dasharray="6 5"/>
+      <polyline fill="none" stroke="#3b82f6" stroke-width="3" points="70,195 140,190 210,184 280,178 350,170 420,160 490,151 560,142 630,130 700,118 770,105 840,92 910,78"/>
+      <polyline fill="none" stroke="#f59e0b" stroke-width="3" points="70,215 140,211 210,207 280,201 350,194 420,186 490,177 560,167 630,156 700,145 770,133 840,121 910,108"/>
+      <polyline fill="none" stroke="#94a3b8" stroke-width="3" points="70,170 140,165 210,158 280,150 350,141 420,130 490,119 560,108 630,95 700,83 770,70 840,58 910,47"/>
+      <polyline fill="none" stroke="#22c55e" stroke-width="3" points="70,155 140,151 210,147 280,142 350,136 420,129 490,121 560,113 630,104 700,94 770,83 840,72 910,61"/>
+      <polyline fill="none" stroke="#a855f7" stroke-width="3" points="70,105 140,102 210,99 280,96 350,93 420,89 490,85 560,80 630,75 700,70 770,65 840,59 910,53"/>
+      <g font-size="11" fill="#cbd5e1"><text x="740" y="35">Petrol</text><text x="795" y="35" fill="#f59e0b">E85</text><text x="840" y="35">Diesel</text><text x="890" y="35">CNG</text><text x="930" y="35">EV</text></g>
+    </svg>
+  </div>
+
+  <div class="card full">
+    <div class="chart-title"><h2>E85 Score</h2><span class="sub">Cost 4 · CO₂ 3 · Refuel 2 · Maintenance 1</span></div>
+    <div class="gauge">
+      <svg viewBox="0 0 320 190">
+        <path d="M45 155 A115 115 0 0 1 275 155" fill="none" stroke="#1e293b" stroke-width="25" stroke-linecap="round"/>
+        <path d="M45 155 A115 115 0 0 1 275 155" fill="none" stroke="#f59e0b" stroke-width="25" stroke-linecap="round"
+              stroke-dasharray="361" stroke-dashoffset="90">
+          <animate attributeName="stroke-dashoffset" from="361" to="90" dur="1.4s" fill="freeze"/>
+        </path>
+        <text x="160" y="132" text-anchor="middle" fill="#fff" font-size="38" font-weight="800">7.5/10</text>
+        <text x="160" y="156" text-anchor="middle" fill="#94a3b8" font-size="12">E85 efficiency score</text>
+      </svg>
+    </div>
+    <p class="verdict">Verdict: E85 is attractive on pump price and CO₂, but the final choice depends on vehicle compatibility, availability, maintenance requirements, and real-world mileage.</p>
+  </div>
+
+  <div class="card full">
+    <div class="chart-title"><h2>Fuel comparison</h2><span class="sub">Selected fuel highlighted</span></div>
+    <div class="grid fuels">
+      <div class="card fuel"><h3 style="color:#f59e0b">E85</h3><ul><li>✅ Lower pump price</li><li>✅ Lower CO₂ in this sample</li><li>❌ Lower mileage</li><li>❌ Limited availability</li></ul><div class="best">🚗 Best for: compatible high-usage vehicles</div></div>
+      <div class="card fuel selected"><span class="badge">YOUR FUEL</span><h3 style="color:#3b82f6">Petrol</h3><ul><li>✅ Widely available</li><li>✅ Smooth everyday operation</li><li>❌ Higher fuel cost than E85</li><li>❌ Higher CO₂ than EV/CNG</li></ul><div class="best">🚗 Best for: mixed city & highway use</div></div>
+      <div class="card fuel"><h3 style="color:#94a3b8">Diesel</h3><ul><li>✅ Strong highway efficiency</li><li>✅ High torque</li><li>❌ Higher maintenance complexity</li><li>❌ Emission concerns</li></ul><div class="best">🚗 Best for: high-mileage highway use</div></div>
+      <div class="card fuel"><h3 style="color:#22c55e">CNG</h3><ul><li>✅ Low running emissions</li><li>✅ Good urban economics</li><li>❌ Refueling infrastructure varies</li><li>❌ Reduced boot space in some cars</li></ul><div class="best">🚗 Best for: frequent city driving</div></div>
+      <div class="card fuel"><h3 style="color:#a855f7">EV</h3><ul><li>✅ Very low tailpipe emissions</li><li>✅ Quiet operation</li><li>❌ Charging time</li><li>❌ Charging access matters</li></ul><div class="best">🚗 Best for: predictable daily routes</div></div>
+    </div>
+  </div>
+
+  <div class="card full">
+    <div class="chart-title"><h2>Age bucket analysis</h2><span class="sub">Selected vehicle: Mid-life</span></div>
+    <table>
+      <thead><tr><th>Age bucket</th><th>Cost / km</th><th>Maintenance / km</th></tr></thead>
+      <tbody>
+        <tr><td>New (0–2y)</td><td>₹5.90</td><td>₹0.70</td></tr>
+        <tr><td>Mid-life (3–5y) ← selected</td><td>₹6.50</td><td>₹1.00</td></tr>
+        <tr><td>Aged (6–9y)</td><td>₹7.30</td><td>₹1.45</td></tr>
+        <tr><td>Old (10+y)</td><td>₹8.40</td><td>₹2.05</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>Vehicle Cost Analysis Dashboard · Sample profile generated without the supplied CSV dataset · Responsive 375px–1440px</footer>
+</div>
+<div class="tooltip" id="tooltip"></div>
+<script>
+document.querySelectorAll('rect[title]').forEach(el=>{
+  el.addEventListener('mouseenter',e=>{
+    const t=document.getElementById('tooltip'); t.textContent=el.getAttribute('title');
+    t.style.display='block';
+  });
+  el.addEventListener('mousemove',e=>{
+    const t=document.getElementById('tooltip'); t.style.left=(e.clientX+12)+'px'; t.style.top=(e.clientY+12)+'px';
+  });
+  el.addEventListener('mouseleave',()=>document.getElementById('tooltip').style.display='none');
+});
+</script>
+</body>
+</html>
