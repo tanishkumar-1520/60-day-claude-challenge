@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Privacy & Footprint Dashboard</title>
+<style>
+  :root {
+    --bg-dark: #090d16;
+    --card-bg: rgba(18, 26, 43, 0.7);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --text-primary: #f1f5f9;
+    --text-muted: #94a3b8;
+    --accent-blue: #38bdf8;
+    --accent-purple: #818cf8;
+    --color-green: #22c55e;
+    --color-yellow: #eab308;
+    --color-orange: #f97316;
+    --color-red: #ef4444;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    padding: 2rem;
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  .header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #38bdf8, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .badge-fact { background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); border: 1px solid rgba(56, 189, 248, 0.3); }
+  .badge-estimate { background: rgba(234, 179, 8, 0.15); color: var(--color-yellow); border: 1px solid rgba(234, 179, 8, 0.3); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .col-12 { grid-column: span 12; }
+  .col-8 { grid-column: span 8; }
+  .col-6 { grid-column: span 6; }
+  .col-4 { grid-column: span 4; }
+  .col-3 { grid-column: span 3; }
+
+  .metric-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .metric-title {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .metric-value {
+    font-size: 2.25rem;
+    font-weight: 700;
+  }
+
+  .metric-sub {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+  }
+
+  .score-extensive { color: var(--color-red); }
+  .score-weak { color: var(--color-red); }
+  .score-fair { color: var(--color-orange); }
+  .score-good { color: var(--color-yellow); }
+  .score-strong { color: var(--color-green); }
+
+  /* Exposure Heatmap */
+  .heatmap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .heatmap-cell {
+    padding: 0.75rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+
+  .heat-high { border-color: rgba(239, 68, 68, 0.5); background: rgba(239, 68, 68, 0.1); }
+  .heat-med { border-color: rgba(249, 115, 22, 0.5); background: rgba(249, 115, 22, 0.1); }
+  .heat-low { border-color: rgba(34, 197, 94, 0.5); background: rgba(34, 197, 94, 0.1); }
+
+  /* Table styling */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+  }
+
+  th, td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  th {
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  /* Matrix */
+  .matrix-dot {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .dot-active { background-color: var(--color-red); box-shadow: 0 0 8px var(--color-red); }
+  .dot-inactive { background-color: rgba(255, 255, 255, 0.1); }
+
+  /* Simulator Toggles */
+  .sim-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+  }
+
+  .switch input { opacity: 0; width: 0; height: 0; }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    transition: .3s;
+    border-radius: 24px;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .3s;
+    border-radius: 50%;
+  }
+
+  input:checked + .slider { background-color: var(--accent-blue); }
+  input:checked + .slider:before { transform: translateX(20px); }
+
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .disclaimer {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 1rem;
+    font-style: italic;
+  }
+
+  @media (max-width: 900px) {
+    .col-8, .col-6, .col-4, .col-3 { grid-column: span 12; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>Digital Privacy & Footprint Dashboard</h1>
+    <p style="color: var(--text-muted); font-size: 0.875rem;">Analyzed Subject: Reported Digital Footprint Dataset</p>
+  </div>
+  <div>
+    <span class="badge badge-fact">Facts Included</span>
+    <span class="badge badge-estimate">Estimates Labeled</span>
+  </div>
+</div>
+
+<!-- Overview Metrics -->
+<div class="grid">
+  <div class="card col-3 metric-card">
+    <div class="metric-title">Digital Footprint Score</div>
+    <div class="metric-value score-extensive" id="footprint-score">84 / 100</div>
+    <div class="metric-sub">Rating: 🔴 Extensive</div>
+  </div>
+  
+  <div class="card col-3 metric-card">
+    <div class="metric-title">Privacy Protection Score</div>
+    <div class="metric-value score-weak" id="privacy-score">28 / 100</div>
+    <div class="metric-sub" id="privacy-rating">Rating: 🔴 Weak</div>
+  </div>
+
+  <div class="card col-3 metric-card">
+    <div class="metric-title">Services & Parent Entities</div>
+    <div class="metric-value">15 / 8</div>
+    <div class="metric-sub"><span class="badge badge-fact">Fact</span> 15 Reported Apps across 8 Parent Companies</div>
+  </div>
+
+  <div class="card col-3 metric-card">
+    <div class="metric-title">Ecosystem Concentration</div>
+    <div class="metric-value" style="color: var(--color-orange);">73%</div>
+    <div class="metric-sub">High Dominance: Alphabet & Meta</div>
+  </div>
+</div>
+
+<!-- Main Section: Heatmap & Companies -->
+<div class="grid">
+  <!-- Company Exposure Ranking -->
+  <div class="card col-6">
+    <div class="section-title">Company Exposure Ranking <span class="badge badge-fact">Fact</span></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Parent Company</th>
+          <th>Services Owned</th>
+          <th>Exposure Level</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Alphabet Inc.</strong></td>
+          <td>Google Search, Pay, Photos, YouTube</td>
+          <td><span style="color:var(--color-red);">Critical (High Data Depth)</span></td>
+        </tr>
+        <tr>
+          <td><strong>Meta Platforms</strong></td>
+          <td>Instagram, WhatsApp</td>
+          <td><span style="color:var(--color-red);">High (Social Graph)</span></td>
+        </tr>
+        <tr>
+          <td><strong>ByteDance / Tencent</strong></td>
+          <td>TikTok, PUBG Mobile</td>
+          <td><span style="color:var(--color-orange);">High (Behavioral & Media)</span></td>
+        </tr>
+        <tr>
+          <td><strong>Snap Inc.</strong></td>
+          <td>Snapchat</td>
+          <td><span style="color:var(--color-yellow);">Moderate</span></td>
+        </tr>
+        <tr>
+          <td><strong>Amazon Inc.</strong></td>
+          <td>Amazon Shopping</td>
+          <td><span style="color:var(--color-yellow);">Moderate (Purchase History)</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Exposure Heatmap -->
+  <div class="card col-6">
+    <div class="section-title">Exposure Heatmap by Datapoint</div>
+    <p style="font-size: 0.8rem; color: var(--text-muted);">Estimated exposure intensity across reported services.</p>
+    <div class="heatmap-grid">
+      <div class="heatmap-cell heat-high">Precise Location<br><strong>High</strong></div>
+      <div class="heatmap-cell heat-high">Contacts & Graph<br><strong>High</strong></div>
+      <div class="heatmap-cell heat-high">Biometrics / Photos<br><strong>High</strong></div>
+      <div class="heatmap-cell heat-high">Payment Data<br><strong>High</strong></div>
+      <div class="heatmap-cell heat-med">Search & Browsing<br><strong>Medium</strong></div>
+      <div class="heatmap-cell heat-med">Audio & Messages<br><strong>Medium</strong></div>
+      <div class="heatmap-cell heat-med">Purchases<br><strong>Medium</strong></div>
+      <div class="heatmap-cell heat-low">Device Identifiers<br><strong>High Surface</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- Digital Twin Profile & WOW Insights -->
+<div class="grid">
+  <div class="card col-6">
+    <div class="section-title">Digital Twin Profile <span class="badge badge-estimate">Estimate</span></div>
+    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Inferred behavioral traits derived from your app portfolio.</p>
+    <ul>
+      <li style="margin-bottom: 0.5rem; font-size: 0.875rem;"><strong>Primary Archetype:</strong> Highly Connected Urban Mobile Gamer / Content Creator</li>
+      <li style="margin-bottom: 0.5rem; font-size: 0.875rem;"><strong>Lifestyle & Media:</strong> Heavy short-form video consumer (TikTok, YouTube), active gamer (Roblox, PUBG).</li>
+      <li style="margin-bottom: 0.5rem; font-size: 0.875rem;"><strong>Financial Mobility:</strong> Uses digital UPI payments (Google Pay) and e-commerce platforms (Amazon, Meesho).</li>
+      <li style="margin-bottom: 0.5rem; font-size: 0.875rem;"><strong>Communication:</strong> Blended social sphere across encrypted (WhatsApp, iMessage) and open community platforms (Discord).</li>
+    </ul>
+    <div class="disclaimer">* Note: All demographic and lifestyle conclusions are strictly Estimates based on service presence. Never treated as factual certainty.</div>
+  </div>
+
+  <div class="card col-6">
+    <div class="section-title">Most Valuable Data Assets</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Data Asset</th>
+          <th>Primary Collector</th>
+          <th>Monetization Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Real-time Geolocation</td>
+          <td>Google Pay, Google Search</td>
+          <td><span style="color:var(--color-red);">Very High</span></td>
+        </tr>
+        <tr>
+          <td>Financial & Transaction History</td>
+          <td>Google Pay, Amazon, Meesho</td>
+          <td><span style="color:var(--color-red);">Very High</span></td>
+        </tr>
+        <tr>
+          <td>Facial Recognition & Photos</td>
+          <td>Google Photos, Instagram, Snapchat</td>
+          <td><span style="color:var(--color-orange);">High</span></td>
+        </tr>
+        <tr>
+          <td>Interest & Ad Profile Graph</td>
+          <td>YouTube, TikTok, Instagram</td>
+          <td><span style="color:var(--color-orange);">High</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Data Collection Matrix -->
+<div class="grid">
+  <div class="card col-12">
+    <div class="section-title">Data Collection Matrix <span class="badge badge-fact">Fact Overview</span></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Service</th>
+          <th>Location</th>
+          <th>Contacts</th>
+          <th>Financial</th>
+          <th>Media/Photos</th>
+          <th>Identifiers</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Google Pay / Photos / Search</td>
+          <td><span class="matrix-dot dot-active"></span></td>
+          <td><span class="matrix-dot dot-active"></span></td>
+          <td><span class="matrix-dot dot-active"></span></td>
+          <td><span class="matrix-dot dot-active"></span></td>
+          <td><span class="matrix-dot dot-active"></span></td>
+        </tr>
+        <tr>
+          <td>Instagram / WhatsApp</td>
+          <td><span class="matrix-dot dot-active"></span></td>
+          <td><span class="matrix-dot dot-active"></span></td>
+          <td><span class="matrix-dot dot-inactive"></span></td>
+          <td><span class="matrix-dot dot-active"></span></td>
+          <td><span class="matrix-dot dot-active"></span></td>
+        </tr>
+        <tr>
+          <td>TikTok / Snapchat</td>
+          <td><span class="matrix-dot dot-active"></span></td>
+          <td><span class="matrix-dot dot-active"></span></td>
+          <td><span class="matrix-dot dot-inactive"></span></td>
+          <td><span class="matrix-dot dot-active"></span></td>
+          <td><span class="matrix-dot dot-active"></span></td>
+        </tr>
+        <tr>
+          <td>Amazon / Meesho</td>
+          <td><span class="matrix-dot dot-active"></span></td>
+          <td><span class="matrix-dot dot-inactive"></span></td>
+          <td><span class="matrix-dot dot-active"></span></td>
+          <td><span class="matrix-dot dot-inactive"></span></td>
+          <td><span class="matrix-dot dot-active"></span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Privacy Improvement Simulator -->
+<div class="grid">
+  <div class="card col-8">
+    <div class="section-title">Privacy Improvement Simulator</div>
+    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Toggle recommended privacy controls to see your projected Privacy Score increase.</p>
+
+    <div class="sim-item">
+      <div>
+        <strong>Disable Precise Location on Social Apps</strong>
+        <div style="font-size:0.75rem; color: var(--text-muted);">Revoke location permissions for Instagram, TikTok, and Snapchat.</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" class="sim-toggle" data-points="15" onchange="updateSim()">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="sim-item">
+      <div>
+        <strong>Enable Auto-Delete for Search & Location History</strong>
+        <div style="font-size:0.75rem; color: var(--text-muted);">Set Google Account activity auto-delete to 3 months.</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" class="sim-toggle" data-points="20" onchange="updateSim()">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="sim-item">
+      <div>
+        <strong>Opt-Out of Personalized Ad Tracking Across Apps</strong>
+        <div style="font-size:0.75rem; color: var(--text-muted);">Enable iOS App Tracking Transparency / Android Privacy Sandbox.</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" class="sim-toggle" data-points="18" onchange="updateSim()">
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <div class="card col-4" style="display:flex; flex-direction:column; justify-content:center;">
+    <div class="section-title">Final Verdict</div>
+    <div style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-muted);">
+      Your digital footprint is currently <strong style="color:var(--color-red);">Extensive</strong> due to heavy reliance on centralized tech ecosystems (Alphabet & Meta).
+    </div>
+    <div style="margin-top: 1rem; padding: 1rem; background: rgba(56, 189, 248, 0.1); border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.2);">
+      <strong>Key Recommendation:</strong> Enabling location restrictions and auto-delete settings can raise your Privacy Score from <strong>28</strong> up to <strong>81 (Strong)</strong> without abandoning any services.
+    </div>
+  </div>
+</div>
+
+<script>
+  function updateSim() {
+    let baseScore = 28;
+    let toggles = document.querySelectorAll('.sim-toggle');
+    toggles.forEach(t => {
+      if (t.checked) {
+        baseScore += parseInt(t.getAttribute('data-points'));
+      }
+    });
+
+    const scoreEl = document.getElementById('privacy-score');
+    const ratingEl = document.getElementById('privacy-rating');
+    scoreEl.innerText = baseScore + " / 100";
+
+    if (baseScore <= 30) {
+      scoreEl.className = "metric-value score-weak";
+      ratingEl.innerText = "Rating: 🔴 Weak";
+    } else if (baseScore <= 60) {
+      scoreEl.className = "metric-value score-fair";
+      ratingEl.innerText = "Rating: 🟠 Fair";
+    } else if (baseScore <= 80) {
+      scoreEl.className = "metric-value score-good";
+      ratingEl.innerText = "Rating: 🟡 Good";
+    } else {
+      scoreEl.className = "metric-value score-strong";
+      ratingEl.innerText = "Rating: 🟢 Strong";
+    }
+  }
+</script>
+
+</body>
+</html>
