@@ -1,0 +1,282 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1020"></stop>
+      <stop offset="55%" stop-color="#111a35"></stop>
+      <stop offset="100%" stop-color="#17102b"></stop>
+    </linearGradient>
+
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#38bdf8"></stop>
+      <stop offset="50%" stop-color="#818cf8"></stop>
+      <stop offset="100%" stop-color="#a78bfa"></stop>
+    </linearGradient>
+
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#22c55e"></stop>
+      <stop offset="100%" stop-color="#4ade80"></stop>
+    </linearGradient>
+
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-opacity="0.25"></feDropShadow>
+    </filter>
+
+    <style>
+      .title { font: 700 34px Arial, sans-serif; fill: #f8fafc; }
+      .subtitle { font: 400 16px Arial, sans-serif; fill: #94a3b8; }
+      .section { font: 700 17px Arial, sans-serif; fill: #f8fafc; }
+      .label { font: 600 13px Arial, sans-serif; fill: #cbd5e1; }
+      .small { font: 400 12px Arial, sans-serif; fill: #94a3b8; }
+      .value { font: 700 25px Arial, sans-serif; fill: #f8fafc; }
+      .greenText { fill: #4ade80; }
+      .blueText { fill: #38bdf8; }
+      .purpleText { fill: #a78bfa; }
+      .orangeText { fill: #fb923c; }
+      .redText { fill: #f87171; }
+      .card { fill: #111a2e; stroke: #263552; stroke-width: 1; }
+      .inner { fill: #0d1628; stroke: #263552; stroke-width: 1; }
+    </style>
+  </defs>
+
+  <!-- BACKGROUND -->
+  <rect width="1600" height="1100" fill="url(#bg)"></rect>
+
+  <!-- HEADER -->
+  <rect x="45" y="35" width="1510" height="105" rx="22" fill="#101a30" stroke="#2b3b5d"></rect>
+  <circle cx="90" cy="87" r="27" fill="#172554"></circle>
+  <text x="90" y="96" text-anchor="middle" font-size="28">🥗</text>
+
+  <text x="135" y="78" class="title">NutriScope Business Strategy Dashboard</text>
+  <text x="135" y="108" class="subtitle">
+    Day 24 • Business Reality Check • Revenue • GTM • Competition • Investment
+  </text>
+
+  <!-- VERDICT -->
+  <rect x="1340" y="62" width="170" height="50" rx="25" fill="#422006" stroke="#fb923c"></rect>
+  <circle cx="1370" cy="87" r="8" fill="#f59e0b"></circle>
+  <text x="1390" y="93" font-family="Arial" font-size="16" font-weight="700" fill="#fed7aa">
+    VALIDATE
+  </text>
+
+  <!-- BUSINESS MODEL -->
+  <rect x="45" y="165" width="490" height="285" rx="18" class="card" filter="url(#shadow)"></rect>
+  <text x="70" y="200" class="section">1. BUSINESS MODEL</text>
+  <text x="70" y="225" class="small">From nutrition tracking to actionable intelligence</text>
+
+  <rect x="70" y="250" width="200" height="75" rx="12" class="inner"></rect>
+  <text x="88" y="275" class="label">TARGET CUSTOMER</text>
+  <text x="88" y="300" class="small">Health-conscious</text>
+  <text x="88" y="316" class="small">18–35 consumers</text>
+
+  <rect x="290" y="250" width="215" height="75" rx="12" class="inner"></rect>
+  <text x="308" y="275" class="label">CORE VALUE</text>
+  <text x="308" y="300" class="small">Food data → insights</text>
+  <text x="308" y="316" class="small">→ daily actions</text>
+
+  <rect x="70" y="340" width="435" height="82" rx="12" fill="#101b32" stroke="#33466b"></rect>
+  <text x="88" y="365" class="label">BUSINESS MODEL</text>
+  <text x="88" y="391" font-family="Arial" font-size="18" font-weight="700" fill="#38bdf8">
+    Freemium → Premium Subscription
+  </text>
+  <text x="88" y="410" class="small">Free tracking • Paid intelligence • Future B2B</text>
+
+  <!-- REVENUE -->
+  <rect x="560" y="165" width="490" height="285" rx="18" class="card" filter="url(#shadow)"></rect>
+  <text x="585" y="200" class="section">2. REVENUE STREAMS</text>
+  <text x="585" y="225" class="small">Primary focus: recurring revenue</text>
+
+  <rect x="585" y="250" width="205" height="78" rx="12" class="inner"></rect>
+  <text x="605" y="275" class="label">FREE</text>
+  <text x="605" y="302" class="value">₹0</text>
+  <text x="665" y="302" class="small">Basic tracking</text>
+
+  <rect x="810" y="250" width="215" height="78" rx="12" fill="#10251d" stroke="#2f6b4a"></rect>
+  <text x="830" y="275" class="label greenText">PREMIUM</text>
+  <text x="830" y="302" class="value">₹199</text>
+  <text x="900" y="302" class="small">/ month</text>
+
+  <rect x="585" y="343" width="205" height="78" rx="12" class="inner"></rect>
+  <text x="605" y="368" class="label purpleText">ANNUAL</text>
+  <text x="605" y="395" class="value">₹1,499</text>
+  <text x="605" y="412" class="small">Annual membership</text>
+
+  <rect x="810" y="343" width="215" height="78" rx="12" class="inner"></rect>
+  <text x="830" y="368" class="label orangeText">FUTURE</text>
+  <text x="830" y="395" class="value">B2B</text>
+  <text x="830" y="412" class="small">Gyms • Coaches • Wellness</text>
+
+  <!-- GTM -->
+  <rect x="1075" y="165" width="480" height="285" rx="18" class="card" filter="url(#shadow)"></rect>
+  <text x="1100" y="200" class="section">3. GO-TO-MARKET FLOW</text>
+  <text x="1100" y="225" class="small">Distribution before feature expansion</text>
+
+  <rect x="1100" y="255" width="105" height="52" rx="26" fill="#172554"></rect>
+  <text x="1152" y="286" text-anchor="middle" class="label blueText">CONTENT</text>
+
+  <text x="1212" y="286" font-size="22" fill="#64748b">→</text>
+
+  <rect x="1240" y="255" width="105" height="52" rx="26" fill="#1e1b4b"></rect>
+  <text x="1292" y="286" text-anchor="middle" class="label purpleText">SIGNUP</text>
+
+  <text x="1352" y="286" font-size="22" fill="#64748b">→</text>
+
+  <rect x="1380" y="255" width="145" height="52" rx="26" fill="#13251c"></rect>
+  <text x="1452" y="286" text-anchor="middle" class="label greenText">ACTIVATION</text>
+
+  <rect x="1100" y="330" width="105" height="52" rx="26" fill="#13251c"></rect>
+  <text x="1152" y="361" text-anchor="middle" class="label greenText">INSIGHT</text>
+
+  <text x="1212" y="361" font-size="22" fill="#64748b">→</text>
+
+  <rect x="1240" y="330" width="105" height="52" rx="26" fill="#422006"></rect>
+  <text x="1292" y="361" text-anchor="middle" class="label orangeText">PAY</text>
+
+  <text x="1352" y="361" font-size="22" fill="#64748b">→</text>
+
+  <rect x="1380" y="330" width="145" height="52" rx="26" fill="#172554"></rect>
+  <text x="1452" y="361" text-anchor="middle" class="label blueText">RETAIN</text>
+
+  <text x="1100" y="412" class="small">
+    Primary channels: social • communities • gyms • referrals • SEO
+  </text>
+
+  <!-- FIRST 100 -->
+  <rect x="45" y="475" width="490" height="270" rx="18" class="card" filter="url(#shadow)"></rect>
+  <text x="70" y="510" class="section">4. FIRST 100 USERS</text>
+
+  <rect x="70" y="535" width="100" height="62" rx="10" class="inner"></rect>
+  <text x="120" y="560" text-anchor="middle" class="label blueText">1–10</text>
+  <text x="120" y="581" text-anchor="middle" class="small">Founder-led</text>
+
+  <rect x="185" y="535" width="100" height="62" rx="10" class="inner"></rect>
+  <text x="235" y="560" text-anchor="middle" class="label purpleText">11–25</text>
+  <text x="235" y="581" text-anchor="middle" class="small">Communities</text>
+
+  <rect x="300" y="535" width="100" height="62" rx="10" class="inner"></rect>
+  <text x="350" y="560" text-anchor="middle" class="label greenText">26–50</text>
+  <text x="350" y="581" text-anchor="middle" class="small">Referrals</text>
+
+  <rect x="415" y="535" width="90" height="62" rx="10" class="inner"></rect>
+  <text x="460" y="560" text-anchor="middle" class="label orangeText">51–100</text>
+  <text x="460" y="581" text-anchor="middle" class="small">Scale winner</text>
+
+  <text x="70" y="630" class="label">VALIDATION TARGETS</text>
+
+  <text x="70" y="658" class="small">● 100 registered users</text>
+  <text x="70" y="680" class="small">● 60+ activated users</text>
+  <text x="280" y="658" class="small">● 10+ paying users</text>
+  <text x="280" y="680" class="small">● 30%+ 30-day retention</text>
+  <text x="70" y="713" class="small">● 10+ referrals</text>
+  <text x="280" y="713" class="small">● Repeatable acquisition</text>
+
+  <!-- COMPETITIVE MOAT -->
+  <rect x="560" y="475" width="490" height="270" rx="18" class="card" filter="url(#shadow)"></rect>
+  <text x="585" y="510" class="section">5. COMPETITIVE MOAT</text>
+  <text x="585" y="535" class="small">Features alone are not enough</text>
+
+  <circle cx="805" cy="625" r="72" fill="#172554" stroke="#818cf8" stroke-width="2"></circle>
+  <text x="805" y="618" text-anchor="middle" font-family="Arial" font-size="16" font-weight="700" fill="#f8fafc">
+    NUTRISCOPE
+  </text>
+  <text x="805" y="640" text-anchor="middle" class="small">Nutrition</text>
+
+  <line x1="730" y1="570" x2="660" y2="555" stroke="#38bdf8" stroke-width="2"></line>
+  <text x="585" y="557" class="label blueText">Personal Data</text>
+
+  <line x1="880" y1="570" x2="950" y2="555" stroke="#a78bfa" stroke-width="2"></line>
+  <text x="890" y="557" class="label purpleText">AI Insights</text>
+
+  <line x1="730" y1="680" x2="660" y2="700" stroke="#4ade80" stroke-width="2"></line>
+  <text x="585" y="710" class="label greenText">Distribution</text>
+
+  <line x1="880" y1="680" x2="950" y2="700" stroke="#fb923c" stroke-width="2"></line>
+  <text x="890" y="710" class="label orangeText">Community</text>
+
+  <text x="585" y="735" class="small">Potential moat strength: EARLY / UNPROVEN</text>
+
+  <!-- RISKS -->
+  <rect x="1075" y="475" width="480" height="270" rx="18" class="card" filter="url(#shadow)"></rect>
+  <text x="1100" y="510" class="section">6. KEY BUSINESS RISKS</text>
+
+  <rect x="1100" y="535" width="435" height="43" rx="9" fill="#2b1720"></rect>
+  <text x="1120" y="562" class="label redText">⚠ Low user retention / food logging fatigue</text>
+
+  <rect x="1100" y="588" width="435" height="43" rx="9" fill="#2b2117"></rect>
+  <text x="1120" y="615" class="label orangeText">⚠ Users may not pay for another tracker</text>
+
+  <rect x="1100" y="641" width="435" height="43" rx="9" fill="#2b1720"></rect>
+  <text x="1120" y="668" class="label redText">⚠ Large competitors and low switching costs</text>
+
+  <rect x="1100" y="694" width="435" height="43" rx="9" fill="#2b2117"></rect>
+  <text x="1120" y="721" class="label orangeText">⚠ Acquisition cost and health-trust concerns</text>
+
+  <!-- SCORECARD -->
+  <rect x="45" y="770" width="730" height="270" rx="18" class="card" filter="url(#shadow)"></rect>
+  <text x="70" y="805" class="section">7. INVESTMENT SCORECARD</text>
+
+  <!-- Score rows -->
+  <text x="70" y="842" class="label">Business Viability</text>
+  <rect x="220" y="829" width="390" height="16" rx="8" fill="#1e293b"></rect>
+  <rect x="220" y="829" width="281" height="16" rx="8" fill="url(#green)"></rect>
+  <text x="630" y="843" class="label greenText">72</text>
+
+  <text x="70" y="880" class="label">Revenue Potential</text>
+  <rect x="220" y="867" width="390" height="16" rx="8" fill="#1e293b"></rect>
+  <rect x="220" y="867" width="265" height="16" rx="8" fill="url(#accent)"></rect>
+  <text x="630" y="881" class="label blueText">68</text>
+
+  <text x="70" y="918" class="label">GTM Strength</text>
+  <rect x="220" y="905" width="390" height="16" rx="8" fill="#1e293b"></rect>
+  <rect x="220" y="905" width="238" height="16" rx="8" fill="#818cf8"></rect>
+  <text x="630" y="919" class="label purpleText">61</text>
+
+  <text x="70" y="956" class="label">Competitive Strength</text>
+  <rect x="220" y="943" width="390" height="16" rx="8" fill="#1e293b"></rect>
+  <rect x="220" y="943" width="211" height="16" rx="8" fill="#fb923c"></rect>
+  <text x="630" y="957" class="label orangeText">54</text>
+
+  <text x="70" y="994" class="label">Investor Readiness</text>
+  <rect x="220" y="981" width="390" height="16" rx="8" fill="#1e293b"></rect>
+  <rect x="220" y="981" width="187" height="16" rx="8" fill="#f87171"></rect>
+  <text x="630" y="995" class="label redText">48</text>
+
+  <rect x="665" y="835" width="80" height="130" rx="16" fill="#172554" stroke="#818cf8"></rect>
+  <text x="705" y="880" text-anchor="middle" class="small">OVERALL</text>
+  <text x="705" y="925" text-anchor="middle" font-family="Arial" font-size="35" font-weight="700" fill="#f8fafc">61</text>
+  <text x="705" y="948" text-anchor="middle" class="small">/100</text>
+
+  <!-- FINAL VERDICT -->
+  <rect x="800" y="770" width="755" height="270" rx="18" class="card" filter="url(#shadow)"></rect>
+  <text x="825" y="805" class="section">8. FINAL VERDICT</text>
+
+  <rect x="825" y="835" width="200" height="75" rx="16" fill="#422006" stroke="#fb923c" stroke-width="2"></rect>
+  <circle cx="855" cy="872" r="10" fill="#f59e0b"></circle>
+  <text x="880" y="879" font-family="Arial" font-size="22" font-weight="700" fill="#fed7aa">
+    VALIDATE
+  </text>
+
+  <text x="1050" y="855" class="label">SUSTAINABILITY THESIS</text>
+  <text x="1050" y="880" class="small">
+    NutriScope has potential because nutrition
+  </text>
+  <text x="1050" y="899" class="small">
+    is a recurring problem with subscription
+  </text>
+  <text x="1050" y="918" class="small">
+    potential. However, revenue and retention
+  </text>
+  <text x="1050" y="937" class="small">
+    are not yet proven.
+  </text>
+
+  <rect x="825" y="935" width="690" height="78" rx="12" fill="#0d1628" stroke="#263552"></rect>
+  <text x="845" y="962" class="label greenText">NEXT MILESTONE</text>
+  <text x="845" y="987" font-family="Arial" font-size="16" font-weight="700" fill="#f8fafc">
+    100 Users → 10+ Paying → Retention → Repeatable Acquisition
+  </text>
+
+  <!-- FOOTER -->
+  <text x="800" y="1068" text-anchor="middle" class="small">
+    NutriScope • Day 24 Business Strategy • Evidence over assumptions • Revenue over vanity metrics
+  </text>
+</svg>
