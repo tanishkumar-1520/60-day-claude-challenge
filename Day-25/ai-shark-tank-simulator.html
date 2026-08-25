@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AI Shark Tank Simulator</title>
+<style>
+:root{--bg:#070b16;--panel:#101728;--panel2:#151e32;--line:#263451;--text:#f8fafc;--muted:#94a3b8;--blue:#38bdf8;--purple:#a78bfa;--green:#4ade80;--orange:#fb923c;--red:#f87171;--gold:#fbbf24}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#18213d 0,#070b16 48%);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;min-height:100vh}
+.container{max-width:1180px;margin:auto;padding:28px 18px 60px}.hero{text-align:center;padding:35px 10px}.hero h1{font-size:clamp(34px,6vw,62px);margin:0;background:linear-gradient(90deg,#38bdf8,#a78bfa,#fb923c);-webkit-background-clip:text;color:transparent}.hero p{color:var(--muted);font-size:17px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.panel{background:rgba(16,23,40,.92);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 16px 45px #0005}.panel h2{margin:0 0 16px}.full{grid-column:1/-1}
+label{display:block;color:#cbd5e1;font-size:13px;font-weight:700;margin:13px 0 7px}input,textarea,select{width:100%;background:#0b1222;border:1px solid #2a3957;color:var(--text);border-radius:12px;padding:12px 13px;font:inherit;outline:none}input:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px #38bdf81c}textarea{min-height:90px;resize:vertical}
+button{border:0;border-radius:12px;padding:12px 18px;font-weight:800;cursor:pointer;color:#06101d;background:linear-gradient(90deg,#38bdf8,#a78bfa);transition:.2s}button:hover{transform:translateY(-2px);filter:brightness(1.08)}button.secondary{background:#1b263c;color:#dbeafe;border:1px solid #314361}button.danger{background:#3a1821;color:#fecaca;border:1px solid #71303c}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.pitch{border-left:4px solid var(--blue);padding:16px;background:#0c1426;border-radius:12px}.pitch strong{color:var(--blue)}
+.judges{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.judge{background:#0b1222;border:1px solid var(--line);border-radius:16px;padding:16px;text-align:center}.judge .icon{font-size:35px}.judge h3{margin:8px 0 4px}.judge small{color:var(--muted)}
+.q{margin-top:16px;background:#0c1426;border:1px solid #263451;border-radius:14px;padding:15px}.q b{color:#e2e8f0}.answer{margin-top:10px}.reaction{margin-top:9px;color:var(--green);font-size:13px;font-weight:700}
+.scoregrid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.score{text-align:center;background:#0b1222;border:1px solid var(--line);padding:18px 10px;border-radius:15px}.score .num{font-size:30px;font-weight:900;color:var(--blue)}
+.bar{height:9px;background:#1e293b;border-radius:9px;overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;background:linear-gradient(90deg,#38bdf8,#a78bfa);border-radius:9px}
+.verdict{text-align:center;padding:28px;border:1px solid #4c3b16;background:linear-gradient(135deg,#171a25,#211a0d);border-radius:20px}.verdict h2{font-size:40px;margin:6px 0;color:var(--gold)}.big{font-size:52px;font-weight:900}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{background:#0b1222;padding:16px;border-radius:14px;border:1px solid var(--line)}.stat span{display:block;color:var(--muted);font-size:12px}.stat b{font-size:24px}
+.table{width:100%;border-collapse:collapse}.table th,.table td{padding:11px;border-bottom:1px solid var(--line);text-align:left}.table th{color:#93c5fd}
+.hidden{display:none}.notice{padding:12px;border-radius:12px;background:#172033;color:#cbd5e1;margin-bottom:14px}
+footer{text-align:center;color:#64748b;padding:25px}
+@media(max-width:850px){.grid,.judges{grid-template-columns:1fr}.scoregrid{grid-template-columns:repeat(2,1fr)}.full{grid-column:auto}.stats{grid-template-columns:1fr}.hero{padding-top:15px}}
+@media print{body{background:white;color:#111}.panel,.judge,.score,.stat,.q,.pitch{box-shadow:none;border:1px solid #ccc;background:white;color:#111}.muted,.small,footer{color:#555}.hero h1{color:#111;-webkit-text-fill-color:#111}button,.actions{display:none}}
+</style>
+</head>
+<body>
+<div class="container">
+<section class="hero">
+<h1>🦈 AI Shark Tank Simulator</h1>
+<p>Pitch your startup. Face four AI judges. Get scored. Discover your funding outcome.</p>
+</section>
+
+<div class="grid">
+<section class="panel">
+<h2>🚀 Startup Pitch</h2>
+<label>Startup Name</label><input id="name" placeholder="e.g. NutriScope">
+<label>Problem Statement</label><textarea id="problem" placeholder="What painful problem are you solving?"></textarea>
+<label>Solution</label><textarea id="solution" placeholder="What does your product do?"></textarea>
+<label>Revenue Model</label><textarea id="revenue" placeholder="How do you make money?"></textarea>
+<label>Target Audience</label><textarea id="audience" placeholder="Who is the ideal customer?"></textarea>
+<label>Funding Ask</label><input id="ask" type="number" min="10000" placeholder="₹ Amount">
+<div class="actions"><button onclick="startSimulation()">Start Shark Tank</button><button class="secondary" onclick="loadDemo()">Load Demo</button></div>
+</section>
+
+<section class="panel">
+<h2>📊 How It Works</h2>
+<div class="notice">This is a self-contained simulation. No backend or API key is required.</div>
+<div class="stats">
+<div class="stat"><span>Judges</span><b>4</b></div>
+<div class="stat"><span>Questions</span><b>8</b></div>
+<div class="stat"><span>Score</span><b>100</b></div>
+</div>
+<br>
+<div class="pitch"><strong>Judge logic</strong><br><br>VC tests market size and scalability. Founder tests execution. Customer tests usefulness. Angel tests profitability. Scores are generated from your pitch and answers.</div>
+</section>
+
+<section id="simulation" class="panel full hidden">
+<h2>🎤 Pitch Round</h2>
+<div id="pitch"></div>
+<div class="judges" id="judges"></div>
+</section>
+
+<section id="results" class="panel full hidden">
+<h2>🏆 Investment Scorecard</h2>
+<div class="scoregrid" id="scores"></div>
+<br>
+<div class="verdict" id="verdict"></div>
+</section>
+
+<section id="report" class="panel full hidden">
+<h2>📄 Pitch Report</h2>
+<div id="reportBody"></div>
+<div class="actions">
+<button onclick="downloadReport()">Download Pitch Report</button>
+<button class="secondary" onclick="window.print()">Print / Save PDF</button>
+<button class="secondary" onclick="shareResult()">Share Result</button>
+</div>
+</section>
+
+<section id="leaderboard" class="panel full">
+<h2>🏅 Local Leaderboard</h2>
+<table class="table"><thead><tr><th>Startup</th><th>Score</th><th>Decision</th><th>Funding</th></tr></thead><tbody id="board"></tbody></table>
+</section>
+</div>
+<footer>AI Shark Tank Simulator • Day 25 • Single-file HTML application</footer>
+</div>
+
+<script>
+const judges=[
+{icon:"🦈",name:"Venture Capitalist",focus:"Market size & scalability",color:"#38bdf8"},
+{icon:"🦈",name:"Founder",focus:"Execution",color:"#a78bfa"},
+{icon:"🦈",name:"Customer",focus:"Usefulness",color:"#4ade80"},
+{icon:"🦈",name:"Angel Investor",focus:"Profitability",color:"#fb923c"}
+];
+let state=null;
+
+function val(id){return document.getElementById(id).value.trim()}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function loadDemo(){
+document.getElementById("name").value="NutriScope";
+document.getElementById("problem").value="People track calories but struggle to understand whether their diet is nutritionally balanced.";
+document.getElementById("solution").value="A nutrition intelligence platform that turns food logs into nutrient insights, risk signals, meal plans and actionable recommendations.";
+document.getElementById("revenue").value="Freemium model with ₹199/month premium and ₹1,499/year annual subscription; future B2B wellness.";
+document.getElementById("audience").value="Health-conscious students, young professionals and fitness-oriented consumers aged 18–35.";
+document.getElementById("ask").value="2500000";
+}
+function startSimulation(){
+const data={name:val("name"),problem:val("problem"),solution:val("solution"),revenue:val("revenue"),audience:val("audience"),ask:Number(val("ask"))||0};
+if(Object.values(data).some(v=>v===""||v===0)){alert("Please complete every startup field.");return}
+state={data,answers:[],reactions:[]};renderPitch();document.getElementById("simulation").classList.remove("hidden");document.getElementById("results").classList.add("hidden");document.getElementById("report").classList.add("hidden");document.getElementById("simulation").scrollIntoView({behavior:"smooth"});
+}
+function renderPitch(){
+const d=state.data;
+document.getElementById("pitch").innerHTML=`<div class="pitch"><strong>${esc(d.name)}</strong><br><br><b>Problem:</b> ${esc(d.problem)}<br><br><b>Solution:</b> ${esc(d.solution)}<br><br><b>Revenue:</b> ${esc(d.revenue)}<br><br><b>Audience:</b> ${esc(d.audience)}<br><br><b>Funding Ask:</b> ₹${d.ask.toLocaleString("en-IN")}</div>`;
+const questions=[
+["How large is the addressable market and how will you scale beyond the first niche?","What is your go-to-market strategy and why will it be repeatable?"],
+["What can your team execute in the next 90 days?","What is the hardest operational bottleneck and how will you solve it?"],
+["What user outcome improves because of this product?","Why would a customer choose you over an existing alternative?"],
+["What are your unit economics and expected margins?","How will the funding translate into revenue and profitability?"]
+];
+document.getElementById("judges").innerHTML=judges.map((j,i)=>`<div class="judge"><div class="icon">${j.icon}</div><h3>${j.name}</h3><small>${j.focus}</small>${questions[i].map((q,k)=>`<div class="q"><b>Q${k+1}.</b> ${q}<textarea class="answer" id="a${i}${k}" placeholder="Answer the judge..."></textarea><button class="secondary" onclick="react(${i},${k})">Submit Answer</button><div id="r${i}${k}" class="reaction"></div></div>`).join("")}</div>`).join("");
+}
+function react(i,k){
+const el=document.getElementById(`a${i}${k}`),txt=el.value.trim();
+if(!txt){alert("Enter an answer first.");return}
+const quality=Math.min(100,Math.round(35+Math.min(65,txt.length*1.5)));
+const msgs=quality>75?["Strong answer. I see evidence and a clear path.","Good. This reduces one of my key concerns."]:quality>55?["Promising, but I need stronger evidence.","Reasonable answer. Validate it with real customers."]:["This is still too assumption-heavy.","I would need more proof before investing."];
+document.getElementById(`r${i}${k}`).textContent="Judge reaction: "+msgs[quality>75?0:quality>55?1:2];
+state.answers.push({judge:judges[i].name,q:k+1,answer:txt,quality});
+if(state.answers.length>=1){calculate()}
+}
+function calculate(){
+const d=state.data, a=state.answers;
+const completeness=[d.problem,d.solution,d.revenue,d.audience].filter(x=>x.length>60).length*5;
+const answerQuality=a.length?a.reduce((s,x)=>s+x.quality,0)/a.length:50;
+const market=Math.round(Math.min(100,55+completeness+answerQuality*.25+(d.audience.length>80?8:0)));
+const innovation=Math.round(Math.min(100,50+Math.min(25,d.solution.length/8)+answerQuality*.2));
+const business=Math.round(Math.min(100,50+Math.min(25,d.revenue.length/8)+answerQuality*.25));
+const execution=Math.round(Math.min(100,50+Math.min(20,a.length*3)+answerQuality*.25));
+const investment=Math.round((market+innovation+business+execution)/4);
+state.scores={market,innovation,business,execution,investment};showResults();
+}
+function showResults(){
+const s=state.scores;
+const items=[["Market Potential",s.market],["Innovation",s.innovation],["Business Model",s.business],["Execution",s.execution],["Investment Worthiness",s.investment]];
+document.getElementById("scores").innerHTML=items.map(x=>`<div class="score"><div>${x[0]}</div><div class="num">${x[1]}</div><div class="bar"><i style="width:${x[1]}%"></i></div></div>`).join("");
+const avg=s.investment,ask=state.data.ask;
+let decision,reason,mult;
+if(avg>=82){decision="INVEST";reason="Strong overall case. Market, business model and execution signals support funding.";mult=1.2}
+else if(avg>=70){decision="COME BACK LATER";reason="Promising startup, but more traction, retention or revenue evidence is required.";mult=1.0}
+else if(avg>=55){decision="ACQUIRE";reason="Interesting product, but strategic fit or distribution must be proven before a full investment.";mult=.75}
+else{decision="REJECT";reason="Current evidence does not justify investment. Rework the core assumptions and return with traction.";mult=.5}
+const valuation=Math.max(1000000,Math.round(ask*mult/50000)*50000);
+const funding=decision==="INVEST"?ask:Math.round(ask*.5/10000)*10000;
+document.getElementById("verdict").innerHTML=`<div class="big">${avg}/100</div><h2>${decision}</h2><p>${reason}</p><div class="stats"><div class="stat"><span>Suggested Valuation</span><b>₹${valuation.toLocaleString("en-IN")}</b></div><div class="stat"><span>Funding Recommendation</span><b>₹${funding.toLocaleString("en-IN")}</b></div><div class="stat"><span>Judge Answers</span><b>${state.answers.length}/8</b></div></div>`;
+state.decision={decision,reason,valuation,funding};document.getElementById("results").classList.remove("hidden");renderReport();saveBoard();document.getElementById("results").scrollIntoView({behavior:"smooth"});
+if(decision==="INVEST")confetti();
+}
+function renderReport(){
+const d=state.data,s=state.scores,v=state.decision;
+document.getElementById("reportBody").innerHTML=`<div class="pitch"><strong>${esc(d.name)}</strong> — AI Shark Tank Pitch Report<br><br><b>Problem:</b> ${esc(d.problem)}<br><b>Solution:</b> ${esc(d.solution)}<br><b>Audience:</b> ${esc(d.audience)}<br><b>Revenue:</b> ${esc(d.revenue)}<br><b>Ask:</b> ₹${d.ask.toLocaleString("en-IN")}</div><br><table class="table"><tr><th>Metric</th><th>Score</th></tr>${Object.entries({"Market Potential":s.market,"Innovation":s.innovation,"Business Model":s.business,"Execution":s.execution,"Investment Worthiness":s.investment}).map(([k,x])=>`<tr><td>${k}</td><td>${x}/100</td></tr>`).join("")}</table><br><div class="verdict"><h2>${v.decision}</h2><p>${v.reason}</p><p><b>Suggested Valuation:</b> ₹${v.valuation.toLocaleString("en-IN")} &nbsp; <b>Funding:</b> ₹${v.funding.toLocaleString("en-IN")}</p></div>`;
+document.getElementById("report").classList.remove("hidden");
+}
+function downloadReport(){
+if(!state){alert("Run a simulation first.");return}
+const d=state.data,s=state.scores,v=state.decision;
+const text=`AI SHARK TANK PITCH REPORT\n\nStartup: ${d.name}\nProblem: ${d.problem}\nSolution: ${d.solution}\nRevenue Model: ${d.revenue}\nTarget Audience: ${d.audience}\nFunding Ask: ₹${d.ask}\n\nSCORES\nMarket Potential: ${s.market}/100\nInnovation: ${s.innovation}/100\nBusiness Model: ${s.business}/100\nExecution: ${s.execution}/100\nInvestment Worthiness: ${s.investment}/100\n\nDECISION: ${v.decision}\nSuggested Valuation: ₹${v.valuation}\nFunding Recommendation: ₹${v.funding}\nReason: ${v.reason}\n`;
+const blob=new Blob([text],{type:"text/plain"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="ai-shark-tank-pitch-report.txt";a.click();URL.revokeObjectURL(url);
+}
+async function shareResult(){
+if(!state)return;
+const text=`${state.data.name} scored ${state.scores.investment}/100 in the AI Shark Tank Simulator. Decision: ${state.decision.decision}.`;
+if(navigator.share){try{await navigator.share({title:"AI Shark Tank Result",text})}catch(e){}}
+else{await navigator.clipboard?.writeText(text);alert("Result copied to clipboard.")}
+}
+function saveBoard(){
+const arr=JSON.parse(localStorage.getItem("sharkBoard")||"[]");
+arr.push({name:state.data.name,score:state.scores.investment,decision:state.decision.decision,funding:state.decision.funding});
+arr.sort((a,b)=>b.score-a.score);localStorage.setItem("sharkBoard",JSON.stringify(arr.slice(0,10)));renderBoard();
+}
+function renderBoard(){
+const arr=JSON.parse(localStorage.getItem("sharkBoard")||"[]");
+document.getElementById("board").innerHTML=arr.length?arr.map(x=>`<tr><td>${esc(x.name)}</td><td>${x.score}</td><td>${x.decision}</td><td>₹${Number(x.funding).toLocaleString("en-IN")}</td></tr>`).join(""):`<tr><td colspan="4">No simulations yet.</td></tr>`;
+}
+function confetti(){
+for(let i=0;i<90;i++){const e=document.createElement("i");e.style.position="fixed";e.style.zIndex=9999;e.style.width="8px";e.style.height="14px";e.style.left=Math.random()*100+"vw";e.style.top="-20px";e.style.background=["#38bdf8","#a78bfa","#4ade80","#fbbf24","#fb923c"][Math.floor(Math.random()*5)];e.style.transform=`rotate(${Math.random()*360}deg)`;document.body.appendChild(e);e.animate([{transform:e.style.transform,top:"-20px"},{transform:`rotate(${Math.random()*720}deg)`,top:"105vh"}],{duration:1800+Math.random()*1800,easing:"ease-in"}).onfinish=()=>e.remove()}
+}
+renderBoard();
+</script>
+</body>
+</html>
