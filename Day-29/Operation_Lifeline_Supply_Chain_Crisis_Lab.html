@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Operation Lifeline: Supply Chain Crisis Lab</title>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:#080b12;color:#edf2f7}
+button{font:inherit}.app{min-height:100vh;background:radial-gradient(circle at 20% 0%,#18233c 0,#0b101b 38%,#070910 100%);padding:28px}
+.shell{max-width:1180px;margin:auto}.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}.brand{font-weight:800;letter-spacing:.5px}.badge{border:1px solid #263653;border-radius:999px;padding:7px 12px;color:#aebbd0;font-size:12px}
+.hero,.card{background:rgba(17,24,39,.82);border:1px solid #26324a;border-radius:22px;box-shadow:0 18px 50px rgba(0,0,0,.22);backdrop-filter:blur(10px)}
+.hero{padding:54px;text-align:center}.hero h1{font-size:clamp(36px,6vw,68px);margin:12px 0}.hero p{max-width:720px;margin:0 auto 30px;color:#aab7c9;line-height:1.7}
+h2{margin:0 0 8px;font-size:30px}.muted{color:#98a7bc;line-height:1.6}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}.card{padding:22px}.metric{font-size:30px;font-weight:800}.label{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:#8492a8}.value{font-size:20px;font-weight:700;margin-top:6px}
+.primary,.secondary,.choice{border:0;border-radius:13px;padding:13px 18px;cursor:pointer;transition:.2s}.primary{background:#6d7cff;color:white;font-weight:800}.primary:hover{transform:translateY(-2px);filter:brightness(1.1)}.secondary{background:#1b263b;color:#dce6f5;border:1px solid #31405b}.secondary:hover,.choice:hover{border-color:#7180ff;transform:translateY(-2px)}
+.section{margin-bottom:20px}.sectionhead{display:flex;justify-content:space-between;gap:18px;align-items:flex-end;margin-bottom:14px}.crisis{border-left:4px solid #ff647c}.impact{color:#ffb6c1}
+.actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}.choice{text-align:left;background:#111a2b;color:#eef3fb;border:1px solid #293751;width:100%;min-height:120px}.choice.selected{border-color:#7886ff;background:#18213a;box-shadow:0 0 0 2px rgba(120,134,255,.15)}.choice h3{margin:0 0 7px}.choice p{margin:0;color:#98a7bc;font-size:14px;line-height:1.5}
+.barrow{margin:14px 0}.barhead{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}.bar{height:9px;background:#202b40;border-radius:99px;overflow:hidden}.fill{height:100%;border-radius:99px;transition:width .8s ease}
+.neggrid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}.options{display:grid;gap:10px}.negscore{display:flex;gap:12px;flex-wrap:wrap}.mini{background:#0d1422;border:1px solid #26344d;border-radius:14px;padding:12px 15px}.mini b{display:block;font-size:20px}
+.question{font-size:20px;font-weight:700;line-height:1.45;margin:15px 0}.answers{display:grid;gap:10px}.answer{padding:14px;text-align:left;border:1px solid #2b3954;background:#111a2b;color:#eaf0f8;border-radius:12px;cursor:pointer}.answer:hover{border-color:#7482ff}.answer:disabled{cursor:default}.correct{border-color:#42d392;background:#123025}.wrong{border-color:#ff667d;background:#301821}
+.feedback{padding:15px;border-radius:14px;background:#0d1524;border:1px solid #263650;color:#b9c6d9}.scorebig{font-size:52px;font-weight:900}.dash{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}.insight{padding:18px;border-radius:16px;background:#0d1524;border:1px solid #273651}.insight strong{display:block;margin-bottom:7px}.progress{height:10px;background:#1e293d;border-radius:99px;overflow:hidden;margin-top:9px}.progress span{display:block;height:100%;background:#7886ff}
+.step{color:#8d9bb0;font-size:13px}.footer{display:flex;justify-content:space-between;gap:10px;margin-top:20px;flex-wrap:wrap}
+@media(max-width:760px){.app{padding:14px}.hero{padding:30px 20px}.neggrid{grid-template-columns:1fr}.sectionhead{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState}=React;
+
+const companies=[
+["NovaForge Electronics","Electronics","$2.8B",7,18,24,31,["Vietnam","India","Germany","Mexico"]],
+["Asterra Foods","Food & Beverage","$1.4B",11,34,16,19,["India","Thailand","Brazil","Italy"]],
+["HelioMotion","Automotive","$6.2B",9,22,41,46,["Japan","Germany","Poland","India"]],
+["BluePeak Medical","Healthcare","$3.7B",6,15,28,38,["USA","Ireland","Singapore","India"]],
+["TerraGrid Energy","Energy","$8.1B",13,27,36,52,["China","USA","South Korea","UAE"]],
+["OrionHome","Consumer Goods","$2.1B",8,30,21,27,["China","India","Turkey","Spain"]]
+];
+const crises=[
+["Factory Fire","Critical","A primary factory is offline after a major fire. Output has stopped and recovery may take weeks.","Production capacity is sharply reduced, raising stockout and late-delivery risk."],
+["Supplier Bankruptcy","High","A strategic supplier has suddenly entered bankruptcy protection.","Replacement sourcing is uncertain and component availability is falling."],
+["Port Strike","High","Workers at a major export port have begun an open-ended strike.","Finished goods are trapped, extending transit times and threatening customer commitments."],
+["Cyberattack","Critical","A ransomware incident has disrupted planning and warehouse systems.","Visibility is degraded and shipments may be delayed while systems are restored."],
+["Flood","Critical","Severe flooding has damaged roads around a key production region.","Inbound materials and outbound logistics are becoming unreliable."],
+["Raw Material Shortage","High","A global shortage has sharply reduced availability of a critical raw material.","Prices are rising while competitors compete for limited supply."],
+["Political Conflict","Critical","New political tensions have disrupted a major sourcing corridor.","Trade routes and supplier continuity are uncertain."],
+["Shipping Delay","Medium","A carrier network disruption has pushed key ocean shipments far behind schedule.","Inventory buffers are shrinking and service levels are under pressure."]
+];
+const actions=[
+["Dual-source critical parts","Reduce dependency by qualifying a backup supplier.","Resilience +18, Cost -9, Inventory +7, Delivery +10"],
+["Expedite priority shipments","Pay more to move critical goods faster.","Cost -15, Delivery +20, Customer +12, Profit -8"],
+["Allocate inventory to key customers","Protect the most strategic accounts first.","Customer +18, Inventory -12, Profit +5"],
+["Pause low-margin orders","Free scarce capacity for higher-value demand.","Profit +14, Customer -5, Delivery +6"],
+["Build emergency safety stock","Buy extra materials before shortages worsen.","Inventory +18, Cost -12, Resilience +12"],
+["Activate regional suppliers","Use closer suppliers even at a higher unit price.","Resilience +14, Delivery +13, Cost -10"]
+];
+const negRounds=[
+["Opening position","We need a reliable supply commitment. What do you offer?"],
+["Volume commitment","We can commit more volume if the economics and service level work."],
+["Service guarantee","We need protection against future delays. Which structure do you choose?"],
+["Final terms","This is the final negotiation. Balance trust, price and lead time."]
+];
+const negOptions=[
+["Push for the lowest price","Aggressive cost focus; supplier trust may fall.","trust",-8,"price",-12,"lead",4],
+["Offer a fair long-term deal","Balanced economics with a credible partnership.","trust",10,"price",-5,"lead",-5],
+["Pay premium for priority capacity","Spend more to secure speed and reliability.","trust",6,"price",8,"lead",-12],
+["Share forecasts and flexibility","Give visibility and flexibility to improve planning.","trust",14,"price",-3,"lead",-9]
+];
+const aiInvest=[
+["Demand Forecasting","Predict demand shifts earlier.","Customer +7, Inventory +8, Profit +6"],
+["Inventory Optimization","Set smarter buffers by item and location.","Inventory +15, Cost +8, Resilience +7"],
+["Supplier Risk Monitoring","Detect supplier and geopolitical signals earlier.","Resilience +16, Risk +14"],
+["Warehouse Vision","Use computer vision to improve warehouse accuracy.","Delivery +8, Customer +6"],
+["Procurement Copilot","Accelerate sourcing, comparison and negotiation work.","Cost +10, Lead Time +7, Profit +6"]
+];
+
+function rand(a){return a[Math.floor(Math.random()*a.length)]}
+function clamp(n){return Math.max(0,Math.min(100,n))}
+function newGame(){
+ const c=rand(companies),k=rand(crises);
+ return {company:{name:c[0],industry:c[1],revenue:c[2],factories:c[3],warehouses:c[4],suppliers:c[5],inventory:c[6],countries:c[7]},crisis:k,stats:{cost:68,inventory:52,profit:61,delivery:55,customer:58,resilience:45},selected:[],neg:{trust:55,price:50,lead:50},ceo:[],ai:[],notes:[]};
+}
+function Bar({label,val}){return <div className="barrow"><div className="barhead"><span>{label}</span><b>{Math.round(val)}</b></div><div className="bar"><div className="fill" style={{width:clamp(val)+"%",background:val>65?"#42d392":val>40?"#7886ff":"#ff667d"}}/></div></div>}
+function Layout({children,step}){return <div className="app"><div className="shell"><div className="topbar"><div className="brand">OPERATION LIFELINE</div><div className="badge">{step}</div></div>{children}</div></div>}
+
+function App(){
+ const [screen,setScreen]=useState("welcome"); const [game,setGame]=useState(newGame()); const [round,setRound]=useState(0); const [q,setQ]=useState(0); const [aiDone,setAiDone]=useState(false);
+ const reset=()=>{setGame(newGame());setRound(0);setQ(0);setAiDone(false);setScreen("company")};
+ const applyActions=()=>{let s={...game.stats};game.selected.forEach(i=>{let a=actions[i][3];a.split(", ").forEach(x=>{let [key,v]=x.split(" ");let map={Cost:"cost",Inventory:"inventory",Profit:"profit",Delivery:"delivery",Customer:"customer",Resilience:"resilience"};if(map[key])s[map[key]]=clamp(s[map[key]]+(v.startsWith("+")?+v.slice(1):-+v.slice(1)))})});setGame({...game,stats:s});setScreen("neg")};
+ const chooseNeg=(o)=>{let n={...game.neg};n.trust=clamp(n.trust+o[3]);n.price=clamp(n.price-o[5]);n.lead=clamp(n.lead-o[7]);setGame({...game,neg:n});setRound(round+1)};
+ const ceoQ=[
+ ["The crisis is worsening. What should you protect first?","Critical customer continuity while preserving cash discipline.",["Every customer equally","Strategic customers and life-critical commitments","Only the cheapest orders","Stop all shipments"],1],
+ ["Your CFO objects to emergency spending. What do you do?","Connect the spend to measurable risk reduction and set a review point.",["Spend without limits","Reject the concern","Approve targeted spend with clear thresholds","Do nothing"],2],
+ ["A supplier offers speed at a very high premium. Your response?","Paying more can be rational when a stockout costs more.",["Always accept","Compare total cost of failure before deciding","Always reject","Ask the supplier to decide"],1],
+ ["The board wants one headline KPI. Which is best?","A crisis needs a balanced view, not a single vanity metric.",["Revenue only","Inventory only","Customer service plus financial and resilience indicators","Social media followers"],2],
+ ["After stabilization, what is the priority?","Turn the incident into durable resilience.",["Forget the crisis","Document lessons, diversify risk and test the playbook","Cut all suppliers","Reduce visibility"],1]
+ ];
+ const ceoChoose=(idx)=>{let arr=[...game.ceo,idx];setGame({...game,ceo:arr});setQ(q+1)};
+ const finishAI=()=>{let s={...game.stats};game.ai.forEach(i=>{let t=aiInvest[i][2];t.split(", ").forEach(x=>{let [key,v]=x.split(" ");let map={Customer:"customer",Inventory:"inventory",Profit:"profit",Cost:"cost",Resilience:"resilience",Risk:"resilience",Delivery:"delivery"};if(map[key])s[map[key]]=clamp(s[map[key]]+(v.startsWith("+")?+v.slice(1):-+v.slice(1)))})});setGame({...game,stats:s});setAiDone(true);setScreen("final")};
+ if(screen==="welcome")return <Layout step="SIMULATION LAB"><div className="hero"><div className="badge">EXECUTIVE DECISION SIMULATOR</div><h1>Operation Lifeline</h1><p>Supply Chain Crisis Lab — lead a fictional company through a fast-moving disruption. You will make decisions across response, negotiation, leadership and AI strategy. There is no perfect answer: manage trade-offs and protect the business.</p><button className="primary" onClick={reset}>Start Simulation →</button></div></Layout>;
+ if(screen==="company")return <Layout step="1 / 6 • COMPANY"><div className="sectionhead"><div><h2>Your company</h2><p className="muted">First understand the operating model. These numbers tell you how much shock the business can absorb.</p></div></div><div className="grid">{[["Company",game.company.name],["Industry",game.company.industry],["Revenue",game.company.revenue],["Factories",game.company.factories],["Warehouses",game.company.warehouses],["Suppliers",game.company.suppliers],["Inventory",game.company.inventory+" days"],["Lead Time",game.company.leadTime||"Variable"]].map(x=><div className="card" key={x[0]}><div className="label">{x[0]}</div><div className="value">{x[1]}</div></div>)}</div><div className="card section" style={{marginTop:14}}><div className="label">Sourcing footprint</div><div className="value">{game.company.countries.join(" • ")}</div><p className="muted">Why does this matter? More geographic diversity can improve resilience, but it can also add coordination and transportation complexity.</p></div><div className="footer"><span className="step">A crisis is next. Read before acting.</span><button className="primary" onClick={()=>setScreen("crisis")}>View Crisis →</button></div></Layout>;
+ if(screen==="crisis")return <Layout step="2 / 6 • CRISIS"><div className="card crisis"><div className="label">ASSIGNED CRISIS • {game.crisis[1]}</div><h2>{game.crisis[0]}</h2><p className="muted">{game.crisis[2]}</p><p className="impact"><b>Business impact:</b> {game.crisis[3]}</p></div><div className="card section" style={{marginTop:14}}><h3>Decision lens</h3><p className="muted">Think in five dimensions: cash cost, inventory health, profit, delivery speed and customer trust. A strong response improves the system rather than optimizing only one number.</p></div><div className="footer"><span className="step">Prepare your War Room.</span><button className="primary" onClick={()=>setScreen("war")}>Enter War Room →</button></div></Layout>;
+ if(screen==="war")return <Layout step="3 / 6 • WAR ROOM"><div className="sectionhead"><div><h2>Choose 3 response actions</h2><p className="muted">You have limited capacity. Select three moves, then simulate the combined consequences.</p></div><span className="badge">{game.selected.length} / 3 selected</span></div><div className="actions">{actions.map((a,i)=><button key={a[0]} className={"choice "+(game.selected.includes(i)?"selected":"")} onClick={()=>setGame({...game,selected:game.selected.includes(i)?game.selected.filter(x=>x!==i):game.selected.length<3?[...game.selected,i]:game.selected})}><h3>{a[0]}</h3><p>{a[1]}</p><p style={{marginTop:10,color:"#cbd5e1"}}>{a[3]}</p></button>)}</div><div className="card section" style={{marginTop:16}}><div className="label">Current business health</div>{Object.entries(game.stats).map(([k,v])=><Bar key={k} label={k} val={v}/>)}</div><div className="footer"><span className="step">Why does this matter? Crisis actions create trade-offs.</span><button className="primary" disabled={game.selected.length!==3} onClick={applyActions}>Simulate Response →</button></div></Layout>;
+ if(screen==="neg")return <Layout step="4 / 6 • NEGOTIATION"><div className="neggrid"><div className="card"><div className="label">ROUND {round+1} OF 4</div><h2>{negRounds[round][0]}</h2><p className="muted">{negRounds[round][1]}</p><div className="options">{negOptions.map((o,i)=><button className="choice" key={i} onClick={()=>chooseNeg(o)}><h3>{o[0]}</h3><p>{o[1]}</p></button>)}</div></div><div className="card"><div className="label">NEGOTIATION SCORECARD</div><div className="negscore"><div className="mini">Trust<b>{game.neg.trust}</b></div><div className="mini">Price<b>{game.neg.price}</b></div><div className="mini">Lead Time<b>{game.neg.lead}</b></div></div><p className="muted">Higher is better. Trust improves cooperation; price and lead-time scores represent business attractiveness.</p></div></div></Layout>;
+ if(screen==="ceo")return <Layout step="5 / 6 • BOARDROOM"><div className="card"><div className="label">CEO QUESTION {q+1} OF 5</div><div className="question">{ceoQ[q][0]}</div><p className="muted">{ceoQ[q][1]}</p><div className="answers">{ceoQ[q][2].map((a,i)=><button key={a} className="answer" onClick={()=>ceoChoose(i)}>{a}</button>)}</div></div></Layout>;
+ if(screen==="ai")return <Layout step="6 / 6 • AI STRATEGY"><div className="sectionhead"><div><h2>Choose 2 AI investments</h2><p className="muted">Pick technologies that address the weaknesses you just experienced. Strong strategy connects AI to a specific business problem.</p></div><span className="badge">{game.ai.length} / 2 selected</span></div><div className="actions">{aiInvest.map((a,i)=><button key={a[0]} className={"choice "+(game.ai.includes(i)?"selected":"")} onClick={()=>setGame({...game,ai:game.ai.includes(i)?game.ai.filter(x=>x!==i):game.ai.length<2?[...game.ai,i]:game.ai})}><h3>{a[0]}</h3><p>{a[1]}</p><p style={{marginTop:10,color:"#cbd5e1"}}>{a[2]}</p></button>)}</div><div className="footer"><span className="step">Select two, then review your executive dashboard.</span><button className="primary" disabled={game.ai.length!==2} onClick={finishAI}>View Final Dashboard →</button></div></Layout>;
+ const leadership=Math.round(game.ceo.reduce((n,x,i)=>n+(x===ceoQ[i][4]?20:8),0)); const negotiation=Math.round((game.neg.trust+game.neg.price+game.neg.lead)/3); const resilience=clamp(game.stats.resilience+(game.ai.includes(2)?10:0)); const cost=clamp(game.stats.cost+(game.ai.includes(4)?8:0)); const overall=Math.round((leadership+negotiation+resilience+cost+game.stats.customer)/5);
+ return <Layout step="EXECUTIVE DASHBOARD"><div className="card section" style={{textAlign:"center"}}><div className="label">OVERALL CRISIS SCORE</div><div className="scorebig">{overall}</div><p className="muted">Your score reflects response quality, negotiation, leadership, resilience, cost control and customer outcomes.</p></div><div className="dash">{[["Leadership",leadership],["Negotiation",negotiation],["Resilience",resilience],["Cost Control",cost],["Risk Management",clamp(resilience+5)],["Customer Satisfaction",game.stats.customer]].map(x=><div className="card" key={x[0]}><div className="label">{x[0]}</div><div className="metric">{x[1]}</div><div className="progress"><span style={{width:clamp(x[1])+"%"}}/></div></div>)}</div><div className="grid section" style={{marginTop:16}}><div className="insight"><strong>Best decision</strong>Balancing immediate continuity with longer-term resilience rather than optimizing a single KPI.</div><div className="insight"><strong>Biggest mistake</strong>{game.stats.cost<45?"Emergency spending was heavy; tie each premium move to the cost of failure.":"Some risk may remain because no crisis playbook can remove every dependency."}</div><div className="insight"><strong>Expert recommendation</strong>Use supplier-risk monitoring and scenario-based inventory policies to make the next response faster and less reactive.</div><div className="insight"><strong>Lesson learned</strong>Supply chain leadership is a portfolio decision: protect customers, preserve cash, shorten recovery time and invest before the next shock.</div></div><div className="footer"><span className="step">Replay to test a different company and crisis.</span><button className="primary" onClick={reset}>↻ Replay Simulation</button></div></Layout>;
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
