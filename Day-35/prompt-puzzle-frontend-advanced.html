@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>🧩 Prompt Puzzle — Master AI Prompting Through Play</title>
+<style>
+:root{--bg:#070a12;--panel:#101522;--panel2:#151c2d;--text:#eef2ff;--muted:#9aa6bf;--accent:#ff7a18;--accent2:#ffb15c;--good:#36d399;--bad:#ff5577;--line:#263149;--shadow:0 24px 70px rgba(0,0,0,.38)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 15% 10%,rgba(255,122,24,.13),transparent 28%),radial-gradient(circle at 85% 20%,rgba(104,76,255,.12),transparent 30%),var(--bg);color:var(--text);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+button{font:inherit;color:inherit}.app{max-width:1280px;margin:auto;padding:24px}.top{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:16px 20px;margin-bottom:22px;border:1px solid var(--line);background:rgba(16,21,34,.82);backdrop-filter:blur(18px);border-radius:20px;box-shadow:var(--shadow);position:sticky;top:12px;z-index:20}.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:18px}.brand span{font-size:28px}.pill{border:1px solid #3a455f;background:#111827;border-radius:999px;padding:7px 12px;color:var(--muted);font-size:12px}
+.hero{padding:38px 28px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(135deg,rgba(255,122,24,.12),rgba(30,39,65,.55));box-shadow:var(--shadow);margin-bottom:20px}.hero h1{font-size:clamp(30px,5vw,58px);line-height:1.02;margin:0 0 12px;letter-spacing:-2px}.hero h1 em{font-style:normal;color:var(--accent2)}.hero p{max-width:760px;color:var(--muted);font-size:16px}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:25px}.stat{padding:14px;border:1px solid var(--line);border-radius:15px;background:rgba(7,10,18,.45)}.stat b{display:block;font-size:20px}.stat small{color:var(--muted)}
+.progress{height:8px;background:#1a2233;border-radius:99px;overflow:hidden;margin:18px 0}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),#ffd08a);transition:width .45s ease}
+.layout{display:grid;grid-template-columns:1fr 320px;gap:20px}.card{border:1px solid var(--line);background:rgba(16,21,34,.9);border-radius:22px;box-shadow:var(--shadow);padding:22px}.challenge-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:1.6px;color:var(--accent2);font-weight:800}.challenge-head h2{margin:5px 0;font-size:26px}.muted{color:var(--muted)}.timer{font-variant-numeric:tabular-nums;font-weight:800;padding:9px 12px;background:#0a0e18;border:1px solid var(--line);border-radius:12px}
+.prompt-box{margin:18px 0;padding:17px;border-left:3px solid var(--accent);background:#0b101b;border-radius:12px}.prompt-box b{display:block;margin-bottom:5px}
+.blocks{display:grid;gap:10px;margin-top:16px}.block{user-select:none;cursor:grab;border:1px solid #33405b;background:linear-gradient(145deg,#151c2d,#101622);padding:13px 15px;border-radius:13px;transition:.2s;display:flex;gap:10px;align-items:center}.block:hover{transform:translateY(-2px);border-color:var(--accent)}.block:active{cursor:grabbing}.block.dragging{opacity:.45}.slot{min-height:58px;border:1px dashed #45516c;border-radius:13px;padding:8px;margin:7px 0;background:rgba(8,12,21,.55)}.slot.over{border-color:var(--accent);background:rgba(255,122,24,.08)}.slot .block{margin:0}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}button.primary,button.secondary,button.danger{border:0;border-radius:12px;padding:11px 16px;font-weight:800;cursor:pointer;transition:.2s}.primary{background:linear-gradient(135deg,var(--accent),#ff9d4b);color:#160b03}.secondary{background:#20293c;border:1px solid #36425d!important}.danger{background:#301522;color:#ffb4c3}.primary:hover,.secondary:hover{transform:translateY(-2px)}
+.option{padding:15px;border:1px solid var(--line);border-radius:14px;background:#0d1320;margin:10px 0;cursor:pointer;transition:.2s}.option:hover{border-color:var(--accent);transform:translateX(3px)}.option.selected{border-color:var(--accent);background:rgba(255,122,24,.09)}.option.correct{border-color:var(--good);background:rgba(54,211,153,.08)}.option.wrong{border-color:var(--bad);background:rgba(255,85,119,.08)}
+.side h3{margin-top:0}.score-ring{width:170px;height:170px;border-radius:50%;display:grid;place-items:center;margin:10px auto 20px;background:conic-gradient(var(--accent) 0deg,#222b3e 0deg)}.score-ring>div{width:135px;height:135px;border-radius:50%;background:var(--panel);display:grid;place-items:center;text-align:center}.score-ring b{font-size:34px}.metric{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #202a3d}.toast{position:fixed;right:22px;bottom:22px;padding:14px 18px;border-radius:13px;background:#141c2c;border:1px solid var(--line);box-shadow:var(--shadow);transform:translateY(100px);opacity:0;transition:.3s;z-index:50}.toast.show{transform:none;opacity:1}.hidden{display:none!important}
+.report{margin-top:20px}.dna{display:grid;gap:12px}.dna-row{display:grid;grid-template-columns:130px 1fr 50px;gap:10px;align-items:center}.track{height:10px;border-radius:99px;background:#20293a;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;transition:1s}.rank{font-size:30px;font-weight:900;color:var(--accent2)}pre{white-space:pre-wrap;word-break:break-word;background:#090d16;border:1px solid var(--line);padding:16px;border-radius:13px;color:#dfe7fa}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.top{position:static}.side{order:-1}}
+@media(max-width:560px){.app{padding:12px}.hero{padding:25px 18px}.card{padding:17px}.stats{grid-template-columns:1fr 1fr}.challenge-head{flex-direction:column}.dna-row{grid-template-columns:90px 1fr 40px}.hero h1{letter-spacing:-1px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top"><div class="brand"><span>🧩</span> Prompt Puzzle</div><div class="pill">ADVANCED · FRONTEND DEVELOPMENT</div></header>
+
+<section class="hero">
+<div class="eyebrow">Master AI Prompting Through Play</div>
+<h1>Think like a <em>prompt engineer.</em></h1>
+<p>Build, clean, and evaluate prompts for realistic frontend-development tasks. Every decision changes your score. Optimize for clarity, constraints, context, and useful output—not just more words.</p>
+<div class="stats">
+<div class="stat"><b id="challengeNo">1/3</b><small>Challenge</small></div>
+<div class="stat"><b id="scenarioNo">1</b><small>Scenario</small></div>
+<div class="stat"><b id="moves">0</b><small>Moves</small></div>
+<div class="stat"><b id="wrong">0</b><small>Wrong placements</small></div>
+<div class="stat"><b id="hints">0</b><small>Hints used</small></div>
+</div>
+<div class="progress"><div class="bar" id="progress"></div></div>
+</section>
+
+<div class="layout">
+<main class="card" id="game"></main>
+<aside class="card side">
+<h3>Live Score</h3>
+<div class="score-ring" id="ring"><div><div><b id="liveScore">0</b><small>/100</small></div></div></div>
+<div class="metric"><span>Accuracy</span><b id="mAccuracy">100%</b></div>
+<div class="metric"><span>Time</span><b id="mTime">0s</b></div>
+<div class="metric"><span>Moves</span><b id="mMoves">0</b></div>
+<div class="metric"><span>Wrong</span><b id="mWrong">0</b></div>
+<div class="metric"><span>Hints</span><b id="mHints">0</b></div>
+<div class="metric"><span>Optimization</span><b id="mBonus">0</b></div>
+</aside>
+</div>
+
+<section class="card report hidden" id="report"></section>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+/* Reusable scenario library */
+const scenarios=[
+{domain:"Frontend",title:"Accessible dashboard component",desired:"Create a responsive React dashboard card with semantic HTML, keyboard support, loading/error states, and accessible labels.",principle:"Specificity + constraints + acceptance criteria",
+blocks:["Role: Act as a senior frontend engineer focused on accessibility and maintainability.","Context: Build a reusable responsive dashboard card for a production React application.","Requirements: Semantic HTML, keyboard navigation, WCAG-friendly labels, loading/error/empty states, and mobile-first CSS.","Output: Return component code, CSS, a short implementation note, and an accessibility checklist.","Acceptance: Explain how each requirement is satisfied and avoid unnecessary dependencies."],
+weak:"Make a nice dashboard card in React.",
+optimized:"Act as a senior frontend engineer. Build a reusable production-ready React dashboard card. Use semantic HTML, keyboard-accessible interactions, clear accessible labels, responsive mobile-first styling, and explicit loading, error, and empty states. Return the component, CSS, a brief implementation note, and an accessibility checklist. Avoid unnecessary dependencies and map the implementation to each requirement.",
+over:"You are an internationally recognized principal frontend architect, accessibility auditor, design-system specialist, performance engineer, testing expert, and React compiler researcher. Produce a 2,000-line enterprise architecture with 47 constraints, 19 abstractions, five state machines, exhaustive theoretical justification, all possible browser matrices, and every conceivable edge case before showing a tiny card component.",
+weakOut:"Here is a generic card with a title and some CSS. It may not cover accessibility or state handling.",
+optOut:"A reusable React card with semantic structure, keyboard-safe controls, responsive CSS, and documented loading/error/empty behavior. The answer maps each requirement to an implementation detail.",
+options:["Make a colorful card with gradients and animations.","Build a reusable accessible React card with responsive states and explicit acceptance criteria.","Write an enterprise design-system specification before showing any code."]},
+{domain:"Frontend",title:"Debug a broken mobile navigation",desired:"Diagnose a mobile menu that opens visually but cannot be closed reliably and causes layout overflow.",principle:"Context + observable symptoms + diagnostic output",
+blocks:["Role: Act as a frontend debugging specialist.","Context: A mobile navigation opens, but close interactions fail intermittently and the page horizontally overflows.","Task: Identify likely causes involving event listeners, state synchronization, focus handling, and overflow CSS.","Output: Give a prioritized diagnosis, corrected code pattern, and a small verification checklist.","Constraint: Do not rewrite unrelated parts of the application."],
+weak:"Fix my mobile menu. It doesn't work.",
+optimized:"Act as a frontend debugging specialist. Diagnose a mobile navigation that opens but intermittently fails to close and creates horizontal overflow. Prioritize likely causes involving event listeners, UI state synchronization, focus handling, and overflow CSS. Provide a prioritized diagnosis, corrected code pattern, and verification checklist. Do not rewrite unrelated application code.",
+over:"Perform an exhaustive investigation of every possible mobile browser, operating system, JavaScript engine, CSS parser, accessibility tree, network condition, animation framework, and hardware combination, then redesign the entire navigation architecture regardless of whether it is related.",
+weakOut:"Try checking your JavaScript and CSS. Make sure the button works.",
+optOut:"Likely causes are duplicated listeners, stale state, or an overflowing child. Inspect the toggle lifecycle first, then lock overflow at the intended container and verify focus/close behavior.",
+options:["Rewrite the entire website navigation from scratch.","Diagnose state/listener/focus/overflow causes first and provide a targeted fix.","Only add overflow:hidden to body and assume the problem is solved."]},
+{domain:"Frontend",title:"Performance audit",desired:"Improve a slow product page by prioritizing high-impact frontend performance work without changing the visual design.",principle:"Prioritization + measurable outcomes",
+blocks:["Role: Act as a web performance engineer.","Context: A product page has slow LCP and excessive JavaScript on mobile.","Task: Prioritize changes using likely impact and implementation effort.","Output: Provide a ranked action plan with metric targets and validation steps.","Constraint: Preserve the existing visual design and avoid speculative rewrites."],
+weak:"Make my website faster.",
+optimized:"Act as a web performance engineer. A product page has poor mobile LCP and excessive JavaScript. Prioritize the highest-impact fixes by expected impact versus effort while preserving the existing visual design. Return a ranked action plan, measurable metric targets, and validation steps using realistic browser performance measurements. Avoid speculative rewrites.",
+over:"Optimize every byte of the application, redesign the bundle system, replace all libraries, invent a custom rendering engine, analyze every network packet, and provide a theoretical performance model for every device ever manufactured.",
+weakOut:"Compress images, minify files, and use caching.",
+optOut:"Start with LCP contributors and JavaScript execution: inspect the critical request chain, hero asset, render-blocking resources, and unused/late-loaded code. Measure before and after each change.",
+options:["Replace the whole tech stack.","Rank LCP/JS issues by impact and validate each change with measurements.","Add random caching headers without profiling."]},
+{domain:"Frontend",title:"Design-system button API",desired:"Design a scalable button API that supports variants, sizes, disabled/loading states, icons, and TypeScript safety.",principle:"Structured constraints + reusable abstractions",
+blocks:["Role: Act as a design-system engineer using React and TypeScript.","Context: The team needs one reusable Button primitive for multiple products.","Requirements: variants, sizes, loading/disabled states, optional icons, native button behavior, and type-safe props.","Output: Provide API design, TypeScript implementation, usage examples, and key trade-offs.","Constraint: Keep the public API small and avoid boolean-prop explosion."],
+weak:"Create a reusable button component.",
+optimized:"Act as a React + TypeScript design-system engineer. Design one reusable Button primitive supporting variants, sizes, loading/disabled states, optional icons, native button behavior, and type-safe props. Keep the public API small and avoid boolean-prop explosion. Return the API shape, implementation, examples, and key trade-offs.",
+over:"Create a universal button abstraction that supports every framework, every design system, every accessibility standard, every historical browser, arbitrary plugin injection, 80 configuration flags, and a metaprogramming layer.",
+weakOut:"Use props like primary, large, loading, and icon.",
+optOut:"A small discriminated or carefully composed prop API can represent visual variants and state without turning every behavior into a boolean. Native button semantics remain the default.",
+options:["Create 20 boolean props for maximum flexibility.","Design a small typed API with variants, sizes, states, icons, examples, and trade-offs.","Use CSS classes only and ignore TypeScript."]},
+{domain:"Frontend",title:"Form validation UX",desired:"Build a signup form that gives useful inline validation without overwhelming users or hurting keyboard/screen-reader usability.",principle:"User intent + behavioral constraints",
+blocks:["Role: Act as a frontend UX engineer and accessibility specialist.","Context: A signup form needs inline validation for email, password, and confirmation fields.","Task: Define when validation should appear and how errors should be announced.","Output: Provide interaction rules, semantic markup pattern, and concise error copy examples.","Constraint: Preserve user input and prevent noisy validation while typing."],
+weak:"Make my signup form user friendly.",
+optimized:"Act as a frontend UX engineer and accessibility specialist. Define a signup validation experience for email, password, and confirmation fields. Specify when validation appears, how errors are associated and announced to assistive technology, and how focus behaves after submit. Preserve user input and avoid noisy validation while typing. Return interaction rules, semantic markup patterns, and concise error-copy examples.",
+over:"Design an exhaustive behavioral specification covering every possible emotional reaction, language, cultural convention, biometric signal, typing rhythm, device, browser, and future assistive technology.",
+weakOut:"Show errors under each input and make them red.",
+optOut:"Use validation timing based on user interaction, associate errors with fields semantically, summarize submit failures, and move focus intentionally without destroying entered data.",
+options:["Validate every keystroke and show red text immediately.","Define validation timing, accessible error association, focus behavior, and concise copy.","Only validate after the user leaves the page."]},
+{domain:"Frontend",title:"Refactor legacy CSS",desired:"Refactor tangled CSS into maintainable layers while preserving pixel-level behavior and avoiding a full rewrite.",principle:"Boundaries + preservation constraints",
+blocks:["Role: Act as a senior CSS architecture specialist.","Context: A legacy page has duplicated selectors, specificity conflicts, and scattered responsive rules.","Task: Propose a safe incremental refactor strategy.","Output: Show a small before/after example, layering approach, and regression checklist.","Constraint: Preserve existing visual behavior and change only one section at a time."],
+weak:"Clean up this CSS.",
+optimized:"Act as a senior CSS architecture specialist. A legacy page contains duplicated selectors, specificity conflicts, and scattered responsive rules. Propose a safe incremental refactor strategy that preserves current visual behavior. Show a small before/after example, a sensible layering approach, and a regression checklist. Refactor one section at a time rather than rewriting the whole stylesheet.",
+over:"Replace the CSS architecture completely with a novel universal methodology, rewrite every selector, convert all styles to generated tokens, and migrate every page before discussing regression risk.",
+weakOut:"Remove duplicate CSS and use better class names.",
+optOut:"Start with one bounded component, document current behavior, reduce specificity, consolidate responsive rules, then compare screenshots and interaction states before moving to the next section.",
+options:["Rewrite all CSS immediately using a new framework.","Use an incremental, bounded refactor with preserved behavior and regression checks.","Delete duplicate rules without measuring visual changes."]},
+{domain:"Frontend",title:"Production-ready modal",desired:"Implement a modal with focus trapping, Escape-to-close, scroll locking, responsive layout, and safe cleanup.",principle:"Completeness + edge-case coverage",
+blocks:["Role: Act as a senior frontend accessibility engineer.","Context: Build a reusable modal for a production web app.","Requirements: focus trap, restore focus, Escape close, backdrop behavior, scroll lock, responsive layout, and cleanup on unmount.","Output: Return implementation plus a test checklist for keyboard and mouse interactions.","Constraint: Avoid leaking listeners or trapping focus when closed."],
+weak:"Create a modal that works on mobile.",
+optimized:"Act as a senior frontend accessibility engineer. Implement a reusable production modal with focus trapping, focus restoration, Escape-to-close, intentional backdrop behavior, scroll locking, responsive layout, and cleanup on unmount. Ensure listeners and focus management are inactive when closed. Return the implementation and a concise keyboard/mouse test checklist.",
+over:"Design an infinitely configurable modal platform with nested modal orchestration, plugin architecture, analytics, telemetry, cross-device focus prediction, and dozens of abstractions before presenting basic behavior.",
+weakOut:"Use a dialog div and close it when the X is clicked.",
+optOut:"The modal should define its lifecycle explicitly: activate focus management only while open, preserve the opener, handle Escape and backdrop rules, lock the correct scroll container, and clean listeners on close/unmount.",
+options:["Use a div with a close icon only.","Specify modal lifecycle, focus behavior, scroll locking, responsive rules, cleanup, and tests.","Build a giant modal framework with dozens of plugins."]}
+];
+
+let pool=[], current=0, challenge=0, moves=0, wrong=0, hints=0, score=0, started=Date.now(), challengeScores=[], selected=null, completed=false;
+const $=id=>document.getElementById(id);
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800)}
+function updateStats(){const elapsed=Math.floor((Date.now()-started)/1000);$("moves").textContent=moves;$("wrong").textContent=wrong;$("hints").textContent=hints;$("mMoves").textContent=moves;$("mWrong").textContent=wrong;$("mHints").textContent=hints;$("mTime").textContent=elapsed+"s";const acc=Math.max(0,Math.round(100-(wrong/(moves||1))*100));$("mAccuracy").textContent=acc+"%";$("mBonus").textContent=score>80?"+10":"0";$("liveScore").textContent=Math.round(score);$("ring").style.background=`conic-gradient(var(--accent) ${score*3.6}deg,#222b3e 0deg)`;$("progress").style.width=((current+(challenge*pool.length))/(pool.length*3)*100)+"%"}
+function start(){pool=shuffle(scenarios).slice(0,7);current=0;challenge=0;moves=wrong=hints=score=0;started=Date.now();challengeScores=[];render()}
+function baseHeader(s,title){return `<div class="challenge-head"><div><div class="eyebrow">Challenge ${challenge+1} of 3 · ${s.title}</div><h2>${title}</h2><p class="muted">${s.desired}</p></div><div class="timer" id="timer">00:00</div></div>`}
+function render(){updateStats();const s=pool[current];completed=false;selected=null;
+if(challenge===0)renderBuild(s);else if(challenge===1)renderClean(s);else renderChoose(s);let sec=0;const ti=setInterval(()=>{if(completed){clearInterval(ti);return}sec++;$("timer").textContent=`${String(Math.floor(sec/60)).padStart(2,"0")}:${String(sec%60).padStart(2,"0")}`},1000)}
+function renderBuild(s){const order=shuffle(s.blocks);$("game").innerHTML=baseHeader(s,"1. Build the Prompt")+`<div class="prompt-box"><b>Mission</b>Arrange the correct prompt blocks into the best logical order. Drag blocks into the answer zone.</div><div class="blocks" id="bank">${order.map((x,i)=>block(x,i)).join("")}</div><h3>Prompt Answer Zone</h3><div id="zone">${order.map((_,i)=>`<div class="slot" data-slot="${i}">Drop block here</div>`).join("")}</div><div class="actions"><button class="secondary" onclick="useHint()">💡 Hint</button><button class="primary" onclick="checkBuild()">Check Prompt →</button></div>`;enableDnD()}
+function block(x,i){return `<div class="block" draggable="true" data-text="${encodeURIComponent(x)}"><span>⠿</span>${x}</div>`}
+function enableDnD(){document.querySelectorAll(".block").forEach(b=>{b.addEventListener("dragstart",e=>{e.dataTransfer.setData("text/plain",b.dataset.text);b.classList.add("dragging")});b.addEventListener("dragend",()=>b.classList.remove("dragging"))});document.querySelectorAll(".slot").forEach(s=>{s.addEventListener("dragover",e=>{e.preventDefault();s.classList.add("over")});s.addEventListener("dragleave",()=>s.classList.remove("over"));s.addEventListener("drop",e=>{e.preventDefault();s.classList.remove("over");const text=decodeURIComponent(e.dataTransfer.getData("text/plain"));s.innerHTML=block(text,0);moves++;updateStats();s.querySelector(".block").draggable=true;enableDnD()})})}
+function useHint(){hints++;score=Math.max(0,score-4);toast("Hint: prioritize Role → Context → Requirements → Output → Constraints");updateStats()}
+function checkBuild(){const vals=[...document.querySelectorAll("#zone .slot .block")].map(x=>x.textContent.trim());moves++;const target=pool[current].blocks;const good=vals.length===target.length&&vals.every((x,i)=>x===target[i]);if(good){score+=32;toast("Excellent prompt architecture! +32");next()}else{wrong++;score=Math.max(0,score-8);toast("Not quite. Think context before requirements, then output.");updateStats()}}
+function renderClean(s){$("game").innerHTML=baseHeader(s,"2. Clean the Prompt")+`<div class="prompt-box"><b>Weak prompt</b>${s.weak}</div><div class="prompt-box"><b>Choose the best optimized version</b><div id="options">${shuffle([s.optimized,s.over,s.weak+" Add lots of details and make it perfect."]).map((x,i)=>`<div class="option" onclick="selectOption(this,${x===s.optimized})">${x}</div>`).join("")}</div></div><div class="actions"><button class="secondary" onclick="useHint()">💡 Hint</button><button class="primary" onclick="checkChoice()">Clean & Optimize →</button></div>`}
+function selectOption(el,correct){document.querySelectorAll(".option").forEach(x=>x.classList.remove("selected"));el.classList.add("selected");selected=correct;moves++;updateStats()}
+function checkChoice(){if(selected===null){toast("Select an option first.");return}completed=true;if(selected){score+=32;toast("Strong optimization instincts! +32");next()}else{wrong++;score=Math.max(0,score-7);toast("Look for clear context, constraints, output, and measurable expectations.");updateStats()}}
+function renderChoose(s){const opts=shuffle([s.options[0],s.options[1],s.options[2]]);$("game").innerHTML=baseHeader(s,"3. Choose the Best Prompt")+`<div class="prompt-box"><b>Desired Output</b>${s.desired}</div><h3>Which prompt would produce the most useful result?</h3><div id="options">${opts.map((x,i)=>`<div class="option" onclick="selectOption(this,${x===s.options[1]})">${x}</div>`).join("")}</div><div class="actions"><button class="secondary" onclick="useHint()">💡 Hint</button><button class="primary" onclick="checkFinal()">Lock Answer →</button></div>`}
+function checkFinal(){if(selected===null){toast("Choose a prompt first.");return}completed=true;if(selected){score+=36;toast("Correct. You spotted the best constraint balance! +36");next()}else{wrong++;score=Math.max(0,score-8);toast("The best prompt is specific without becoming unnecessarily complex.");updateStats()}}
+function next(){challengeScores.push(Math.min(100,Math.round(score)));current++;if(current>=pool.length){current=0;challenge++;if(challenge>=3){showReport();return}}setTimeout(render,550)}
+function showReport(){completed=true;score=Math.max(0,Math.min(100,score-Math.max(0,wrong*2)+Math.max(0,score>75?10:0)));updateStats();const rating=score>=90?"Prompt Architect":score>=75?"Advanced Builder":score>=60?"Prompt Practitioner":"Prompt Apprentice";const rank=score>=90?"S":score>=80?"A":score>=65?"B":"C";const accuracy=Math.max(0,Math.round(100-(wrong/(moves||1))*100));const dna={Clarity:Math.min(100,accuracy+5),Context:Math.min(100,70+hints*-2),Constraints:Math.min(100,75+score/8),Output:Math.min(100,72+score/7),Efficiency:Math.max(40,90-hints*8-wrong*3)};$("game").innerHTML=`<div class="eyebrow">🏆 Performance Complete</div><h2>Prompt Performance Report</h2><p class="muted">You completed all three challenge types across ${pool.length} randomized scenarios.</p><div class="rank">Rank ${rank} · ${rating}</div><div class="prompt-box"><b>Prompt Score</b><strong style="font-size:42px">${Math.round(score)}/100</strong><br><span class="muted">Accuracy ${accuracy}% · ${moves} moves · ${wrong} wrong placements · ${hints} hints</span></div><h3>Prompt DNA</h3><div class="dna">${Object.entries(dna).map(([k,v])=>`<div class="dna-row"><span>${k}</span><div class="track"><div class="fill" style="width:${v}%"></div></div><b>${Math.round(v)}</b></div>`).join("")}</div><h3>Personalized Feedback</h3><p>${score>=80?"Your strongest skill is balancing specificity with usable constraints. Keep writing prompts that tell the model what success looks like without prescribing unnecessary implementation details.":"Your next improvement is prompt structure. Add concrete context, explicit requirements, a desired output format, and acceptance criteria before adding more words."}</p><p><b>Next milestone:</b> ${score>=90?"Maintain 90+ while reducing moves and hints.":"Reach 80+ by reducing wrong placements and using fewer hints."}</p><h3>Final Optimized Prompt</h3><pre>${pool[0].optimized}</pre><div class="actions"><button class="primary" onclick="start()">🔄 Replay with New Scenarios</button><button class="secondary" onclick="location.reload()">↻ Restart</button></div>`;$("report").classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"});updateStats()}
+start();
+</script>
+</body>
+</html>
