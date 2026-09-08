@@ -1,0 +1,41 @@
+# Merged PDF Result
+
+## PDF Splitter & Merger
+
+### Merge Operation Completed Successfully
+
+This is a **sample merged PDF document** created to demonstrate the PDF merging functionality.
+
+---
+
+## Document 1
+
+This section represents the first PDF file.
+
+PDF merging allows multiple PDF documents to be combined into a single document while preserving their individual pages.
+
+---
+
+## Document 2
+
+This section represents the second PDF file.
+
+After merging, the content from multiple PDF files is combined into one convenient PDF document.
+
+---
+
+## Final Result
+
+**Operation:** PDF Merge
+**Status:** Completed Successfully
+**Output:** `merged-result.pdf`
+
+The PDF Splitter & Merger application successfully combined the selected PDF files into one document.
+
+### Project
+
+**60 Days of Claude AI Challenge – Day 38**
+
+**Application:** PDF Splitter & Merger
+
+**Result:** Successfully generated `merged-result.pdf`
