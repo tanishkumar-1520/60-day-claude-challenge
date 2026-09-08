@@ -1,0 +1,36 @@
+# PDF Split Result
+
+## PDF Splitter & Merger
+
+### Operation Completed Successfully
+
+The selected PDF pages have been successfully extracted and split into a new PDF document.
+
+**Operation:** PDF Split
+**Status:** Completed
+**Output:** split-result.pdf
+
+### Result
+
+The requested pages were separated from the original PDF and saved as a new PDF file.
+
+This demonstrates how a browser-based PDF utility can simplify document management by allowing users to extract only the pages they need.
+
+---
+
+## Key Features Demonstrated
+
+* PDF file selection
+* Page selection
+* PDF page extraction
+* New PDF generation
+* Client-side file processing
+* Downloadable PDF output
+
+### Project
+
+**60 Days of Claude AI Challenge – Day 38**
+
+**Application:** PDF Splitter & Merger
+
+**Result:** Successfully generated `split-result.pdf`
