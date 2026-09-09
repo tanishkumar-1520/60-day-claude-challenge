@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Assistant Builder — Day 40</title>
+<style>
+:root{
+  --bg:#0b1020;--panel:#11182b;--panel2:#17213a;--text:#eef2ff;--muted:#9aa7c7;
+  --accent:#d97706;--accent2:#f59e0b;--border:#293653;--good:#34d399;--danger:#fb7185;
+}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,Segoe UI,sans-serif;background:
+radial-gradient(circle at top right,#30200d 0,#0b1020 38%),var(--bg);color:var(--text)}
+button,input,textarea{font:inherit}.app{max-width:1180px;margin:auto;padding:28px 18px 60px}
+header{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:24px}
+.brand{display:flex;gap:14px;align-items:center}.logo{width:48px;height:48px;border-radius:14px;
+display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),#fbbf24);font-weight:900;color:#111}
+h1{font-size:24px;margin:0} .sub{color:var(--muted);font-size:13px;margin-top:4px}
+.status{padding:9px 13px;border:1px solid var(--border);border-radius:999px;color:var(--muted);font-size:12px}
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.card{background:rgba(17,24,43,.88);
+border:1px solid var(--border);border-radius:22px;padding:22px;box-shadow:0 18px 50px #0004}
+.card h2{margin:0 0 6px;font-size:18px}.hint{color:var(--muted);font-size:13px;line-height:1.6}
+label{display:block;margin:18px 0 8px;font-size:13px;font-weight:700} textarea,input{width:100%;
+background:#0b1224;color:var(--text);border:1px solid var(--border);border-radius:14px;padding:13px;outline:none}
+textarea{min-height:170px;resize:vertical} textarea:focus,input:focus{border-color:var(--accent2);box-shadow:0 0 0 3px #f59e0b18}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}button{border:0;border-radius:12px;padding:11px 15px;
+cursor:pointer;transition:.2s transform,.2s opacity}.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#17100a;font-weight:800}
+.secondary{background:#202b45;color:var(--text)}button:hover{transform:translateY(-2px)}button:disabled{opacity:.5;cursor:not-allowed}
+.output{min-height:310px;background:#0b1224;border:1px solid var(--border);border-radius:16px;padding:18px;white-space:pre-wrap;line-height:1.65;color:#dce5ff}
+.empty{display:grid;place-items:center;text-align:center;min-height:270px;color:var(--muted)}.spinner{display:inline-block;width:16px;height:16px;
+border:2px solid #ffffff55;border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;vertical-align:-3px;margin-right:7px}
+@keyframes spin{to{transform:rotate(360deg)}}details{margin-top:18px}summary{cursor:pointer;font-weight:800;padding:4px 0}
+.doc{color:#c3cce4;font-size:13px;line-height:1.7}.doc code{background:#0a1020;padding:2px 6px;border-radius:6px;color:#fbbf24}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.chip{font-size:11px;padding:6px 9px;border-radius:999px;background:#202b45;color:#cbd5e1}
+@media(max-width:850px){.grid{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column}.status{align-self:flex-start}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand"><div class="logo">AI</div><div><h1>AI Assistant Builder</h1><div class="sub">Day 40 • Purpose-built Claude assistant workspace</div></div></div>
+  <div class="status" id="status">Ready</div>
+</header>
+
+<div class="grid">
+<section class="card">
+  <h2>Assistant Workspace</h2>
+  <p class="hint">Describe the task you want the assistant to handle. The production system prompt below keeps responses focused, useful, safe, and structured.</p>
+  <label for="assistantType">Assistant type</label>
+  <input id="assistantType" placeholder="e.g. Resume & Career Coach">
+  <label for="goal">Session goal</label>
+  <input id="goal" placeholder="What should the user achieve in one session?">
+  <label for="input">User input</label>
+  <textarea id="input" placeholder="Enter a question, paste content, or describe the situation..."></textarea>
+  <div class="row">
+    <button class="primary" id="runBtn">Ask Claude</button>
+    <button class="secondary" id="clearBtn">Clear</button>
+  </div>
+  <div class="chips"><span class="chip">Focused reasoning</span><span class="chip">Structured output</span><span class="chip">Edge-case aware</span></div>
+</section>
+
+<section class="card">
+  <h2>Assistant Response</h2>
+  <p class="hint">Your Claude response appears here.</p>
+  <div class="output" id="output"><div class="empty">Your assistant is ready.<br>Enter an input and click <b>Ask Claude</b>.</div></div>
+</section>
+</div>
+
+<section class="card" style="margin-top:18px">
+<details open>
+<summary>How this was built</summary>
+<div class="doc">
+<p><b>System prompt design:</b> The assistant receives a clear role, scope, objective, response structure, and rules for missing information, irrelevant requests, unsafe content, and uncertainty. This makes behavior more consistent across sessions.</p>
+<p><b>UI choices:</b> The workspace separates configuration, user input, and the final answer. Dark surfaces, warm accent colors, cards, responsive layout, focus states, loading feedback, and empty states create a polished AI-product experience.</p>
+<p><b>Extend it:</b> Add file uploads, conversation memory, tool calls, authentication, multi-step workflows, saved sessions, domain-specific templates, or analytics. For production use outside a hosted Claude artifact, route API calls through a secure backend and keep secrets server-side.</p>
+<p><b>Note:</b> This standalone demo includes the Anthropic request structure. Browser-hosted direct API access may require the appropriate authentication and platform configuration; never expose a private API key in public frontend code.</p>
+</div>
+</details>
+</section>
+
+<section class="card" style="margin-top:18px">
+<details>
+<summary>Production System Prompt</summary>
+<div class="doc"><pre id="systemPrompt" style="white-space:pre-wrap;font:inherit"></pre></div>
+</details>
+</section>
+</div>
+
+<script>
+const SYSTEM_PROMPT = `You are a production-quality AI assistant designed for the user's chosen domain.
+
+ROLE
+Act as a knowledgeable, practical, and concise domain expert. Help the user achieve the single most important session outcome while explaining reasoning when it adds value.
+
+SCOPE
+- Stay within the selected assistant domain.
+- Ask only for information that is genuinely needed.
+- Never invent facts, sources, files, actions, or results.
+- Clearly label assumptions and uncertainty.
+- Prefer actionable answers over generic advice.
+
+INPUT HANDLING
+- Interpret the user's request in context.
+- If key information is missing, ask a focused follow-up question.
+- If the input is irrelevant, briefly explain the scope and redirect to useful in-scope help.
+- If the input is ambiguous, state the most reasonable interpretation and proceed when safe.
+
+OUTPUT
+Use a clear structure appropriate to the request. Prefer headings, bullets, steps, tables, scores, recommendations, or examples when useful. Put the most important answer first.
+
+SAFETY AND ABUSE
+Do not provide assistance that meaningfully enables illegal, dangerous, abusive, privacy-invasive, or harmful activity. Refuse briefly when necessary and offer a safe alternative.
+
+QUALITY
+Be accurate, transparent, user-centered, and concise. Do not claim to have performed an action you cannot perform.`;
+
+document.getElementById("systemPrompt").textContent = SYSTEM_PROMPT;
+
+const output=document.getElementById("output"), statusEl=document.getElementById("status"), runBtn=document.getElementById("runBtn");
+function setStatus(t){statusEl.textContent=t}
+document.getElementById("clearBtn").onclick=()=>{document.getElementById("input").value="";output.innerHTML='<div class="empty">Your assistant is ready.<br>Enter an input and click <b>Ask Claude</b>.</div>';setStatus("Ready")};
+
+runBtn.onclick=async()=>{
+ const input=document.getElementById("input").value.trim(), type=document.getElementById("assistantType").value.trim()||"General AI Assistant",
+ goal=document.getElementById("goal").value.trim()||"Provide a useful answer to the user's request.";
+ if(!input){output.innerHTML='<div class="empty">Please enter a user request first.</div>';return}
+ runBtn.disabled=true;setStatus("Thinking…");output.innerHTML='<div><span class="spinner"></span>Claude is preparing a response…</div>';
+ try{
+   const res=await fetch("https://api.anthropic.com/v1/messages",{
+     method:"POST",
+     headers:{"Content-Type":"application/json","anthropic-version":"2023-06-01"},
+     body:JSON.stringify({model:"claude-3-5-sonnet-latest",max_tokens:1200,
+       system:SYSTEM_PROMPT+"\\n\\nAssistant type: "+type+"\\nSession outcome: "+goal,
+       messages:[{role:"user",content:input}]})
+   });
+   if(!res.ok) throw new Error("API request failed ("+res.status+"). In a normal browser deployment, configure authentication through a secure supported setup.");
+   const data=await res.json();
+   output.textContent=(data.content||[]).map(x=>x.text||"").join("\\n")||"No response returned.";
+   setStatus("Complete");
+ }catch(e){
+   output.textContent="Unable to complete the live request.\\n\\n"+e.message+"\\n\\nThe UI and system-prompt workflow are ready for a Claude artifact or properly authenticated deployment.";
+   setStatus("Error");
+ }finally{runBtn.disabled=false}
+};
+</script>
+</body>
+</html>
