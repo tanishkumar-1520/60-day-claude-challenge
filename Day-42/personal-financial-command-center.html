@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personal Financial Command Center</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#697386;--line:#e5e9f2;--accent:#6c5ce7;--good:#159570;--warn:#d58b16;--bad:#d84d5b;--shadow:0 12px 35px rgba(31,42,70,.08)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--text)}
+body.dark{--bg:#10131b;--card:#181c26;--text:#f3f5fa;--muted:#9ba5b8;--line:#2a3040;--shadow:0 12px 35px rgba(0,0,0,.25)}
+button,input,select{font:inherit}button{cursor:pointer;border:0}.app{display:flex;min-height:100vh}.sidebar{width:250px;background:#151827;color:#fff;padding:24px 16px;position:fixed;height:100vh;z-index:5}.brand{font-size:20px;font-weight:800;padding:8px 10px 26px}.brand span{color:#a99cff}.nav button{display:block;width:100%;text-align:left;background:transparent;color:#b9c0d0;padding:12px 14px;border-radius:10px;margin:4px 0}.nav button.active,.nav button:hover{background:#292e42;color:#fff}.main{margin-left:250px;width:calc(100% - 250px);padding:28px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}.top h1{margin:0 0 5px;font-size:28px}.top p{margin:0;color:var(--muted)}.actions{display:flex;gap:8px}.btn{padding:10px 14px;border-radius:10px;background:var(--card);color:var(--text);border:1px solid var(--line)}.primary{background:var(--accent);color:#fff;border-color:var(--accent)}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}.metric small,.label{color:var(--muted);font-size:13px}.metric strong{display:block;font-size:26px;margin-top:8px}.delta{font-size:12px;margin-top:7px}.good{color:var(--good)}.bad{color:var(--bad)}.warn{color:var(--warn)}.section{display:none}.section.active{display:block;animation:fade .25s ease}@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}.two{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;margin-top:16px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}.card h2{font-size:17px;margin:0 0 15px}.bar{height:12px;background:var(--line);border-radius:20px;overflow:hidden}.bar i{display:block;height:100%;background:var(--accent);border-radius:20px}.chart{height:190px;display:flex;align-items:end;gap:12px;padding:18px 8px 5px}.col{flex:1;text-align:center;color:var(--muted);font-size:11px}.col i{display:block;background:linear-gradient(180deg,var(--accent),#9d93f2);border-radius:7px 7px 2px 2px;min-height:10px;margin-bottom:6px}.list{display:grid;gap:10px}.row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}.row:last-child{border:0}.pill{padding:5px 9px;border-radius:99px;background:rgba(108,92,231,.12);color:var(--accent);font-size:12px}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}.field input,.field select{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--text)}.form-actions{margin-top:15px;display:flex;gap:8px}.score{width:150px;height:150px;border-radius:50%;display:grid;place-items:center;margin:auto;background:conic-gradient(var(--accent) calc(var(--score)*1%),var(--line) 0)}.score:after{content:"";width:112px;height:112px;background:var(--card);border-radius:50%;position:absolute}.score div{position:relative;z-index:1;text-align:center}.score strong{font-size:30px;display:block}.sim input[type=range]{width:100%}.result{font-size:24px;font-weight:800;margin:8px 0}.tip{padding:13px;border-left:4px solid var(--accent);background:rgba(108,92,231,.08);border-radius:8px;margin:9px 0}.check{display:flex;gap:10px;align-items:center;padding:10px 0}.muted{color:var(--muted)}.hidden{display:none}@media(max-width:950px){.sidebar{width:72px}.brand{font-size:0}.brand span{font-size:20px}.nav button{font-size:0;text-align:center}.nav button:first-letter{font-size:18px}.main{margin-left:72px;width:calc(100% - 72px)}.grid{grid-template-columns:repeat(2,1fr)}.two,.three{grid-template-columns:1fr}}@media(max-width:600px){.main{padding:16px}.top{align-items:flex-start;gap:10px}.top h1{font-size:22px}.grid,.formgrid{grid-template-columns:1fr}.actions .btn:not(.primary){display:none}.sidebar{width:58px}.main{margin-left:58px;width:calc(100% - 58px)}}
+@media print{.sidebar,.actions{display:none}.main{margin:0;width:100%}.card{box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand">Finance<span>OS</span></div>
+  <nav class="nav">
+    <button class="active" data-target="overview">⌂ Overview</button>
+    <button data-target="cashflow">↔ Cash Flow</button>
+    <button data-target="budget">◫ Budget</button>
+    <button data-target="goals">◎ Goals</button>
+    <button data-target="debt">▣ Debt & Loans</button>
+    <button data-target="investments">◈ Investments</button>
+    <button data-target="insights">✦ Insights</button>
+    <button data-target="simulator">⚙ What-If</button>
+    <button data-target="planning">✓ Planning</button>
+  </nav>
+</aside>
+
+<main class="main">
+<header class="top">
+  <div><h1>Personal Financial Command Center</h1><p id="welcome">Your financial picture, decisions, and next steps in one place.</p></div>
+  <div class="actions"><button class="btn" id="theme">◐ Theme</button><button class="btn" onclick="window.print()">Print Report</button><button class="btn primary" id="saveTop">Save</button></div>
+</header>
+
+<section id="overview" class="section active">
+<div class="grid">
+ <div class="card metric"><small>Monthly Income</small><strong id="mIncome">₹80,000</strong><div class="delta good">▲ 5.2% vs last month</div></div>
+ <div class="card metric"><small>Monthly Expenses</small><strong id="mExpense">₹48,000</strong><div class="delta">60% of income</div></div>
+ <div class="card metric"><small>Net Cash Flow</small><strong id="mNet">₹32,000</strong><div class="delta good">Positive cash flow</div></div>
+ <div class="card metric"><small>Financial Health</small><strong id="mScore">78 / 100</strong><div class="delta good">Healthy trajectory</div></div>
+</div>
+<div class="two">
+ <div class="card"><h2>Cash Flow Overview</h2><div class="chart" id="chart"></div></div>
+ <div class="card"><h2>Health Snapshot</h2><div class="score" id="scoreCircle" style="--score:78"><div><strong id="scoreNum">78</strong><span class="muted">/ 100</span></div></div><p class="muted" style="text-align:center">Strong foundation. Focus on savings and debt efficiency.</p></div>
+</div>
+<div class="three">
+ <div class="card"><h2>Top Recommendation</h2><div class="tip">Increase your emergency fund contribution before adding new discretionary commitments.</div></div>
+ <div class="card"><h2>Savings Rate</h2><strong style="font-size:28px">40%</strong><p class="muted">Target: 30%+</p><div class="bar"><i style="width:80%"></i></div></div>
+ <div class="card"><h2>Quick Actions</h2><div class="list"><button class="btn" onclick="show('budget')">Review budget →</button><button class="btn" onclick="show('simulator')">Run a what-if →</button></div></div>
+</div>
+</section>
+
+<section id="cashflow" class="section">
+<div class="card"><h2>Income & Expense Inputs</h2><div class="formgrid">
+ <div class="field"><label>Monthly income (₹)</label><input id="income" type="number" value="80000"></div>
+ <div class="field"><label>Monthly expenses (₹)</label><input id="expense" type="number" value="48000"></div>
+ <div class="field"><label>Current savings (₹)</label><input id="savings" type="number" value="240000"></div>
+ <div class="field"><label>Emergency fund target (₹)</label><input id="emergency" type="number" value="288000"></div>
+</div><div class="form-actions"><button class="btn primary" id="update">Update Dashboard</button></div></div>
+<div class="two"><div class="card"><h2>Monthly Cash Flow</h2><div id="cashSummary" class="list"></div></div><div class="card"><h2>Emergency Fund</h2><div class="metric"><strong id="emergencyPct">83%</strong><p class="muted">of target funded</p><div class="bar"><i id="emergencyBar" style="width:83%"></i></div></div></div></div>
+</section>
+
+<section id="budget" class="section">
+<div class="card"><h2>50 / 30 / 20 Budget Guide</h2><p class="muted">Use this as a starting framework, then adapt it to your actual priorities.</p>
+<div class="list">
+<div class="row"><span>Needs <span class="pill">50%</span></span><strong id="needs">₹40,000</strong></div>
+<div class="row"><span>Wants <span class="pill">30%</span></span><strong id="wants">₹24,000</strong></div>
+<div class="row"><span>Savings / Debt <span class="pill">20%</span></span><strong id="future">₹16,000</strong></div>
+</div></div>
+<div class="three"><div class="card"><h2>Housing</h2><strong>₹18,000</strong><p class="muted">22.5% of income</p></div><div class="card"><h2>Food & Transport</h2><strong>₹12,000</strong><p class="muted">15% of income</p></div><div class="card"><h2>Discretionary</h2><strong>₹8,000</strong><p class="muted">10% of income</p></div></div>
+</section>
+
+<section id="goals" class="section">
+<div class="card"><h2>Financial Goals</h2><div class="formgrid"><div class="field"><label>Goal name</label><input id="goalName" value="Emergency Fund"></div><div class="field"><label>Target amount (₹)</label><input id="goalTarget" type="number" value="288000"></div><div class="field"><label>Current amount (₹)</label><input id="goalCurrent" type="number" value="240000"></div><div class="field"><label>Monthly contribution (₹)</label><input id="goalMonthly" type="number" value="12000"></div></div><div class="form-actions"><button class="btn primary" id="goalCalc">Calculate Progress</button></div></div>
+<div class="card" style="margin-top:16px"><h2 id="goalTitle">Emergency Fund</h2><div class="bar"><i id="goalBar" style="width:83%"></i></div><p><strong id="goalPct">83%</strong> complete · <span id="goalRemaining">₹48,000</span> remaining · about <span id="goalMonths">4</span> months at current contribution.</p></div>
+</section>
+
+<section id="debt" class="section">
+<div class="card"><h2>Debt & Loan Strategy</h2><div class="list">
+<div class="row"><span>Personal Loan</span><strong>₹1,20,000</strong></div><div class="row"><span>Credit Card</span><strong>₹25,000</strong></div><div class="row"><span>Student / Education Loan</span><strong>₹2,40,000</strong></div>
+</div><div class="tip">Prioritize high-interest debt while maintaining a starter emergency buffer. Avoid taking new high-cost debt for discretionary spending.</div></div>
+</section>
+
+<section id="investments" class="section">
+<div class="card"><h2>Investment Allocation</h2><div class="list">
+<div class="row"><span>Equity / Index Funds</span><strong>55%</strong></div><div class="row"><span>Debt / Fixed Income</span><strong>25%</strong></div><div class="row"><span>Cash / Emergency Reserve</span><strong>15%</strong></div><div class="row"><span>Other</span><strong>5%</strong></div>
+</div><div class="tip">Diversification, time horizon, liquidity needs, and risk tolerance should guide allocation. This dashboard is educational, not personalized investment advice.</div></div>
+</section>
+
+<section id="insights" class="section">
+<div class="three"><div class="card"><h2>✓ Strong</h2><p>Positive monthly cash flow and a healthy savings rate.</p></div><div class="card"><h2>⚠ Watch</h2><p>Emergency fund is below the stated target.</p></div><div class="card"><h2>→ Next</h2><p>Direct a portion of surplus toward high-interest debt or your highest-priority goal.</p></div></div>
+<div class="card" style="margin-top:16px"><h2>AI Financial Recommendations</h2><div class="tip">1. Protect your emergency reserve before increasing lifestyle spending.</div><div class="tip">2. Automate savings immediately after income arrives.</div><div class="tip">3. Review recurring subscriptions quarterly.</div><div class="tip">4. Compare debt interest rates before choosing a payoff order.</div></div>
+</section>
+
+<section id="simulator" class="section">
+<div class="card sim"><h2>What-If Simulator</h2><p class="muted">Change one assumption and see how your monthly surplus and annual savings could move.</p>
+<div class="field"><label>Monthly income: <strong id="simIncomeVal">₹80,000</strong></label><input id="simIncome" type="range" min="20000" max="200000" step="5000" value="80000"></div>
+<div class="field" style="margin-top:18px"><label>Monthly expenses: <strong id="simExpenseVal">₹48,000</strong></label><input id="simExpense" type="range" min="10000" max="150000" step="1000" value="48000"></div>
+<div class="three"><div class="card"><small>Monthly surplus</small><div class="result" id="simSurplus">₹32,000</div></div><div class="card"><small>Annual surplus</small><div class="result" id="simAnnual">₹3,84,000</div></div><div class="card"><small>Savings rate</small><div class="result" id="simRate">40%</div></div></div>
+</div></section>
+
+<section id="planning" class="section">
+<div class="card"><h2>Financial Planning Checklist</h2>
+<label class="check"><input type="checkbox"> Build a 3–6 month emergency fund</label>
+<label class="check"><input type="checkbox"> Track recurring subscriptions</label>
+<label class="check"><input type="checkbox"> Review high-interest debt</label>
+<label class="check"><input type="checkbox"> Automate savings and investing</label>
+<label class="check"><input type="checkbox"> Set short-, medium-, and long-term goals</label>
+<label class="check"><input type="checkbox"> Review your financial plan every quarter</label>
+</div>
+<div class="three"><div class="card"><h2>Tip</h2><p>Pay yourself first: automate a fixed transfer after payday.</p></div><div class="card"><h2>Learning Prompt</h2><p>“Explain my monthly cash flow in simple language and suggest three improvements.”</p></div><div class="card"><h2>Safety</h2><p>Never enter passwords, card PINs, OTPs, or full account credentials into a personal finance dashboard.</p></div></div>
+</section>
+</main></div>
+
+<script>
+const $=id=>document.getElementById(id);
+function money(n){return "₹"+Math.round(n).toLocaleString("en-IN")}
+function show(id){document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));$(id).classList.add("active");document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.target===id));window.scrollTo(0,0)}
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>show(b.dataset.target));
+$("theme").onclick=()=>{document.body.classList.toggle("dark");localStorage.setItem("finance-dark",document.body.classList.contains("dark"))};
+if(localStorage.getItem("finance-dark")==="true")document.body.classList.add("dark");
+
+function updateFinance(){
+ let income=+$("income").value||0, expense=+$("expense").value||0, savings=+$("savings").value||0, emergency=+$("emergency").value||1, net=income-expense;
+ let score=Math.max(0,Math.min(100,Math.round(55+(net/income)*30+(Math.min(savings/emergency,1)*15))));
+ $("mIncome").textContent=money(income);$("mExpense").textContent=money(expense);$("mNet").textContent=money(net);$("mScore").textContent=score+" / 100";
+ $("scoreNum").textContent=score;$("scoreCircle").style.setProperty("--score",score);
+ let ep=Math.min(100,Math.round(savings/emergency*100));$("emergencyPct").textContent=ep+"%";$("emergencyBar").style.width=ep+"%";
+ $("needs").textContent=money(income*.5);$("wants").textContent=money(income*.3);$("future").textContent=money(income*.2);
+ $("cashSummary").innerHTML=`<div class="row"><span>Income</span><strong>${money(income)}</strong></div><div class="row"><span>Expenses</span><strong>${money(expense)}</strong></div><div class="row"><span>Available surplus</span><strong class="${net>=0?'good':'bad'}">${money(net)}</strong></div>`;
+ drawChart(income,expense);
+ localStorage.setItem("finance-data",JSON.stringify({income,expense,savings,emergency}));
+}
+function drawChart(income,expense){
+ let vals=[expense*.82,expense*.9,expense*.88,expense*.96,income*.61,income*.72,income*.6], labels=["Jan","Feb","Mar","Apr","May","Jun","Jul"], max=Math.max(...vals);
+ $("chart").innerHTML=vals.map((v,i)=>`<div class="col"><i style="height:${Math.max(20,v/max*145)}px"></i>${labels[i]}</div>`).join("");
+}
+$("update").onclick=updateFinance;$("saveTop").onclick=()=>{updateFinance();alert("Financial data saved locally in your browser.")};
+let saved=JSON.parse(localStorage.getItem("finance-data")||"null");if(saved){$("income").value=saved.income;$("expense").value=saved.expense;$("savings").value=saved.savings;$("emergency").value=saved.emergency}updateFinance();
+
+$("goalCalc").onclick=()=>{let t=+$("goalTarget").value,c=+$("goalCurrent").value,m=+$("goalMonthly").value||1,p=Math.min(100,Math.round(c/t*100)),rem=Math.max(0,t-c);$("goalTitle").textContent=$("goalName").value||"Financial Goal";$("goalPct").textContent=p+"%";$("goalBar").style.width=p+"%";$("goalRemaining").textContent=money(rem);$("goalMonths").textContent=Math.ceil(rem/m)};
+function sim(){let i=+$("simIncome").value,e=+$("simExpense").value,s=i-e,r=i?Math.round(s/i*100):0;$("simIncomeVal").textContent=money(i);$("simExpenseVal").textContent=money(e);$("simSurplus").textContent=money(s);$("simAnnual").textContent=money(s*12);$("simRate").textContent=r+"%"}
+$("simIncome").oninput=sim;$("simExpense").oninput=sim;sim();
+</script>
+</body>
+</html>
