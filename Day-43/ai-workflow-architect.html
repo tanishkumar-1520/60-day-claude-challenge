@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Workflow Architect</title>
+<style>
+:root{--bg:#0b1020;--panel:#121a2e;--panel2:#18223b;--text:#eef3ff;--muted:#9eabc5;--accent:#ff7a18;--accent2:#ffb15c;--good:#37d39b;--danger:#ff647c;--border:#293653;--shadow:0 18px 50px rgba(0,0,0,.28)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 20% 0%,#1d2745 0,#0b1020 40%);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.55}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+header{position:sticky;top:0;z-index:20;background:rgba(11,16,32,.86);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav{max-width:1200px;margin:auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{font-weight:800;font-size:19px}.brand span{color:var(--accent)}
+.nav-actions{display:flex;gap:8px}.btn{border:1px solid var(--border);background:var(--panel);color:var(--text);padding:9px 13px;border-radius:10px}.btn:hover{border-color:var(--accent)}.primary{background:var(--accent);border-color:var(--accent);color:#1c1007;font-weight:800}
+main{max-width:1200px;margin:auto;padding:42px 20px 80px}.hero{display:grid;grid-template-columns:1.3fr .7fr;gap:28px;align-items:center;margin-bottom:35px}.eyebrow{color:var(--accent2);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:12px}.hero h1{font-size:clamp(38px,6vw,70px);line-height:1;margin:10px 0 18px}.hero p{font-size:18px;color:var(--muted);max-width:760px}.hero-card{background:linear-gradient(145deg,#1a2542,#11182b);border:1px solid var(--border);border-radius:22px;padding:24px;box-shadow:var(--shadow)}.score{font-size:54px;font-weight:900;color:var(--accent)}.mini{color:var(--muted);font-size:13px}
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0}.progress-wrap{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:15px}.bar{height:9px;background:#222d48;border-radius:99px;overflow:hidden}.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;transition:.4s}
+.workflow{display:flex;gap:10px;overflow:auto;padding:8px 0 18px}.stage-pill{min-width:150px;background:var(--panel);border:1px solid var(--border);padding:14px;border-radius:14px}.stage-pill.active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}.stage-pill.done{border-color:var(--good)}.stage-pill small{display:block;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.card{background:rgba(18,26,46,.94);border:1px solid var(--border);border-radius:18px;padding:22px;box-shadow:0 10px 35px rgba(0,0,0,.15)}.card h2,.card h3{margin-top:0}.tag{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:4px 9px;color:var(--accent2);font-size:12px;margin:3px}
+ul{padding-left:20px}.muted{color:var(--muted)}.tool{padding:12px;background:var(--panel2);border-radius:12px;margin:9px 0}.tool strong{color:var(--accent2)}.prompt{background:#080d19;border:1px dashed #3b4a6b;border-radius:12px;padding:14px;margin:10px 0;font-family:ui-monospace,Consolas,monospace;font-size:13px;color:#d9e3fb}.copy{float:right;font-size:11px;padding:5px 8px}
+.full{grid-column:1/-1}.note{width:100%;min-height:130px;background:#0a1020;color:var(--text);border:1px solid var(--border);border-radius:12px;padding:12px;resize:vertical}
+.tree{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.node{background:var(--panel2);padding:15px;border-radius:13px;border-left:3px solid var(--accent)}.node b{display:block;margin-bottom:5px}
+footer{text-align:center;color:var(--muted);padding:25px}
+@media(max-width:800px){.hero,.grid{grid-template-columns:1fr}.tree{grid-template-columns:1fr}.nav-actions .btn span{display:none}}
+@media print{header,.controls,.nav-actions{display:none!important}body{background:white;color:#111}.card,.hero-card,.progress-wrap{box-shadow:none;border:1px solid #bbb;background:white;color:#111}.muted{color:#555}.prompt{color:#111;background:#f4f4f4}}
+</style>
+</head>
+<body>
+<header><div class="nav">
+<div class="brand">AI <span>Workflow</span> Architect</div>
+<div class="nav-actions"><button class="btn" onclick="toggleTheme()">☀ Theme</button><button class="btn" onclick="window.print()">🖨 Print</button><button class="btn primary" onclick="resetApp()">↻ Reset</button></div>
+</div></header>
+
+<main>
+<section class="hero">
+<div>
+<div class="eyebrow">Day 43 • AI Challenge</div>
+<h1>Design workflows that actually work.</h1>
+<p>A practical end-to-end workflow architecture for <b>Content Creation → Social Media → Personal Brand Growth</b>. Move through every stage, evaluate AI tools, use ready-to-adapt prompts, and identify automation opportunities.</p>
+<div class="controls"><button class="btn primary" onclick="markAll()">✓ Complete workflow</button><button class="btn" onclick="scrollToId('stages')">Explore stages ↓</button></div>
+</div>
+<div class="hero-card"><div class="mini">Workflow readiness</div><div class="score" id="score">0%</div><div class="mini">Progress is saved automatically in your browser.</div></div>
+</section>
+
+<div class="progress-wrap"><div style="display:flex;justify-content:space-between"><b>Workflow progress</b><span id="progressText">0 / 6 stages</span></div><div class="bar"><i id="bar"></i></div></div>
+
+<section id="stages" style="margin-top:28px">
+<h2>Workflow Map</h2>
+<div class="workflow" id="workflow"></div>
+</section>
+
+<section class="grid" id="content"></section>
+
+<section class="card full" style="margin-top:18px">
+<h2>Decision Tree</h2>
+<div class="tree">
+<div class="node"><b>Do you have a clear audience?</b><span class="muted">No → research audience needs. Yes → continue.</span></div>
+<div class="node"><b>Is the idea repeatable?</b><span class="muted">No → improve the content system. Yes → create a template.</span></div>
+<div class="node"><b>Is a task repetitive?</b><span class="muted">Yes → candidate for automation. No → keep human review.</span></div>
+</div>
+</section>
+
+<section class="grid" style="margin-top:18px">
+<div class="card"><h2>Notes</h2><textarea id="notes" class="note" placeholder="Write your workflow observations, ideas, or lessons learned..."></textarea></div>
+<div class="card"><h2>Bookmarks</h2><p class="muted">Save useful stages for later review.</p><div id="bookmarks">No bookmarks yet.</div></div>
+</section>
+</main>
+<footer>AI Workflow Architect • Single-file offline learning application</footer>
+
+<script>
+const stages=[
+{title:"1. Discover",objective:"Define the audience, outcome, constraints, and success metric before creating anything.",tasks:["Identify target audience and their pain points","Study existing content and competitor patterns","Define one measurable objective","Create a concise workflow brief"],tools:[["ChatGPT","Brainstorming, audience research synthesis, structured briefs."],["Claude","Long-form analysis and turning messy research into clear frameworks."],["Perplexity","Fast research and source discovery when online research is allowed."]],alts:"Gemini, Microsoft Copilot, NotebookLM",prompt:"Act as a workflow strategist. Help me define the audience, problem, desired outcome, constraints, and success metric for a personal brand content workflow. Ask only the highest-value questions.",best:"Start with the outcome, not the tool. Keep the first workflow narrow.",mistake:"Choosing AI tools before understanding the process.",output:"One-page workflow brief",time:"20–40 min",tip:"Use one primary KPI so the workflow has a clear definition of success."},
+{title:"2. Plan",objective:"Turn the objective into a repeatable content strategy and production plan.",tasks:["Choose 3–5 content pillars","Select platforms based on audience fit","Create a weekly publishing cadence","Build a reusable content calendar"],tools:[["Notion AI","Useful for structured planning, databases, calendars, and reusable templates."],["ChatGPT","Strong for ideation, content angles, and calendar variations."],["Claude","Useful for developing consistent strategic frameworks and brand voice."]],alts:"ClickUp AI, Microsoft Copilot, Gemini",prompt:"Create a 30-day content plan for a personal brand. Use three content pillars, a clear audience, platform-specific formats, and a realistic publishing cadence. Explain the strategic reason for each pillar.",best:"Design a system you can sustain for months.",mistake:"Creating a huge calendar that cannot realistically be executed.",output:"Content strategy + calendar",time:"30–60 min",tip:"Batch similar planning tasks together."},
+{title:"3. Create",objective:"Produce high-quality drafts while keeping human judgment, expertise, and voice at the center.",tasks:["Generate hooks and angles","Draft posts/scripts","Adapt one idea into multiple formats","Fact-check important claims","Apply brand voice and examples"],tools:[["Claude","Excellent for structured drafting, editing, and maintaining a consistent voice."],["ChatGPT","Flexible ideation, rewriting, and format transformation."],["Canva AI","Useful for turning approved content concepts into visual assets."]],alts:"Gemini, Adobe Firefly, Grammarly",prompt:"Turn this idea into three platform-specific drafts. Keep the original insight and personal voice. Provide a strong hook, useful body, clear takeaway, and a non-pushy CTA. Avoid generic AI phrasing.",best:"Treat AI as a co-pilot, not the source of your expertise.",mistake:"Publishing the first AI draft without review.",output:"Approved content drafts/assets",time:"30–90 min",tip:"Create a reusable prompt template with placeholders for topic, audience, tone, and CTA."},
+{title:"4. Review",objective:"Quality-control content for accuracy, clarity, originality, brand alignment, and risk.",tasks:["Check facts and sources","Remove unsupported claims","Review tone and clarity","Check accessibility and formatting","Confirm the content serves the objective"],tools:[["Claude","Strong for critique, rubric-based review, and identifying gaps."],["ChatGPT","Useful for alternative edits and quality-control checklists."],["Grammarly","Helpful for readability and writing mechanics."]],alts:"LanguageTool, Gemini, Microsoft Editor",prompt:"Review the draft below using five criteria: factual risk, clarity, audience value, brand voice, and CTA quality. Give a score out of 10 for each and provide only actionable improvements.",best:"Separate creation from review so you can critique objectively.",mistake:"Asking AI to approve its own work without a clear rubric.",output:"Final approved version",time:"10–25 min",tip:"Use the same review rubric every time to improve consistency."},
+{title:"5. Publish & Measure",objective:"Publish consistently and use performance data to improve the next cycle.",tasks:["Schedule approved content","Track reach, engagement, saves, leads, or conversions","Compare performance by content pillar","Record lessons learned","Update the next content plan"],tools:[["Buffer","Scheduling and multi-platform publishing workflows."],["Google Analytics","Useful for measuring website traffic and conversion behavior."],["Looker Studio","Useful for building performance dashboards from connected data sources."]],alts:"Hootsuite, Metricool, native platform analytics",prompt:"Analyze this content-performance dataset. Identify the top patterns, weak points, likely reasons, and three experiments for the next 30 days. Do not confuse correlation with causation.",best:"Measure outcomes, not vanity metrics alone.",mistake:"Changing strategy after one low-performing post.",output:"Performance report + experiments",time:"20–45 min weekly",tip:"Review trends over several posts before changing your strategy."},
+{title:"6. Improve & Automate",objective:"Find repetitive work that can be standardized or automated without removing important human judgment.",tasks:["List repetitive workflow steps","Estimate frequency and time cost","Identify inputs/outputs","Create templates and SOPs","Automate low-risk repetitive tasks","Keep human approval for high-impact decisions"],tools:[["Zapier","Connects apps and automates repetitive trigger/action workflows."],["Make","Useful for more visual and complex multi-step automation."],["n8n","Flexible workflow automation with strong control for technical users."]],alts:"Power Automate, IFTTT, native platform automations",prompt:"Analyze this workflow and identify automation candidates. For each candidate, give trigger, inputs, action, output, risk, human approval point, and estimated time saved.",best:"Automate stable processes first.",mistake:"Automating a broken or poorly defined workflow.",output:"Automation roadmap + SOPs",time:"30–90 min",tip:"Start with one low-risk automation and measure the result before scaling."}
+];
+
+let state=JSON.parse(localStorage.getItem("aiWorkflowArchitect")||'{"done":[],"bookmarks":[],"notes":""}');
+
+function render(){
+const wf=document.getElementById("workflow"), content=document.getElementById("content");
+wf.innerHTML=stages.map((s,i)=>`<button class="stage-pill ${state.done.includes(i)?'done':''} ${i===0?'active':''}" onclick="showStage(${i})"><b>${s.title}</b><small>${state.done.includes(i)?'✓ Completed':'Click to explore'}</small></button>`).join("");
+content.innerHTML=stages.map((s,i)=>`
+<article class="card stage" id="stage-${i}">
+<div style="display:flex;justify-content:space-between;gap:10px"><div><span class="tag">Stage ${i+1}</span><h2>${s.title}</h2></div><button class="btn" onclick="bookmark(${i})">${state.bookmarks.includes(i)?'★ Saved':'☆ Save'}</button></div>
+<p class="muted">${s.objective}</p>
+<h3>Objectives & Tasks</h3><ul>${s.tasks.map(x=>`<li>${x}</li>`).join("")}</ul>
+<h3>Recommended AI Tools</h3>${s.tools.map(t=>`<div class="tool"><strong>${t[0]}</strong><br><span class="muted">${t[1]}</span></div>`).join("")}
+<p><b>Alternative tools:</b> <span class="muted">${s.alts}</span></p>
+<h3>Prompt Example <button class="btn copy" onclick="copyPrompt(${i})">Copy</button></h3><div class="prompt" id="prompt-${i}">${s.prompt}</div>
+<div class="grid">
+<div><h3>Best Practices</h3><p>${s.best}</p><h3>Common Mistake</h3><p>${s.mistake}</p></div>
+<div><h3>Expected Output</h3><p>${s.output}</p><h3>Time Estimate</h3><p>${s.time}</p><h3>Efficiency Tip</h3><p>${s.tip}</p></div>
+</div>
+<button class="btn ${state.done.includes(i)?'':'primary'}" onclick="toggleDone(${i})">${state.done.includes(i)?'✓ Stage completed':'Mark stage complete'}</button>
+</article>`).join("");
+updateStats();
+document.getElementById("notes").value=state.notes||"";
+document.getElementById("notes").oninput=e=>{state.notes=e.target.value;save()};
+}
+
+function updateStats(){let p=Math.round(state.done.length/stages.length*100);document.getElementById("score").textContent=p+"%";document.getElementById("progressText").textContent=state.done.length+" / "+stages.length+" stages";document.getElementById("bar").style.width=p+"%";document.getElementById("bookmarks").innerHTML=state.bookmarks.length?state.bookmarks.map(i=>`<div class="tool"><b>${stages[i].title}</b> <button class="btn" onclick="scrollToId('stage-${i}')">Open</button></div>`).join(""):"No bookmarks yet."}
+function toggleDone(i){state.done=state.done.includes(i)?state.done.filter(x=>x!==i):[...state.done,i];save();render()}
+function markAll(){state.done=stages.map((_,i)=>i);save();render()}
+function bookmark(i){state.bookmarks=state.bookmarks.includes(i)?state.bookmarks.filter(x=>x!==i):[...state.bookmarks,i];save();render()}
+function copyPrompt(i){navigator.clipboard?.writeText(stages[i].prompt);alert("Prompt copied to clipboard.")}
+function showStage(i){scrollToId("stage-"+i)}
+function scrollToId(id){document.getElementById(id)?.scrollIntoView({behavior:"smooth",block:"start"})}
+function save(){localStorage.setItem("aiWorkflowArchitect",JSON.stringify(state))}
+function resetApp(){if(confirm("Reset progress, bookmarks, and notes?")){state={done:[],bookmarks:[],notes:""};save();render()}}
+function toggleTheme(){document.body.classList.toggle("light");document.body.style.setProperty("--bg",document.body.classList.contains("light")?"#f4f6fb":"#0b1020");document.body.style.setProperty("--panel",document.body.classList.contains("light")?"#fff":"#121a2e");document.body.style.setProperty("--panel2",document.body.classList.contains("light")?"#eef1f7":"#18223b");document.body.style.setProperty("--text",document.body.classList.contains("light")?"#172033":"#eef3ff");document.body.style.setProperty("--muted",document.body.classList.contains("light")?"#59657c":"#9eabc5")}
+render();
+</script>
+</body>
+</html>
