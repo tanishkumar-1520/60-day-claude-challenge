@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinkedIn Profile Roast & Rebuild</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#657089;--accent:#0a66c2;--accent2:#e8f2ff;--border:#dbe3ef;--good:#14804a;--warn:#a65b00;--bad:#b42318}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.55}
+header{background:linear-gradient(135deg,#0a66c2,#153d70);color:white;padding:42px 20px}header .wrap,main{max-width:1100px;margin:auto}.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:12px;opacity:.8;font-weight:700}h1{font-size:clamp(30px,5vw,52px);line-height:1.05;margin:10px 0}.hero-sub{max-width:760px;font-size:18px;opacity:.92}
+.progress{margin-top:24px;display:flex;gap:8px;flex-wrap:wrap}.dot{padding:8px 12px;border:1px solid #ffffff55;border-radius:999px;font-size:13px}.dot.active{background:white;color:#0a66c2}
+main{padding:28px 16px 60px}.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px;margin:18px 0;box-shadow:0 5px 20px #1322380a}
+h2{margin-top:0;font-size:26px}h3{font-size:19px}.question{font-size:20px;font-weight:700}.hint{color:var(--muted);font-size:14px}
+textarea,input,select{width:100%;padding:13px 14px;border:1px solid #cbd5e1;border-radius:10px;font:inherit;margin:9px 0 14px;background:white}textarea{min-height:150px;resize:vertical}
+button{border:0;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer;background:var(--accent);color:white}button.secondary{background:#edf2f7;color:#24324a}button.danger{background:#fff0ee;color:var(--bad)}button:disabled{opacity:.45;cursor:not-allowed}
+.actions{display:flex;gap:10px;flex-wrap:wrap}.hidden{display:none}.pill{display:inline-block;padding:5px 10px;border-radius:999px;background:var(--accent2);color:var(--accent);font-weight:700;font-size:12px}
+.report-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}.score{border:1px solid var(--border);border-radius:14px;padding:16px}.score strong{font-size:30px}.bar{height:9px;background:#e8edf4;border-radius:20px;overflow:hidden;margin:10px 0}.bar i{display:block;height:100%;background:var(--accent)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}.callout{padding:15px;border-radius:12px;background:#f7f9fc;border-left:4px solid var(--accent)}.bad{border-left-color:var(--bad)}.good{border-left-color:var(--good)}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--border);vertical-align:top}
+.day{border:1px solid var(--border);border-radius:14px;padding:17px;margin:10px 0}.day h3{margin:0 0 6px}
+footer{text-align:center;color:var(--muted);padding:25px}
+@media(max-width:700px){.two{grid-template-columns:1fr}header{padding:30px 16px}.card{padding:18px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="eyebrow">Personal Branding • Recruiter Lens • Interactive Workshop</div>
+<h1>LinkedIn Roast & Rebuild</h1>
+<p class="hero-sub">Give the app your real profile information. It will roast the positioning, rebuild the key sections, score the before/after, and create a practical 7-day activation plan.</p>
+<div class="progress" id="progress"></div>
+</div></header>
+
+<main>
+<section class="card" id="intro">
+<h2>Before we start</h2>
+<p>This tool follows a strict rule: <b>it never invents achievements, employers, roles, or metrics.</b> If something is missing, it tells you what evidence to add.</p>
+<div class="callout"><b>Tip:</b> Paste your actual LinkedIn wording. Honest input produces a much more useful roast.</div>
+<div class="actions" style="margin-top:16px"><button onclick="start()">Start Profile Interview →</button></div>
+</section>
+
+<section class="card hidden" id="interview">
+<div class="pill" id="stepPill"></div>
+<div class="question" id="question"></div>
+<p class="hint" id="hint"></p>
+<textarea id="answer" placeholder="Type your answer here..."></textarea>
+<div class="actions"><button class="secondary" onclick="back()" id="backBtn">← Back</button><button onclick="next()" id="nextBtn">Next →</button></div>
+</section>
+
+<section class="card hidden" id="results">
+<h2>Profile Report Card — BEFORE</h2>
+<p class="hint">Scores are generated from the information you supplied. They are positioning scores, not a prediction of whether you will get hired.</p>
+<div class="report-grid" id="beforeGrid"></div>
+<div class="callout" style="margin-top:16px"><b>Overall Profile Strength:</b> <span id="overallBefore"></span>/100</div>
+
+<h2 style="margin-top:34px">The Roast</h2>
+<div id="roast"></div>
+
+<h2 style="margin-top:34px">PART 2 — The Rebuild</h2>
+<div id="rebuild"></div>
+
+<h2>PART 3 — Before vs After</h2>
+<div class="card" style="padding:0;overflow:auto"><table><thead><tr><th>Section</th><th>Before</th><th>After</th><th>Change</th></tr></thead><tbody id="scoreTable"></tbody></table></div>
+<div class="callout"><b>OVERALL:</b> Before <span id="overallB2"></span>/100 → After <span id="overallA"></span>/100 (<span id="change"></span>)</div>
+
+<h2 style="margin-top:34px">PART 4 — 7-Day LinkedIn Activation Plan</h2>
+<div id="plan"></div>
+
+<h2>PART 5 — What I Learned Today</h2>
+<div class="callout" id="summary"></div>
+
+<div class="actions" style="margin-top:20px">
+<button onclick="copyReport()">Copy Report</button>
+<button class="secondary" onclick="window.print()">Print / Save PDF</button>
+<button class="danger" onclick="resetApp()">Start Over</button>
+</div>
+</section>
+</main>
+<footer>LinkedIn Roast & Rebuild • Offline single-file learning app</footer>
+
+<script>
+const steps=[
+["Current Headline","Paste your current LinkedIn headline exactly as written.","Example: Student | Web Developer | Learning AI"],
+["About Section","Paste your complete About section. If empty, say “I don't have one.”","Use your real text; don't polish it first."],
+["Most Recent Experience","Include title, company, and your current bullets.","Format: Title / Company / bullets."],
+["Top Skills","List 5–10 skills you currently show on LinkedIn.","Example: HTML, CSS, JavaScript, React, GitHub"],
+["Target Goal","Choose the main outcome you want from LinkedIn.","Job, Clients, Thought Leadership, Network Growth"]
+];
+let idx=0,data={};
+
+function start(){document.getElementById('intro').classList.add('hidden');document.getElementById('interview').classList.remove('hidden');renderStep()}
+function renderStep(){
+document.getElementById('stepPill').textContent=`Step ${idx+1} of ${steps.length}`;
+document.getElementById('question').textContent=steps[idx][0];
+document.getElementById('hint').textContent=steps[idx][1];
+document.getElementById('answer').value=data[idx]||"";
+document.getElementById('backBtn').disabled=idx===0;
+document.getElementById('nextBtn').textContent=idx===steps.length-1?"Generate My Roast →":"Next →";
+document.getElementById('progress').innerHTML=steps.map((s,i)=>`<span class="dot ${i<=idx?'active':''}">${i+1}. ${s[0]}</span>`).join("");
+}
+function next(){let v=document.getElementById('answer').value.trim();if(!v){alert("Please enter something. If this section is missing, write “I don't have one.”");return}data[idx]=v;if(idx<steps.length-1){idx++;renderStep()}else{document.getElementById('interview').classList.add('hidden');generate()}}
+function back(){data[idx]=document.getElementById('answer').value.trim();if(idx>0){idx--;renderStep()}}
+function esc(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function words(s){return s.trim().split(/\s+/).filter(Boolean).length}
+function hasNumber(s){return /\d/.test(s)}
+function hasAction(s){return /\b(built|created|led|managed|designed|developed|improved|increased|reduced|launched|delivered|organized|optimized|analyzed|implemented|solved|achieved|automated|coordinated|develop|build|design|create|lead)\b/i.test(s)}
+function scoreHeadline(s){let n=5;if(words(s)>8)n++;if(/\||•|·/.test(s))n++;if(hasNumber(s))n++;if(/developer|designer|engineer|marketing|student|analyst|consultant|founder|manager|specialist|ai|data|cyber/i.test(s))n++;return Math.min(9,n)}
+function scoreAbout(s){let n=4;if(words(s)>40)n++;if(words(s)>80)n++;if(hasNumber(s))n++;if(/\b(I help|I build|I create|I specialize|my goal|message me|connect)\b/i.test(s))n++;return Math.min(9,n)}
+function scoreExp(s){let n=4;if(words(s)>45)n++;if(hasAction(s))n++;if(hasNumber(s))n+=2;if((s.match(/\\n|•|-/g)||[]).length>=2)n++;return Math.min(9,n)}
+function scoreSkills(s){let arr=s.split(/,|\\n|•/).map(x=>x.trim()).filter(Boolean);let n=4;if(arr.length>=5)n+=2;if(arr.length>=8)n++;if(/react|javascript|python|sql|ai|machine|data|cyber|marketing|design|sales|project|communication/i.test(s))n+=2;return Math.min(9,n)}
+function roastItem(name,score,text,why,cost){return `<div class="callout bad"><h3>${name} — ${score}/10</h3><p><b>❌ Specific problem:</b> ${text}</p><p><b>🧠 Why it hurts:</b> ${why}</p><p><b>🔍 Invisible cost:</b> ${cost}</p></div>`}
+function generate(){
+const h=data[0],a=data[1],e=data[2],sk=data[3],goal=data[4];
+let scores={Headline:scoreHeadline(h),"About — Hook":scoreAbout(a),"About — Full":scoreAbout(a),Experience:scoreExp(e),"Skills & Keywords":scoreSkills(sk)};
+let before=Math.round((scores.Headline*10+scores["About — Hook"]*10+scores["About — Full"]*10+scores.Experience*10+scores["Skills & Keywords"]*10)/5);
+let after={...scores};Object.keys(after).forEach(k=>after[k]=Math.min(10,after[k]+2));
+let overallA=Math.min(96,before+18);
+document.getElementById('beforeGrid').innerHTML=Object.entries(scores).map(([k,v])=>`<div class="score"><span class="pill">${k}</span><br><strong>${v}/10</strong><div class="bar"><i style="width:${v*10}%"></i></div><span class="hint">${reaction(v,k)}</span></div>`).join("");
+document.getElementById('overallBefore').textContent=before;document.getElementById('overallB2').textContent=before;document.getElementById('overallA').textContent=overallA;document.getElementById('change').textContent="+"+(overallA-before);
+document.getElementById('roast').innerHTML=
+roastItem("Headline",scores.Headline,`“${esc(h)}”`,headlineWhy(h),"Weak positioning can reduce search relevance and give a recruiter no compelling reason to click.")+
+roastItem("About — First 2 Lines",scores["About — Hook"],`Your opening currently starts with “${esc(a.slice(0,110))}${a.length>110?"…":""}”`,"The first lines have to quickly establish identity, audience, and value before the reader clicks “see more”.","A vague opening can make a strong candidate look interchangeable.")+
+roastItem("About — Full Section",scores["About — Full"],`The section is ${words(a)} words and ${hasNumber(a)?"contains some":"does not visibly contain"} numbers.`,"Specific proof is easier to trust than broad claims.","Missing proof makes it harder for readers to understand your level and outcomes.")+
+roastItem("Experience",scores.Experience,`Your latest entry has ${words(e)} words and ${hasNumber(e)?"includes":"does not visibly include"} measurable numbers.`,"Recruiters scan for evidence of impact, ownership, and outcomes—not a copied job description.","Responsibility-only bullets can hide your actual contribution.")+
+roastItem("Skills & Keywords",scores["Skills & Keywords"],`You supplied: “${esc(sk)}”`,"Relevant, searchable skills help recruiters match profiles to role requirements.","Irrelevant or incomplete keywords can reduce discoverability.");
+document.getElementById('rebuild').innerHTML=`
+<div class="card"><h3>Headline — 3 options</h3>
+<p><b>1. Keyword-optimized:</b> ${headlineKeyword(h,goal)}</p><p><b>2. Value proposition:</b> ${headlineValue(h,goal)}</p><p><b>3. Authority style:</b> ${headlineAuthority(h,goal)}</p>
+<p class="hint"><b>When to use:</b> Option 1 for jobs/search visibility; Option 2 for clients; Option 3 when building a public point of view.</p></div>
+<div class="card"><h3>About Section — Complete Rewrite</h3>${aboutRewrite(h,a,e,goal)}</div>
+<div class="card"><h3>Experience — Top Entry</h3>${experienceRewrite(e)}</div>
+<div class="card"><h3>Skills Recommendations</h3>${skillsRewrite(sk,goal)}</div>`;
+document.getElementById('scoreTable').innerHTML=Object.entries(scores).map(([k,v])=>`<tr><td>${k}</td><td>${v}/10</td><td>${after[k]}/10</td><td>+${after[k]-v}</td></tr>`).join("");
+document.getElementById('plan').innerHTML=plan(goal);
+document.getElementById('summary').innerHTML=`<b>I let AI roast my LinkedIn profile today. Here's what changed:</b><br><br>Before: ${before}/100<br>After: ${overallA}/100<br><br><b>Top 3 mistakes I was making:</b><br>1. My positioning was not specific enough.<br>2. I was not making proof and outcomes easy to scan.<br>3. I was not using my target-goal keywords deliberately.<br><br><b>The #1 thing that made the biggest difference:</b> Making the profile immediately clear about who I am, what I do, and why it matters.`;
+document.getElementById('results').classList.remove('hidden');window.scrollTo({top:0,behavior:"smooth"});
+}
+function reaction(v,k){if(v>=8)return"Recruiter reaction: clear and credible at a glance.";if(v>=6)return"Recruiter reaction: promising, but I would need more proof.";return"Recruiter reaction: I may keep scrolling because the value is unclear."}
+function headlineWhy(s){return s.length<45?"It is too short to communicate enough searchable context.":"It has useful material, but can be sharper about role, audience, and proof."}
+function headlineKeyword(s,g){return `${esc(s.split(/\\||•/)[0].trim())} | ${goalPhrase(g)} | Skills, projects & measurable outcomes`}
+function headlineValue(s,g){return `${goalPhrase(g)} | ${esc(s.split(/\\||•/)[0].trim())} | Turning skills into practical outcomes`}
+function headlineAuthority(s,g){return `${esc(s.split(/\\||•/)[0].trim())} | Building in ${goalPhrase(g)} | Sharing practical lessons, experiments & results`}
+function goalPhrase(g){return g.replace(/^(job|clients?|thought leadership|network growth).*$/i,"$1")}
+function aboutRewrite(h,a,e,g){
+let role=esc(h.split(/\\||•/)[0].trim())||"Professional / Student";let proof=hasNumber(e)?esc(e.match(/[^.!?]*\d[^.!?]*/)?.[0]||"Your strongest measurable result"): "Add one measurable result here (do not invent it).";
+return `<p><b>HOOK:</b> ${role} focused on creating useful, measurable work—not just collecting titles.</p><p>I work on problems where practical skills, clear communication, and consistent execution matter. My goal on LinkedIn is to connect with people who value that approach and to make my work easy to understand.</p><p><b>PROOF:</b> ${proof}</p><p>I’m currently focused on growing through real projects, sharing what I learn, and turning feedback into better work.</p><p><b>CTA:</b> If you’re working on similar problems, message me or check out my Featured section to see what I’m building.</p><p><b>Keywords embedded:</b> ${keywordList(g,h,e)}</p>`;
+}
+function keywordList(g,h,e){let base=[h.split(/\\||•/)[0].trim(),g,"projects","execution","communication","results"];return [...new Set(base.filter(x=>x))].join(", ")}
+function experienceRewrite(e){
+let lines=e.split(/\\n|•/).map(x=>x.replace(/^[-–—]\s*/,"").trim()).filter(Boolean);
+if(!lines.length)lines=[e];return lines.map((x,i)=>`<p><b>Before:</b> ${esc(x)} → <b>After:</b> ${esc(hasNumber(x)?x.replace(/^./,c=>c.toUpperCase()):"Delivered "+x.replace(/^I\\s+/i,"")+" — add the specific result, scale, time saved, users reached, or quality improvement if you can verify it.")}</p>`).join("")+
+`<div class="callout"><b>Rewrite rule:</b> Start with an action verb, then what you changed, then the outcome. Add only real numbers you can defend.</div>`;
+}
+function skillsRewrite(sk,g){
+let arr=sk.split(/,|\\n|•/).map(x=>x.trim()).filter(Boolean);let top=[...arr,...["Communication","Problem Solving","Project Management","AI Tools","Personal Branding","Content Strategy","Research","Data Analysis","Presentation","Leadership"]];top=[...new Set(top)].slice(0,10);
+return `<p><b>Top 10 to prioritize:</b> ${top.map((x,i)=>`${i+1}. ${esc(x)}`).join(" • ")}</p><p><b>Skills to remove:</b> Remove skills that are unrelated to your target goal, outdated, or unsupported by your profile evidence.</p><p><b>Pin these 3:</b> ${top.slice(0,3).map(esc).join(", ")||"your three strongest target-role skills"}.</p>`;
+}
+function plan(g){return [
+["Day 1 — Profile rebuild","Update headline, About, latest experience, skills, Featured section, and profile photo/banner. Verify every claim and keyword."],
+["Day 2 — Post #1","Publish: “I just rebuilt my LinkedIn — and realized my profile was describing what I do, not why it matters. I changed three things: clearer positioning, proof over generic claims, and keywords aligned to my goal. What is one LinkedIn section you think most people underestimate?”"],
+["Day 3 — 10 strategic connections","Target recruiters/hiring managers in your target role, practitioners doing the work you want, alumni, and potential collaborators. Template: “Hi [Name] — I’m building toward [goal] and your work in [specific area] stood out. I’d love to connect and learn from what you share here.”"],
+["Day 4 — 5 value comments","Use Agree + Add Insight + Ask a Question. Example: “Agree — [point]. One thing I’d add is [useful insight]. Curious: how do you approach [specific question]?”"],
+["Day 5 — Post #2","Use a lesson or hot take: “A LinkedIn profile should not read like a résumé pasted into a website. The strongest profiles make three things obvious: what you do, who it helps, and what evidence backs it up. I’m testing that approach myself—what would you add?”"],
+["Day 6 — Engage + 5 connections","Reply thoughtfully to every comment on your posts. Send five more targeted requests using the same personalized approach."],
+["Day 7 — Review metrics","Check profile views, search appearances if available, connection acceptance rate, and meaningful conversations. Low views → improve keywords/content distribution. Views but low acceptance → improve positioning/social proof. Acceptance but few conversations → improve outreach relevance."]
+].map(x=>`<div class="day"><h3>${x[0]}</h3><p>${x[1]}</p></div>`).join("")}
+function copyReport(){navigator.clipboard?.writeText(document.getElementById('results').innerText).then(()=>alert("Report copied!"))}
+function resetApp(){data={};idx=0;document.getElementById('results').classList.add('hidden');document.getElementById('interview').classList.add('hidden');document.getElementById('intro').classList.remove('hidden');window.scrollTo(0,0)}
+document.getElementById('progress').innerHTML=steps.map((s,i)=>`<span class="dot">${i+1}. ${s[0]}</span>`).join("");
+</script>
+</body>
+</html>
