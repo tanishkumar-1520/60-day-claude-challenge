@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision Report | ABTalks 60-Day Challenge</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-main:#0f0f14;--bg-card:#1a1a24;--bg-card-alt:#1e1e2e;
+  --text-primary:#f0f0f5;--text-secondary:#8888a0;
+  --accent-green:#34d399;--accent-red:#f87171;--accent-blue:#60a5fa;
+  --accent-gold:#fbbf24;--accent-purple:#a78bfa;
+  --border-subtle:rgba(255,255,255,.06);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg-main);color:var(--text-primary);font-family:'Inter','Segoe UI',system-ui,sans-serif;line-height:1.7}
+.container{max-width:720px;margin:auto;padding:0 16px 48px}
+header{padding:42px 0 28px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:2px;color:var(--accent-blue);text-transform:uppercase}
+h1{font-size:28px;line-height:1.2;margin:8px 0 4px;font-weight:800}
+.subtitle{font-size:16px;color:var(--text-secondary);margin:0 0 4px}
+.date{font-size:12px;color:var(--text-secondary)}
+.gradient-line{height:3px;margin-top:24px;border-radius:5px;background:linear-gradient(90deg,var(--accent-blue),var(--accent-purple),var(--accent-gold))}
+.card{background:var(--bg-card);border:1px solid var(--border-subtle);border-left:4px solid var(--accent-blue);border-radius:16px;padding:28px;margin:28px 0;box-shadow:0 4px 24px rgba(0,0,0,.3);transition:.2s ease}
+.card:hover{transform:translateY(-2px)}
+.card.green{border-left-color:var(--accent-green)} .card.purple{border-left-color:var(--accent-purple)}
+.card.red{border-left-color:var(--accent-red)} .card.gold{border-left-color:var(--accent-gold);background:var(--bg-card-alt)}
+.section-title{font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin:0 0 18px}
+.blue .section-title{color:var(--accent-blue)} .green .section-title{color:var(--accent-green)}
+.purple .section-title{color:var(--accent-purple)} .red .section-title{color:var(--accent-red)}
+.gold .section-title{color:var(--accent-gold)}
+p{font-size:15px;margin:8px 0;color:var(--text-primary)}
+.muted{color:var(--text-secondary)}
+.option-grid{display:grid;gap:16px}
+.option{padding:18px;border:1px solid var(--border-subtle);border-radius:12px;background:rgba(255,255,255,.025)}
+.option h3{margin:0 0 10px;font-size:18px}
+.label{font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.8px;font-weight:600;margin-top:12px}
+ul{margin:7px 0 0;padding-left:20px}
+li{font-size:14px;margin:4px 0}
+.pill{display:inline-block;padding:4px 9px;border-radius:99px;background:rgba(167,139,250,.12);color:var(--accent-purple);font-size:12px;font-weight:600}
+.matrix-option{margin:20px 0 26px}
+.matrix-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.matrix-head strong{font-size:17px}.total{font-size:18px;font-weight:800}
+.dimension{margin:12px 0}
+.dimension-head{display:flex;justify-content:space-between;font-size:13px;color:var(--text-secondary);margin-bottom:5px}
+.bar{height:28px;background:rgba(255,255,255,.05);border-radius:8px;overflow:hidden}
+.fill{height:100%;width:0;border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:9px;color:#fff;font-size:12px;font-weight:800;animation:grow .8s ease-out forwards}
+.a .fill{background:linear-gradient(90deg,#60a5fa,#3b82f6)}
+.b .fill{background:linear-gradient(90deg,#34d399,#10b981)}
+.c .fill{background:linear-gradient(90deg,#a78bfa,#8b5cf6)}
+@keyframes grow{to{width:var(--score)}}
+.winner{outline:1px solid rgba(251,191,36,.35);box-shadow:0 0 18px rgba(251,191,36,.08)}
+.total-row{margin-top:14px;padding:12px;border-radius:10px;background:rgba(251,191,36,.09);display:flex;justify-content:space-between;color:var(--accent-gold)}
+.premortem{display:grid;gap:16px}.warning{color:var(--accent-red);font-weight:600}.prevention{color:var(--accent-green);font-weight:600}
+.plan{display:grid;gap:9px}.day{padding:12px 14px;background:rgba(255,255,255,.025);border-radius:10px;font-size:14px}.day strong{color:var(--accent-green)}
+.verdict{padding:34px 28px}.winner-name{font-size:32px;font-weight:800;color:var(--accent-gold);line-height:1.15;margin:8px 0 14px}
+.hard-truth{font-style:italic;color:var(--text-secondary);margin-top:18px}
+.share-grid{display:flex;gap:14px;flex-wrap:wrap}
+.share-card{flex:1 1 190px;aspect-ratio:1/1;padding:16px;border-radius:12px;background:var(--bg-card-alt);border:1px solid var(--border-subtle);display:flex;flex-direction:column}
+.share-card h3{font-size:13px;color:var(--accent-gold);text-transform:uppercase;letter-spacing:.7px;margin:0 0 12px}
+.share-card .big{font-size:22px;font-weight:800;margin:auto 0}
+.watermark{margin-top:auto;font-size:9px;color:var(--text-secondary);text-align:right}
+footer{text-align:center;color:var(--text-secondary);font-size:12px;margin-top:40px}
+@media(max-width:600px){
+ .container{padding:0 10px 36px}.card{padding:20px 16px;margin:22px 0}
+ h1{font-size:26px}.section-title{font-size:18px}p{font-size:14px}
+ .matrix-head{align-items:flex-start;gap:10px;flex-direction:column}
+ .dimension-head{display:block}.dimension-head span{display:block;margin-bottom:4px}
+ .share-grid{display:block}.share-card{margin-bottom:14px;aspect-ratio:auto;min-height:190px}
+ .winner-name{font-size:28px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+  <div class="eyebrow">ABTalks • 60-Day Challenge • Day 45</div>
+  <h1>DECISION REPORT</h1>
+  <p class="subtitle">A clear framework for a tough decision</p>
+  <div class="date" id="reportDate"></div>
+  <div class="gradient-line"></div>
+</header>
+
+<section class="card blue">
+<h2 class="section-title">1 — The Real Decision</h2>
+<p><strong>Actual decision:</strong> This report is a reusable decision dashboard template. Enter the real decision, options, goal, timeline, gut choice, fear, and reversibility before relying on the analysis.</p>
+<p><strong>Real trade-off:</strong> Choosing between available options means balancing upside, safety, growth, stress, alignment, reversibility, and regret.</p>
+<p><strong>Why it's emotionally hard:</strong> Tough decisions become harder when uncertainty and the fear of getting one important thing wrong compete with what your gut already says.</p>
+</section>
+
+<section class="card green">
+<h2 class="section-title">2 — The Case for Each Option</h2>
+<div class="option-grid">
+  <article class="option">
+    <h3>Option A</h3>
+    <div class="label">Strongest case FOR</div><p>Use this card to capture the strongest evidence in favor of Option A from the user's answers.</p>
+    <div class="label">Hidden upside</div><p>Record the upside that is easy to overlook.</p>
+    <div class="label">Biggest weakness</div><p>Record the clearest downside without softening it.</p>
+    <div class="label">Best if you value</div><p><span class="pill">The priorities you stated</span></p>
+  </article>
+  <article class="option">
+    <h3>Option B</h3>
+    <div class="label">Strongest case FOR</div><p>Use this card to capture the strongest evidence in favor of Option B from the user's answers.</p>
+    <div class="label">Hidden upside</div><p>Record the upside that is easy to overlook.</p>
+    <div class="label">Biggest weakness</div><p>Record the clearest downside without softening it.</p>
+    <div class="label">Best if you value</div><p><span class="pill">The priorities you stated</span></p>
+  </article>
+</div>
+</section>
+
+<section class="card purple">
+<h2 class="section-title">3 — Assumption Buster</h2>
+<div class="label">3 assumptions you may be making</div>
+<ul><li>You may be treating an uncertain outcome as more predictable than it really is.</li><li>You may be assuming that avoiding change automatically reduces risk.</li><li>You may be assuming the decision is permanent when parts of it may be reversible.</li></ul>
+<div class="label">2 biases at play</div>
+<ul><li><strong>Loss aversion:</strong> potential losses can feel heavier than equivalent gains.</li><li><strong>Status quo bias:</strong> the current path can feel safer simply because it is familiar.</li></ul>
+<div class="label">1 thing you may be ignoring</div>
+<p>Your stated goal should matter more than the discomfort created by uncertainty.</p>
+</section>
+
+<section class="card blue">
+<h2 class="section-title">4 — Decision Matrix</h2>
+<p class="muted">Template scores below are intentionally conservative placeholders. Replace them with scores justified by the user's actual situation.</p>
+<div class="matrix-option a winner">
+<div class="matrix-head"><strong>Option A</strong><span class="total">56 / 70</span></div>
+<div class="dimension"><div class="dimension-head"><span>Life/Career Upside</span><span>8/10</span></div><div class="bar"><div class="fill" style="--score:80%;animation-delay:.1s">8</div></div></div>
+<div class="dimension"><div class="dimension-head"><span>Financial Safety</span><span>8/10</span></div><div class="bar"><div class="fill" style="--score:80%;animation-delay:.2s">8</div></div></div>
+<div class="dimension"><div class="dimension-head"><span>Growth &amp; Learning</span><span>9/10</span></div><div class="bar"><div class="fill" style="--score:90%;animation-delay:.3s">9</div></div></div>
+<div class="dimension"><div class="dimension-head"><span>Stress Level</span><span>7/10</span></div><div class="bar"><div class="fill" style="--score:70%;animation-delay:.4s">7</div></div></div>
+<div class="dimension"><div class="dimension-head"><span>Reversibility</span><span>8/10</span></div><div class="bar"><div class="fill" style="--score:80%;animation-delay:.5s">8</div></div></div>
+<div class="dimension"><div class="dimension-head"><span>Long-term Alignment</span><span>8/10</span></div><div class="bar"><div class="fill" style="--score:80%;animation-delay:.6s">8</div></div></div>
+<div class="dimension"><div class="dimension-head"><span>Regret Risk</span><span>8/10</span></div><div class="bar"><div class="fill" style="--score:80%;animation-delay:.7s">8</div></div></div>
+<div class="total-row"><span>Winning template score</span><strong>56 / 70</strong></div>
+</div>
+<div class="matrix-option b">
+<div class="matrix-head"><strong>Option B</strong><span class="total">51 / 70</span></div>
+<div class="dimension"><div class="dimension-head"><span>Life/Career Upside</span><span>8/10</span></div><div class="bar"><div class="fill" style="--score:80%;animation-delay:.8s">8</div></div></div>
+<div class="dimension"><div class="dimension-head"><span>Financial Safety</span><span>7/10</span></div><div class="bar"><div class="fill" style="--score:70%;animation-delay:.9s">7</div></div></div>
+<div class="dimension"><div class="dimension-head"><span>Growth &amp; Learning</span><span>7/10</span></div><div class="bar"><div class="fill" style="--score:70%;animation-delay:1s">7</div></div></div>
+<div class="dimension"><div class="dimension-head"><span>Stress Level</span><span>6/10</span></div><div class="bar"><div class="fill" style="--score:60%;animation-delay:1.1s">6</div></div></div>
+<div class="dimension"><div class="dimension-head"><span>Reversibility</span><span>7/10</span></div><div class="bar"><div class="fill" style="--score:70%;animation-delay:1.2s">7</div></div></div>
+<div class="dimension"><div class="dimension-head"><span>Long-term Alignment</span><span>8/10</span></div><div class="bar"><div class="fill" style="--score:80%;animation-delay:1.3s">8</div></div></div>
+<div class="dimension"><div class="dimension-head"><span>Regret Risk</span><span>8/10</span></div><div class="bar"><div class="fill" style="--score:80%;animation-delay:1.4s">8</div></div></div>
+<div class="total-row"><span>Comparison score</span><strong>51 / 70</strong></div>
+</div>
+</section>
+
+<section class="card red">
+<h2 class="section-title">5 — Premortem</h2>
+<div class="premortem">
+<div class="option"><h3>Option A — If it failed after 12 months</h3><ul><li>The underlying assumption proved wrong.</li><li>The expected upside did not materialize.</li><li>The cost or stress became larger than expected.</li></ul><p class="warning">Early warning: progress or evidence consistently moves away from the original goal.</p><p class="prevention">Prevention: define a measurable checkpoint before committing fully.</p></div>
+<div class="option"><h3>Option B — If it failed after 12 months</h3><ul><li>The option did not deliver the expected outcome.</li><li>The trade-off became harder to tolerate.</li><li>A better alternative appeared but was ignored.</li></ul><p class="warning">Early warning: repeated signals contradict the original reasoning.</p><p class="prevention">Prevention: schedule a deliberate review point and define an exit condition.</p></div>
+</div>
+</section>
+
+<section class="card green">
+<h2 class="section-title">6 — 7-Day Test Plan</h2>
+<div class="plan">
+<div class="day"><strong>Day 1:</strong> Research the highest-impact unknown.</div>
+<div class="day"><strong>Day 2:</strong> Verify the most important assumption with evidence.</div>
+<div class="day"><strong>Day 3:</strong> Run one small, low-risk experiment for Option A.</div>
+<div class="day"><strong>Day 4:</strong> Run one small, low-risk experiment for Option B.</div>
+<div class="day"><strong>Day 5:</strong> Have one honest conversation with someone who can challenge your thinking.</div>
+<div class="day"><strong>Day 6:</strong> Ask what evidence would make you change your mind.</div>
+<div class="day"><strong>Day 7:</strong> Decide using the goal, evidence, reversibility, and pre-defined criteria—not fear alone.</div>
+</div>
+</section>
+
+<section class="card gold verdict">
+<h2 class="section-title">7 — The Verdict</h2>
+<div class="winner-name">Option A</div>
+<p><strong>Why it wins:</strong> In this template, Option A has the higher matrix score and stronger balance across upside, safety, learning, and reversibility.</p>
+<p>It should remain the winner only while those scores are supported by the user's real evidence and priorities.</p>
+<p><strong>What could flip it:</strong> New information that materially changes the financial safety, stress, alignment, or reversibility scores.</p>
+<p class="hard-truth">Hard truth: a decision cannot become risk-free just because you analyze it longer.</p>
+</section>
+
+<section class="card gold">
+<h2 class="section-title">8 — Shareable Cards</h2>
+<div class="share-grid">
+<article class="share-card">
+<h3>Matrix Summary</h3>
+<div class="big">Option A — 56/70<br><span class="muted">Option B — 51/70</span></div>
+<div class="watermark">Built with Claude AI</div>
+</article>
+<article class="share-card">
+<h3>Verdict</h3>
+<div class="big">Option A<br><span class="muted">Higher overall decision score.</span></div>
+<div class="watermark">Built with Claude AI</div>
+</article>
+<article class="share-card">
+<h3>LinkedIn Hook</h3>
+<div class="big">Clarity beats certainty.</div>
+<p class="muted">Good decisions are not about removing every risk. They are about making the trade-offs visible.</p>
+<p class="muted">Test assumptions. Challenge bias. Decide with evidence.</p>
+<p class="muted">CTA: What framework do you use for tough decisions?</p>
+<div class="watermark">Built with Claude AI</div>
+</article>
+</div>
+</section>
+
+<footer>Built with Claude AI | ABTalks 60-Day Challenge</footer>
+</div>
+<script>
+document.getElementById('reportDate').textContent =
+  new Intl.DateTimeFormat('en-IN',{day:'2-digit',month:'short',year:'numeric'}).format(new Date());
+</script>
+</body>
+</html>
