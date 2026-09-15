@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Autonomous Agent Studio</title>
+<style>
+:root{--bg:#090b10;--panel:#11151d;--panel2:#171c25;--text:#eef2f7;--muted:#9aa5b5;--line:#28313d;--accent:#d97757;--good:#53c98b;--warn:#eab866;--bad:#ef6b73;--blue:#72a7ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0%,#1c1820 0,#090b10 42%);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,textarea,select{font:inherit}button{cursor:pointer;border:0}.wrap{max-width:1450px;margin:auto;padding:24px}
+header{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:20px}.brand{display:flex;gap:14px;align-items:center}.logo{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#f0a078);display:grid;place-items:center;color:#18100d;font-weight:900;font-size:22px;box-shadow:0 10px 35px #d9775730}h1{font-size:clamp(24px,4vw,38px);margin:0}header p{margin:4px 0;color:var(--muted)}.status{padding:9px 13px;border:1px solid var(--line);border-radius:999px;color:var(--muted);background:#ffffff05}
+.grid{display:grid;grid-template-columns:380px 1fr;gap:18px}.card{background:linear-gradient(180deg,#141922e8,#0f131ae8);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 12px 40px #0005}.card h2{font-size:16px;margin:0 0 14px}.stack{display:grid;gap:12px}label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}input,textarea,select{width:100%;background:#0b0f15;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:11px;outline:none}textarea{min-height:105px;resize:vertical}input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{padding:10px 14px;border-radius:10px;background:#202733;color:var(--text);border:1px solid var(--line)}.primary{background:var(--accent);color:#160f0c;border-color:transparent;font-weight:800}.danger{background:#3a1b20;color:#ffb4b9}.btn:disabled{opacity:.45;cursor:not-allowed}
+.agents{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.agent{padding:10px;border:1px solid var(--line);border-radius:11px;background:#0d1118}.agent b{font-size:13px}.agent small{display:block;color:var(--muted);margin-top:4px}.agent.active{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:#d9775712}
+.main{display:grid;gap:18px}.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.metric{padding:14px;border:1px solid var(--line);border-radius:13px;background:#0d1117}.metric strong{display:block;font-size:23px}.metric span{font-size:11px;color:var(--muted)}
+.flow{display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;padding:14px}.node{padding:11px 13px;border-radius:12px;background:#171d26;border:1px solid var(--line);font-size:12px;text-align:center}.node.active{border-color:var(--accent);background:#d9775715;transform:translateY(-2px)}.arrow{color:var(--muted)}.loopnote{text-align:center;color:var(--muted);font-size:12px;margin-top:3px}.outputs{display:grid;grid-template-columns:1fr 1fr;gap:12px}.output{background:#0a0e14;border:1px solid var(--line);border-radius:12px;padding:12px;min-height:150px}.output h3{font-size:13px;margin:0 0 8px}.output pre{white-space:pre-wrap;word-break:break-word;color:#cbd4df;font:12px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;margin:0;max-height:280px;overflow:auto}
+.history{width:100%;border-collapse:collapse;font-size:12px}.history th,.history td{padding:9px;border-bottom:1px solid var(--line);text-align:left}.history th{color:var(--muted)}.log{max-height:220px;overflow:auto;font:12px/1.6 ui-monospace,monospace}.log div{padding:4px 0;border-bottom:1px dashed #ffffff0b}.good{color:var(--good)}.warn{color:var(--warn)}.bad{color:var(--bad)}.muted{color:var(--muted)}.small{font-size:12px;color:var(--muted);line-height:1.5}.summary{line-height:1.6;background:#0b1016;border-left:3px solid var(--accent);padding:13px;border-radius:9px}
+@media(max-width:1050px){.grid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(3,1fr)}}@media(max-width:650px){.wrap{padding:13px}.metrics{grid-template-columns:repeat(2,1fr)}.outputs{grid-template-columns:1fr}.agents{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column}.flow{justify-content:flex-start}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="brand"><div class="logo">A</div><div><h1>Autonomous Agent Studio</h1><p>Plan • Execute • Evaluate • Critique • Improve • Remember • Review</p></div></div>
+  <div class="status" id="status">● Ready</div>
+</header>
+
+<div class="grid">
+<aside class="stack">
+<section class="card">
+<h2>1 · Workflow Setup</h2>
+<div class="stack">
+<div><label>Goal</label><textarea id="goal" placeholder="Example: Create a concise launch plan for a new productivity app.">Create a concise launch plan for a new productivity app.</textarea></div>
+<div><label>Success rubric</label><textarea id="rubric">Useful, accurate, specific, actionable, clear and complete. Score from 0 to 100.</textarea></div>
+<div><label>Target score</label><input id="target" type="number" min="1" max="100" value="85"></div>
+<div><label>Required plateau delta</label><input id="delta" type="number" min="0" max="20" step="0.5" value="2"></div>
+<div><label>API key</label><input id="key" type="password" placeholder="Anthropic API key (required by the API)"></div>
+<div class="actions"><button class="btn primary" id="start">Start Autonomous Run</button><button class="btn danger" id="stop" disabled>Stop</button></div>
+<p class="small">Browser-side calls to the Anthropic Messages API require an API key and suitable browser CORS/account configuration. Never publish a secret key in a public repository.</p>
+</div>
+</section>
+
+<section class="card">
+<h2>2 · Agent Responsibilities</h2>
+<div class="agents" id="agents"></div>
+</section>
+</aside>
+
+<main class="main">
+<section class="card">
+<div class="metrics">
+<div class="metric"><strong id="round">—</strong><span>Current round</span></div>
+<div class="metric"><strong id="score">—</strong><span>Latest score</span></div>
+<div class="metric"><strong id="improve">—</strong><span>Latest delta</span></div>
+<div class="metric"><strong id="retries">0</strong><span>Retries</span></div>
+<div class="metric"><strong id="stopReason">Running</strong><span>Stop condition</span></div>
+</div>
+<div class="flow" id="flow"></div>
+<div class="loopnote">Evaluator → Critic → Improver returns to Evaluator until plateau, threshold, or safety cap fires.</div>
+</section>
+
+<section class="card">
+<h2>Live Activity Log</h2><div class="log" id="log"><div class="muted">Waiting for a workflow...</div></div>
+</section>
+
+<section class="card">
+<h2>Intermediate Outputs</h2>
+<div class="outputs">
+<div class="output"><h3>Current Draft</h3><pre id="draft">—</pre></div>
+<div class="output"><h3>Evaluation Report</h3><pre id="evaluation">—</pre></div>
+<div class="output"><h3>Critique</h3><pre id="critique">—</pre></div>
+<div class="output"><h3>Memory Update</h3><pre id="memory">—</pre></div>
+</div>
+</section>
+
+<section class="card">
+<h2>Iteration History</h2>
+<div style="overflow:auto"><table class="history"><thead><tr><th>Round</th><th>Score</th><th>Delta</th><th>Critique</th></tr></thead><tbody id="history"></tbody></table></div>
+</section>
+
+<section class="card">
+<h2>Final Summary</h2>
+<div class="summary" id="summary">No run completed yet.</div>
+</section>
+
+<section class="card">
+<h2>Architecture Overview</h2>
+<p class="small">Planner defines the approach. Executor creates the working draft. Evaluator measures the draft against the rubric. Critic identifies weaknesses. Improver receives the prior evaluation and critique and creates the next draft. Memory Manager records durable lessons. Safety Monitor can stop unsafe execution. Final Reviewer receives the terminal state after a stop condition fires.</p>
+<p class="small">The stop check runs after each improvement pass in this order: <b>plateau → threshold → hard safety cap</b>. The loop is intentionally open-ended at runtime rather than using a preselected round count.</p>
+</section>
+</main>
+</div>
+</div>
+
+<script>
+const AGENTS=[
+["Planner","Turns the goal into an actionable plan."],
+["Executor","Produces the first working draft."],
+["Evaluator","Scores the current draft against the rubric."],
+["Critic","Finds concrete weaknesses and risks."],
+["Improver","Uses evaluation + critique to improve the draft."],
+["Memory Manager","Carries useful lessons across rounds."],
+["Safety Monitor","Checks for unsafe or invalid execution."],
+["Final Reviewer","Reviews the terminal result after stopping."]
+];
+const $=id=>document.getElementById(id);
+const state={running:false,stop:false,round:0,retries:0,history:[],draft:"",evaluation:"",critique:"",memory:"",stopReason:""};
+$("agents").innerHTML=AGENTS.map(a=>`<div class="agent" id="agent-${a[0].replaceAll(" ","")}"><b>${a[0]}</b><small>${a[1]}</small></div>`).join("");
+$("flow").innerHTML=["Planner","Executor","Evaluator","Critic","Improver","Final Reviewer"].map((x,i)=>`<div class="node" id="node-${x.replaceAll(" ","")}">${x}</div>${i<5?'<span class="arrow">→</span>':''}`).join("");
+function log(msg,cls=""){const d=document.createElement("div");d.className=cls;d.textContent=`[${new Date().toLocaleTimeString()}] ${msg}`;$("log").appendChild(d);$("log").scrollTop=$("log").scrollHeight}
+function active(name){document.querySelectorAll(".agent,.node").forEach(x=>x.classList.remove("active"));let a=$("agent-"+name.replaceAll(" ",""));let n=$("node-"+name.replaceAll(" ",""));if(a)a.classList.add("active");if(n)n.classList.add("active")}
+function setStatus(s){$("status").textContent="● "+s}
+function delay(ms){return new Promise(r=>setTimeout(r,ms))}
+async function api(system,user,retries=2){
+  const key=$("key").value.trim();
+  if(!key) throw new Error("Anthropic API key is required for a live API call.");
+  for(let attempt=0;attempt<=retries;attempt++){
+    if(state.stop) throw new Error("Run stopped by user.");
+    try{
+      const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":key,"anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1800,system, messages:[{role:"user",content:user}]})});
+      if(!res.ok){let t=await res.text();throw new Error(`API ${res.status}: ${t.slice(0,300)}`)}
+      const data=await res.json();
+      return (data.content||[]).filter(x=>x.type==="text").map(x=>x.text).join("\n").trim();
+    }catch(e){if(attempt===retries)throw e;state.retries++;$("retries").textContent=state.retries;log(`Retry ${attempt+1}: ${e.message}`,"warn");await delay(800*(attempt+1))}
+  }
+}
+function parseScore(text){
+  const patterns=[/score\\s*[:=-]\\s*(\\d{1,3})/i,/rating\\s*[:=-]\\s*(\\d{1,3})/i,/\\b(\\d{1,3})\\s*\\/\\s*100\\b/i];
+  for(const p of patterns){const m=text.match(p);if(m)return Math.max(0,Math.min(100,Number(m[1])));}
+  return null;
+}
+async function callAgent(name,system,user){
+  active(name);setStatus(name+" active");log(name+" is running a live model call.");
+  const out=await api(system,user);await delay(120);return out;
+}
+async function run(){
+ state.running=true;state.stop=false;state.round=0;state.retries=0;state.history=[];state.stopReason="";$("start").disabled=true;$("stop").disabled=false;$("history").innerHTML="";$("log").innerHTML="";$("summary").textContent="Running...";
+ $("retries").textContent=0;$("stopReason").textContent="Running";setStatus("Starting");
+ const goal=$("goal").value.trim(),rubric=$("rubric").value.trim(),target=Number($("target").value),plateauDelta=Number($("delta").value);
+ try{
+   const plan=await callAgent("Planner","You are the Planner agent. Produce a practical, ordered plan for the objective. Be concise and operational. Do not invent execution results.",`Objective: ${goal}\nSuccess rubric: ${rubric}`);
+   const first=await callAgent("Executor","You are the Executor agent. Execute the plan by producing the best useful draft. Return only the draft plus brief assumptions if needed.",`Objective: ${goal}\nPlan:\n${plan}`);
+   state.draft=first;$("draft").textContent=first;
+   state.memory=await callAgent("Memory Manager","You are a Memory Manager. Extract reusable lessons, constraints, and decisions from the workflow. Do not change the draft.",`Goal: ${goal}\nPlan:\n${plan}\nInitial draft:\n${first}`);
+   $("memory").textContent=state.memory;
+   await callAgent("Safety Monitor","You are a Safety Monitor. Check this workflow for obvious unsafe, prohibited, or invalid instructions. Return SAFE or STOP followed by a short explanation.",`Goal: ${goal}\nDraft:\n${state.draft}`);
+   while(true){
+     if(state.stop) throw new Error("Run stopped by user.");
+     state.round++;$("round").textContent=`Round ${state.round} — checking stop condition…`;
+     state.evaluation=await callAgent("Evaluator","You are the Evaluator. Evaluate the current draft strictly against the rubric. Give a score from 0 to 100 and explain the score. Your score must be explicit as 'Score: N/100'.","Goal: "+goal+"\nRubric: "+rubric+"\nCurrent draft:\n"+state.draft+"\nPrevious memory:\n"+state.memory);
+     $("evaluation").textContent=state.evaluation;
+     const score=parseScore(state.evaluation);
+     if(score===null) throw new Error("Evaluator response did not contain a parseable score.");
+     const prev=state.history.length?state.history[state.history.length-1].score:null;
+     const delta=prev===null?0:score-prev;
+     state.critique=await callAgent("Critic","You are the Critic. Identify the most important weaknesses, omissions, risks, and concrete fixes in the current draft using the evaluation. Do not produce canned feedback.","Evaluation:\n"+state.evaluation+"\nCurrent draft:\n"+state.draft);
+     $("critique").textContent=state.critique;
+     const improved=await callAgent("Improver","You are the Improver. Create a materially better version of the draft. You must use the prior evaluation and critique. Preserve correct information and improve weak areas. Return the complete revised draft.","Goal: "+goal+"\nRubric: "+rubric+"\nPrior draft:\n"+state.draft+"\nPrior evaluation:\n"+state.evaluation+"\nCritique:\n"+state.critique+"\nMemory:\n"+state.memory);
+     state.draft=improved;$("draft").textContent=improved;
+     state.memory=await callAgent("Memory Manager","You are the Memory Manager. Update the running memory with durable lessons from this round. Focus on what should influence the next evaluation/improvement.","Round evaluation:\n"+state.evaluation+"\nCritique:\n"+state.critique+"\nNew draft:\n"+state.draft);
+     $("memory").textContent=state.memory;
+     state.history.push({round:state.round,score,delta,critique:state.critique});
+     renderHistory(score,delta);
+     $("score").textContent=score;$("improve").textContent=(delta>=0?"+":"")+delta;
+     log(`Round ${state.round}: evaluator score ${score}/100; delta ${delta}.`);
+     let reason=null;
+     if(state.history.length>=3 && state.history.slice(-2).every(x=>x.delta<plateauDelta)) reason=`Plateau: improvement was below ${plateauDelta} for 2 consecutive rounds.`;
+     if(score>=target) reason=`Threshold: score ${score}/100 crossed target ${target}/100.`;
+     if(state.round>=20) reason="Hard iteration cap: safety fallback reached at 20 rounds.";
+     if(reason){state.stopReason=reason;$("stopReason").textContent=reason.split(":")[0];log("Stop condition fired: "+reason,"warn");break}
+     $("round").textContent=`Round ${state.round+1} — continuing open-ended loop…`;
+   }
+   const final=await callAgent("Final Reviewer","You are the Final Reviewer. Review the terminal draft and summarize quality, remaining risks, strengths, and whether the stated goal was met. Name the stop reason exactly.","Goal: "+goal+"\nStop reason: "+state.stopReason+"\nFinal draft:\n"+state.draft+"\nLast evaluation:\n"+state.evaluation);
+   $("summary").innerHTML=`<b>Stop reason:</b> ${escapeHtml(state.stopReason)}<br><br><b>Final Reviewer:</b><br>${escapeHtml(final).replaceAll("\n","<br>")}<br><br><b>Execution stats:</b> ${state.round} evaluation/improvement round(s), ${state.retries} retry/retries.`;
+   setStatus("Completed");active("Final Reviewer");log("Final review completed.","good");
+ }catch(e){setStatus("Failed");$("stopReason").textContent="Error";$("summary").textContent="Execution failed: "+e.message;log("Execution failed: "+e.message,"bad")}
+ finally{state.running=false;$("start").disabled=false;$("stop").disabled=true}
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function renderHistory(score,delta){$("history").insertAdjacentHTML("beforeend",`<tr><td>${state.round}</td><td>${score}/100</td><td>${delta>=0?"+":""}${delta}</td><td>${escapeHtml(state.critique.slice(0,180))}${state.critique.length>180?"…":""}</td></tr>`)}
+$("start").onclick=()=>run();
+$("stop").onclick=()=>{state.stop=true;log("Stop requested by user.","warn");setStatus("Stopping…")};
+</script>
+</body>
+</html>
