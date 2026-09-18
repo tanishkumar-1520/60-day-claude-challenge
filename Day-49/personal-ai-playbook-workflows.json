@@ -1,0 +1,27 @@
+{
+  "app": "Personal AI Playbook",
+  "version": 1,
+  "workflows": [
+    {
+      "id": 1,
+      "name": "Frontend Project Builder",
+      "category": "Development",
+      "favorite": true,
+      "prompt": "Act as a senior frontend developer. Build a complete responsive project, explain key decisions, test common edge cases, and return clean maintainable code."
+    },
+    {
+      "id": 2,
+      "name": "Debugging Workflow",
+      "category": "Development",
+      "favorite": false,
+      "prompt": "Act as a senior JavaScript debugger. Identify the root cause, explain it clearly, propose the smallest safe fix, and verify likely edge cases."
+    },
+    {
+      "id": 3,
+      "name": "Learning Workflow",
+      "category": "Learning",
+      "favorite": false,
+      "prompt": "Act as a practical coding mentor. Explain the concept simply, give a small example, then provide a short exercise and quality checklist."
+    }
+  ]
+}

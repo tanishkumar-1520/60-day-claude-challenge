@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Personal AI Playbook — Day 49</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;background:#0b1020;color:#eef2ff;line-height:1.5}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:10px 14px;background:#f97316;color:white}
+.app{display:grid;grid-template-columns:230px 1fr;min-height:100vh}.side{padding:22px;border-right:1px solid #26304a;background:#0e1528;position:sticky;top:0;height:100vh}
+.logo{font-size:21px;font-weight:800;margin-bottom:25px}.logo span{color:#fb923c}.nav button{display:block;width:100%;text-align:left;background:transparent;color:#aeb9d4;margin:5px 0}.nav button.active,.nav button:hover{background:#1b2742;color:#fff}
+.main{padding:30px;max-width:1250px;width:100%;margin:auto}.top{display:flex;justify-content:space-between;gap:15px;align-items:center}.muted{color:#9aa7c4}.hero{padding:25px;border:1px solid #273452;border-radius:18px;background:linear-gradient(135deg,#17213a,#10172a);margin:22px 0}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:#111a2e;border:1px solid #273452;border-radius:15px;padding:18px}.card h3{margin-top:0}.pill{display:inline-block;padding:4px 9px;border-radius:99px;background:#243454;color:#ffbd8a;font-size:12px}
+.section{display:none}.section.show{display:block}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}.toolbar input,.toolbar select,.field input,.field textarea,.field select{background:#0b1222;color:#fff;border:1px solid #30405f;border-radius:9px;padding:10px;width:100%}
+.workflow{display:flex;justify-content:space-between;gap:15px;align-items:center}.actions{display:flex;gap:7px;flex-wrap:wrap}.actions button{padding:7px 10px}
+.builder{display:grid;grid-template-columns:290px 1fr;gap:18px}.picker,.canvas{background:#111a2e;border:1px solid #273452;border-radius:15px;padding:18px}.block{border:1px solid #33476d;border-radius:12px;padding:13px;margin:10px 0;background:#131e35}.block small{display:block;color:#9aa7c4;margin:5px 0 10px}.remove{background:#33405b}.preview{white-space:pre-wrap;background:#090e19;padding:15px;border-radius:10px;min-height:180px}
+.help{position:fixed;right:20px;bottom:20px;border-radius:50%;width:48px;height:48px;font-size:20px}.modal{position:fixed;inset:0;background:#0009;display:none;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.modalbox{max-width:650px;background:#111a2e;border:1px solid #3a4b70;border-radius:18px;padding:25px}
+.toast{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);background:#1f2c48;padding:10px 16px;border-radius:10px;display:none}
+@media(max-width:850px){.app{grid-template-columns:1fr}.side{height:auto;position:relative}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}.grid{grid-template-columns:1fr}.builder{grid-template-columns:1fr}.main{padding:18px}.top{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side"><div class="logo">Personal <span>AI</span> Playbook</div><div class="nav">
+<button class="active" onclick="show('dashboard',this)">Dashboard</button><button onclick="show('workflows',this)">Workflow Library</button><button onclick="show('prompt',this)">Prompt Builder</button><button onclick="show('loop',this)">Loop Builder</button><button onclick="show('backup',this)">Import / Export</button>
+</div><p class="muted" style="font-size:12px;margin-top:25px">Day 49 • Frontend Developer profile</p></aside>
+<main class="main">
+<div class="top"><div><h1 id="title">Personal AI Playbook</h1><p class="muted">Reusable AI workflow systems for coding, debugging, learning, and project delivery.</p></div><button onclick="openHelp()">What is this?</button></div>
+
+<div id="dashboard" class="section show">
+<div class="hero"><span class="pill">PERSONALIZED PLAYBOOK</span><h2>Turn repeated AI tasks into reusable systems.</h2><p>This tool organizes workflows, helps you assemble prompts block-by-block, and turns prompts into improvement loops. Use the library to save your own workflows and Import / Export to back them up.</p><button onclick="show('prompt')">Build a Prompt</button></div>
+<div class="grid"><div class="card"><h3>Workflow Library</h3><p class="muted">Save, search, favorite, duplicate, and reuse your AI workflows.</p></div><div class="card"><h3>Prompt Builder</h3><p class="muted">Combine role, objective, context, constraints, strategy, format, tone, examples, and quality checks.</p></div><div class="card"><h3>Loop Builder</h3><p class="muted">Define evaluation, improvement, stopping, and safety rules for iterative AI work.</p></div></div>
+</div>
+
+<div id="workflows" class="section"><h2>Workflow Library</h2><p class="muted">Your saved AI workflows, searchable and reusable.</p><div class="toolbar"><input id="search" placeholder="Search workflows..." oninput="render()"><select id="filter" onchange="render()"><option value="all">All</option><option value="favorite">Favorites</option></select><button onclick="newWorkflow()">Add Workflow</button></div><div id="list"></div></div>
+
+<div id="prompt" class="section"><h2>Prompt Builder</h2><p class="muted">Add building blocks to explain exactly how an AI should perform a task.</p><div class="builder"><div class="picker" id="picker"></div><div class="canvas"><h3>Assembled Prompt</h3><div id="blocks"></div><h3>Live Preview</h3><div class="preview" id="preview"></div><div class="toolbar"><button onclick="copyText('preview')">Copy Prompt</button><button onclick="savePrompt()">Save Workflow</button><button onclick="clearBlocks()">Clear</button></div></div></div></div>
+
+<div id="loop" class="section"><h2>Loop Builder</h2><p class="muted">Convert a normal prompt into an autonomous improvement loop with explicit boundaries.</p><div class="card"><div class="field"><label>Goal<br><input id="lg" value="Build and refine a high-quality frontend project"></label></div><div class="field"><label>Evaluation criteria<br><textarea id="le">Correctness, usability, responsive design, maintainability</textarea></label></div><div class="field"><label>Improvement strategy<br><textarea id="li">Inspect the result, identify the highest-impact issue, fix it, then re-check all criteria.</textarea></label></div><div class="field"><label>Stop conditions<br><textarea id="ls">Stop when all criteria pass, or after 5 iterations.</textarea></label></div><div class="field"><label>Safety rules<br><textarea id="lr">Do not make destructive changes without confirmation. Preserve working functionality.</textarea></label></div><button onclick="buildLoop()">Generate Loop Prompt</button><h3>Result</h3><div class="preview" id="loopout"></div><button onclick="copyText('loopout')">Copy Loop Prompt</button></div></div>
+
+<div id="backup" class="section"><h2>Import / Export</h2><p class="muted">Export your workflow library as a JSON backup or import one later.</p><div class="card"><button onclick="exportData()">Export Workflow JSON</button> <label style="display:inline-block;background:#33405b;padding:10px 14px;border-radius:10px;cursor:pointer">Import JSON <input type="file" id="imp" accept=".json" hidden onchange="importData(event)"></label></div></div>
+</main></div>
+<button class="help" onclick="openHelp()">?</button><div class="modal" id="modal"><div class="modalbox"><h2>What is Personal AI Playbook?</h2><p>It is a local, offline workspace for turning repeated AI tasks into reusable workflows. <b>Workflow Library</b> stores your systems. <b>Prompt Builder</b> assembles prompts from explained building blocks. <b>Loop Builder</b> adds evaluation, improvement, stop, and safety rules. <b>Import / Export</b> backs up your saved workflows.</p><button onclick="closeHelp()">Got it</button></div></div><div class="toast" id="toast"></div>
+<script>
+const defs=[
+['Role','Defines who the AI should act as so its perspective and expertise are clear.','Act as a senior frontend developer and code reviewer.'],
+['Objective','States the exact outcome you want instead of a vague request.','Build a complete, responsive solution for the requested task.'],
+['Context','Supplies project details the AI needs to make useful decisions.','The project is a single-file HTML/CSS/JavaScript application for learning.'],
+['Constraints','Sets boundaries such as tools, scope, compatibility, or forbidden approaches.','Use clean, maintainable code and avoid unnecessary dependencies.'],
+['Reasoning strategy','Explains how the AI should evaluate the task before producing the result.','Break the task into steps, check edge cases, then implement and verify.'],
+['Output format','Defines the structure of the final answer or artifact.','Return the complete solution with clear sections and usable code.'],
+['Tone','Controls communication style for explanations and documentation.','Clear, practical, concise, and beginner-friendly.'],
+['Examples','Provides a concrete pattern that helps the AI match your intended result.','Include a short example of the expected workflow or UI behavior.'],
+['Quality checks','Defines tests the AI should perform before considering the work complete.','Check functionality, responsiveness, readability, and common edge cases.']
+];
+let blocks=[];let workflows=JSON.parse(localStorage.getItem('pai-workflows')||'[]');
+if(!workflows.length) workflows=[{id:1,name:'Frontend Project Builder',category:'Development',favorite:true,prompt:'Act as a senior frontend developer. Build a complete responsive project, explain key decisions, test common edge cases, and return clean maintainable code.'}];
+function show(id,btn){document.querySelectorAll('.section').forEach(x=>x.classList.remove('show'));document.getElementById(id).classList.add('show');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active'); if(id==='workflows')render();if(id==='prompt')renderPicker();}
+function renderPicker(){picker.innerHTML='<h3>Building Blocks</h3>'+defs.map((d,i)=>`<div class="block"><b>${d[0]}</b><small>${d[1]}</small><button onclick="addBlock(${i})">Add</button></div>`).join('')}
+function addBlock(i){blocks.push({i,text:defs[i][2]});renderBlocks()}
+function renderBlocks(){document.getElementById('blocks').innerHTML=blocks.map((b,n)=>`<div class="block"><b>${defs[b.i][0]}</b><small>${defs[b.i][1]}</small><textarea oninput="blocks[${n}].text=this.value;updatePreview()">${b.text}</textarea><button class="remove" onclick="blocks.splice(${n},1);renderBlocks()">Remove</button></div>`).join('');updatePreview()}
+function updatePreview(){document.getElementById('preview').textContent=blocks.map(b=>defs[b.i][0].toUpperCase()+':\\n'+b.text).join('\\n\\n')}
+function clearBlocks(){blocks=[];renderBlocks()}
+function savePrompt(){let p=document.getElementById('preview').textContent;if(!p.trim())return toast('Add blocks first');workflows.push({id:Date.now(),name:'Custom AI Workflow',category:'Development',favorite:false,prompt:p});persist();toast('Workflow saved')}
+function render(){let q=(search.value||'').toLowerCase(), f=filter.value;let arr=workflows.filter(w=>(w.name+w.category+w.prompt).toLowerCase().includes(q)&&(f==='all'||w.favorite));list.innerHTML=arr.map(w=>`<div class="card workflow"><div><span class="pill">${w.category}</span><h3>${w.name}</h3><p class="muted">${w.prompt.slice(0,180)}</p></div><div class="actions"><button onclick="copyString(${JSON.stringify(w.prompt)})">Copy</button><button onclick="fav(${w.id})">★</button><button onclick="dup(${w.id})">Duplicate</button><button class="remove" onclick="del(${w.id})">Delete</button></div></div>`).join('')||'<div class="card"><p>No workflows found. Create one with Prompt Builder.</p></div>'}
+function persist(){localStorage.setItem('pai-workflows',JSON.stringify(workflows));render()}
+function fav(id){let w=workflows.find(x=>x.id===id);w.favorite=!w.favorite;persist()}
+function dup(id){let w=workflows.find(x=>x.id===id);workflows.push({...w,id:Date.now(),name:w.name+' Copy',favorite:false});persist()}
+function del(id){workflows=workflows.filter(x=>x.id!==id);persist()}
+function newWorkflow(){show('prompt');clearBlocks()}
+function buildLoop(){let p=`AUTONOMOUS AI IMPROVEMENT LOOP\\n\\nGOAL:\\n${lg.value}\\n\\nEVALUATION CRITERIA:\\n${le.value}\\n\\nIMPROVEMENT STRATEGY:\\n${li.value}\\n\\nSTOP CONDITIONS:\\n${ls.value}\\n\\nSAFETY RULES:\\n${lr.value}\\n\\nLOOP INSTRUCTION:\\nComplete the goal, evaluate the result against every criterion, make the highest-impact safe improvement, and repeat. Respect all stop conditions and safety rules.`;loopout.textContent=p}
+function copyText(id){copyString(document.getElementById(id).textContent)}
+function copyString(t){navigator.clipboard.writeText(t);toast('Copied to clipboard')}
+function toast(t){let x=document.getElementById('toast');x.textContent=t;x.style.display='block';setTimeout(()=>x.style.display='none',1800)}
+function exportData(){let blob=new Blob([JSON.stringify({app:'Personal AI Playbook',version:1,workflows},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='personal-ai-playbook-workflows.json';a.click()}
+function importData(e){let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(Array.isArray(d.workflows)){workflows=d.workflows;persist();toast('Backup imported')}}catch{toast('Invalid JSON')}};r.readAsText(e.target.files[0])}
+function openHelp(){modal.classList.add('open')}function closeHelp(){modal.classList.remove('open')}
+renderPicker();render();buildLoop();
+</script></body></html>
