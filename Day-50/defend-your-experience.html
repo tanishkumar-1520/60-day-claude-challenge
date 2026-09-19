@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Defend Your Experience — Day 50</title>
+<style>
+:root{--bg:#07090d;--panel:#10141c;--panel2:#151b25;--text:#f5f7fb;--muted:#98a2b3;--accent:#ff6b35;--accent2:#ff9b71;--line:#26303d;--good:#42d392;--warn:#ffc857;--bad:#ff6678;--shadow:0 18px 60px #0008}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 15% 0,#24130c 0,transparent 32%),radial-gradient(circle at 90% 20%,#111c2d 0,transparent 28%),var(--bg);color:var(--text);font:15px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1250px;margin:auto;padding:24px}
+header{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:12px 0 28px}.brand{display:flex;align-items:center;gap:12px}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#ffb38f);display:grid;place-items:center;font-weight:900;color:#111}.brand b{font-size:18px}.brand span{display:block;color:var(--muted);font-size:12px}.top-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:#171d27;color:var(--text);padding:10px 14px;border-radius:11px}.btn:hover{border-color:#566173}.btn.primary{background:var(--accent);border-color:var(--accent);color:#160b07;font-weight:800}.btn.ghost{background:transparent}
+.hero{display:grid;grid-template-columns:1.5fr .9fr;gap:18px;margin-bottom:18px}.card{background:linear-gradient(180deg,#121721ee,#0d1118ee);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow)}h1{font-size:clamp(32px,5vw,58px);line-height:1.02;margin:0 0 16px;letter-spacing:-2px}h2{margin:0 0 10px}h3{margin:0 0 8px}.accent{color:var(--accent)}.muted{color:var(--muted)}.eyebrow{color:var(--accent2);font-weight:800;text-transform:uppercase;letter-spacing:1.6px;font-size:12px}.hero p{color:#c0c7d3;max-width:720px;font-size:16px}.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{background:#0b0f15;border:1px solid var(--line);padding:16px;border-radius:14px}.stat strong{display:block;font-size:30px}.layout{display:grid;grid-template-columns:250px 1fr;gap:18px}.side{position:sticky;top:14px;height:max-content}.nav button{display:block;width:100%;text-align:left;margin:6px 0;background:transparent;border:1px solid transparent;color:#adb6c4;padding:12px;border-radius:10px}.nav button.active,.nav button:hover{background:#171e28;border-color:var(--line);color:white}.progress{height:8px;background:#252c37;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#ffb38f);transition:.4s}.section{display:none}.section.active{display:block}.drop{border:1.5px dashed #4a5565;border-radius:16px;padding:34px;text-align:center;background:#0b0f15}.drop.drag{border-color:var(--accent);background:#1a120e}.file-name{margin-top:12px;color:var(--accent2);font-weight:700}.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{padding:7px 10px;border-radius:99px;background:#1a202a;border:1px solid var(--line);color:#cdd3dd;font-size:12px}.choice-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.choice{padding:15px;border:1px solid var(--line);background:#0c1118;border-radius:13px;text-align:left;color:white}.choice.selected{border-color:var(--accent);background:#1c130f}.chat{min-height:380px;max-height:520px;overflow:auto;padding:6px}.bubble{max-width:82%;padding:13px 15px;border-radius:15px;margin:10px 0;white-space:pre-wrap}.ai{background:#171d27;border:1px solid var(--line)}.me{background:#5a2b18;margin-left:auto}.composer{display:flex;gap:8px;margin-top:12px}.composer textarea{flex:1;resize:vertical;min-height:70px;background:#090d13;border:1px solid var(--line);color:white;border-radius:13px;padding:12px}.meter{display:flex;align-items:center;gap:12px}.meter .ring{width:82px;height:82px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--accent) var(--score,45%),#252c37 0);position:relative}.ring:after{content:"";position:absolute;inset:8px;border-radius:50%;background:#10141c}.ring b{position:relative;z-index:1}.bars{display:grid;gap:10px}.bar{display:grid;grid-template-columns:130px 1fr 42px;align-items:center;gap:10px}.bar i{height:9px;background:#252c37;border-radius:99px;overflow:hidden}.bar i b{display:block;height:100%;background:var(--accent);width:50%}.report-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.mini{padding:16px;border:1px solid var(--line);border-radius:15px;background:#0c1118}.mini strong{font-size:24px}.good{color:var(--good)}.warn{color:var(--warn)}.bad{color:var(--bad)}.claim{border-left:3px solid var(--accent);padding:12px 15px;background:#0d1219;margin:10px 0;border-radius:0 12px 12px 0}.empty{text-align:center;padding:55px 20px;color:var(--muted)}.toast{position:fixed;right:20px;bottom:20px;background:#171d27;border:1px solid var(--line);padding:12px 16px;border-radius:12px;display:none;z-index:20}.modal{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:20px;z-index:10}.modal .card{max-width:700px;width:100%;max-height:85vh;overflow:auto}.small{font-size:12px}.footer{padding:30px 0;color:#697384;text-align:center}
+@media(max-width:850px){.hero,.layout{grid-template-columns:1fr}.side{position:static}.choice-grid,.report-grid{grid-template-columns:1fr}.bar{grid-template-columns:95px 1fr 35px}.app{padding:14px}header{align-items:flex-start;flex-direction:column}.top-actions{width:100%}.top-actions .btn{flex:1}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand"><div class="logo">D</div><div><b>Defend Your Experience</b><span>Day 50 • Adaptive interview simulator</span></div></div>
+  <div class="top-actions"><button class="btn" id="historyBtn">History</button><button class="btn" id="exportBtn">Export Session</button><button class="btn ghost" id="resetBtn">Reset</button></div>
+</header>
+
+<div class="hero">
+  <div class="card">
+    <div class="eyebrow">Don't just tell your story. Defend it.</div>
+    <h1>Turn every claim into <span class="accent">evidence.</span></h1>
+    <p>Upload a resume, portfolio, bio, project or experience document. Then face an adaptive skeptical interviewer that follows your answers, probes vague claims and builds a Defense Report.</p>
+    <div class="chips"><span class="chip">Adaptive follow-ups</span><span class="chip">Evidence gaps</span><span class="chip">Confidence tracking</span><span class="chip">Local session history</span></div>
+  </div>
+  <div class="card"><h3>Session readiness</h3><div class="meter"><div class="ring" id="ring"><b id="scoreNum">0%</b></div><div><b id="readinessLabel">Not started</b><div class="muted small">Complete challenges to raise your evidence score.</div></div></div><hr style="border:0;border-top:1px solid var(--line);margin:20px 0"><div class="stat-grid"><div class="stat"><span class="muted">Claims</span><strong id="claimCount">0</strong></div><div class="stat"><span class="muted">Challenges</span><strong id="challengeCount">0</strong></div></div></div>
+</div>
+
+<div class="layout">
+<aside class="side card">
+  <div class="muted small">SESSION PROGRESS</div><div class="progress" style="margin:8px 0 16px"><i id="progress"></i></div>
+  <nav class="nav">
+    <button class="active" data-tab="start">01 · Start</button>
+    <button data-tab="interview">02 · Defend</button>
+    <button data-tab="dashboard">03 · Dashboard</button>
+    <button data-tab="report">04 · Defense Report</button>
+  </nav>
+</aside>
+
+<main>
+<section class="section active" id="start">
+  <div class="card">
+    <h2>1. Define what you're defending</h2>
+    <p class="muted">Choose the preparation context. The simulator will adapt its skepticism and question style.</p>
+    <div class="choice-grid" id="contextChoices">
+      <button class="choice selected" data-value="job interview">Job interview</button>
+      <button class="choice" data-value="promotion">Promotion / performance review</button>
+      <button class="choice" data-value="freelance/client">Freelance or client pitch</button>
+      <button class="choice" data-value="portfolio/project review">Portfolio / project review</button>
+    </div>
+    <br><label class="muted small">Audience you expect</label>
+    <select id="audience" style="width:100%;padding:12px;background:#0b0f15;color:white;border:1px solid var(--line);border-radius:11px;margin:7px 0 18px">
+      <option>Recruiter + hiring manager</option><option>Technical interviewer</option><option>Founder / client</option><option>Academic / research panel</option><option>Senior leadership</option>
+    </select>
+    <h3>2. Upload your experience</h3>
+    <div class="drop" id="drop"><b>Drag & drop a file here</b><div class="muted">or choose a PDF, DOCX, TXT, MD, HTML or JSON file</div><button class="btn primary" id="pick" style="margin-top:14px">Choose file</button><input id="file" type="file" hidden accept=".pdf,.doc,.docx,.txt,.md,.html,.json,.csv"></div>
+    <div class="file-name" id="fileName">No document loaded — you can also paste experience below.</div>
+    <textarea id="paste" placeholder="Paste resume/project/experience text here if needed..." style="width:100%;min-height:150px;background:#090d13;color:white;border:1px solid var(--line);border-radius:13px;padding:13px;margin-top:12px"></textarea>
+    <div style="display:flex;justify-content:flex-end;margin-top:12px"><button class="btn primary" id="startBtn">Analyze & Start →</button></div>
+    <div class="muted small" style="margin-top:14px">Privacy note: selected text is kept in this browser session. In an Anthropic HTML Artifact, AI requests use the artifact environment's authenticated Messages API. Local-browser mode includes a deterministic fallback so the app remains usable without credentials.</div>
+  </div>
+</section>
+
+<section class="section" id="interview">
+  <div class="card"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div><div class="eyebrow">Adaptive defense</div><h2>Face the claim</h2></div><span class="chip" id="roundChip">Round 1</span></div>
+    <div class="chat" id="chat"></div>
+    <div class="composer"><textarea id="answer" placeholder="Answer with specifics: what you did, how you did it, evidence, result, and what you learned."></textarea><button class="btn primary" id="sendBtn">Defend</button></div>
+    <div class="muted small" style="margin-top:8px">Tip: vague answers trigger deeper skepticism. You can mention metrics, constraints, decisions, trade-offs, artifacts or lessons.</div>
+  </div>
+</section>
+
+<section class="section" id="dashboard">
+  <div class="card"><div class="eyebrow">Live analysis</div><h2>Defense Dashboard</h2><div class="bars" id="bars"></div></div>
+  <br><div class="report-grid"><div class="mini"><span class="muted">Evidence strength</span><strong id="evidenceVal">0%</strong><div class="small muted">Specific proof behind claims</div></div><div class="mini"><span class="muted">Specificity</span><strong id="specificityVal">0%</strong><div class="small muted">Concrete actions and outcomes</div></div><div class="mini"><span class="muted">Confidence</span><strong id="confidenceVal">0%</strong><div class="small muted">Clarity under pressure</div></div></div>
+</section>
+
+<section class="section" id="report">
+  <div class="card"><div class="eyebrow">Final output</div><h2>Defense Report</h2><p class="muted">A practical review of what you defended well and what still needs evidence.</p><div id="reportBody"></div><button class="btn primary" id="reportExport">Export Defense Report</button></div>
+</section>
+</main></div>
+<div class="footer">Defend Your Experience • Day 50 • Built as a single self-contained HTML application</div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="modal" id="historyModal"><div class="card"><h2>Session History</h2><div id="history"></div><button class="btn" id="closeHistory">Close</button></div></div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const state={context:'job interview',audience:'Recruiter + hiring manager',doc:'',claims:[],answers:[],round:0,scores:{evidence:0,specificity:0,confidence:0},started:false};
+const fallbackClaims=[
+ {title:'Impact claim',text:'Identify one experience where your work produced a measurable or observable result.'},
+ {title:'Ownership claim',text:'Explain exactly what you personally owned, rather than what the team did.'},
+ {title:'Decision claim',text:'Defend one important decision and the alternatives you considered.'},
+ {title:'Challenge claim',text:'Describe the hardest constraint, failure, or disagreement and how you responded.'}
+];
+function toast(t){let x=$('#toast');x.textContent=t;x.style.display='block';setTimeout(()=>x.style.display='none',2300)}
+function save(){localStorage.setItem('defend50',JSON.stringify({...state,updated:new Date().toISOString()}))}
+function load(){try{let x=JSON.parse(localStorage.getItem('defend50'));if(x){Object.assign(state,x);updateUI()}}catch(e){}}
+function tab(id){$$('.section').forEach(x=>x.classList.toggle('active',x.id===id));$$('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));let n={start:0,interview:34,dashboard:67,report:100}[id];$('#progress').style.width=n+'%'}
+$$('.nav button').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
+$$('#contextChoices .choice').forEach(b=>b.onclick=()=>{$$('#contextChoices .choice').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');state.context=b.dataset.value});
+$('#audience').onchange=e=>state.audience=e.target.value;
+$('#pick').onclick=()=>$('#file').click();
+$('#file').onchange=e=>handleFile(e.target.files[0]);
+['dragover','dragenter'].forEach(ev=>$('#drop').addEventListener(ev,e=>{e.preventDefault();$('#drop').classList.add('drag')}));
+['dragleave','drop'].forEach(ev=>$('#drop').addEventListener(ev,e=>{e.preventDefault();$('#drop').classList.remove('drag')}));
+$('#drop').addEventListener('drop',e=>handleFile(e.dataTransfer.files[0]));
+function handleFile(f){if(!f)return;state.fileName=f.name;$('#fileName').textContent=f.name+' selected';let r=new FileReader();r.onload=()=>{state.doc=String(r.result).slice(0,18000);toast('Document loaded');};r.readAsText(f)}
+function extractClaims(text){let lines=text.split(/\n+/).map(x=>x.trim()).filter(x=>x.length>35);let verbs=/\b(led|built|created|designed|developed|managed|improved|increased|reduced|launched|analyzed|implemented|delivered|research|worked)\b/i;let c=lines.filter(x=>verbs.test(x)).slice(0,8).map((x,i)=>({title:'Experience claim '+(i+1),text:x}));return c.length?c:fallbackClaims}
+$('#startBtn').onclick=()=>{let pasted=$('#paste').value.trim();if(pasted)state.doc=pasted;if(!state.doc){state.claims=fallbackClaims}else state.claims=extractClaims(state.doc);state.started=true;state.round=0;state.answers=[];state.scores={evidence:0,specificity:0,confidence:0};renderChat();tab('interview');save()};
+function addBubble(who,text){let d=document.createElement('div');d.className='bubble '+(who==='me'?'me':'ai');d.textContent=text;$('#chat').appendChild(d);$('#chat').scrollTop=$('#chat').scrollHeight}
+function question(){let c=state.claims[state.round%state.claims.length];let q;
+if(state.round===0)q=`Let's start with "${c.text}". What did YOU personally do, step by step, and what evidence proves the result?`;
+else if(state.round%4===1)q=`You said "${state.answers[state.answers.length-1]?.text?.slice(0,140)||c.text}". What would you show an interviewer to verify that claim?`;
+else if(state.round%4===2)q=`What was the hardest constraint or trade-off in that experience, and why did you choose your approach over the obvious alternative?`;
+else q=`If I challenged your contribution and said the outcome may have happened without you, how would you defend your specific impact?`;
+return q}
+function renderChat(){ $('#chat').innerHTML='';addBubble('ai',`You are preparing for a ${state.context} with a ${state.audience}. I will challenge claims from your experience one at a time. Be specific; I will follow your evidence.`);addBubble('ai',question());$('#roundChip').textContent='Round 1'}
+async function callAnthropic(prompt){
+try{
+ if(typeof window.anthropic==='undefined'||!window.anthropic.messages)return null;
+ let r=await window.anthropic.messages.create({model:'claude-sonnet-4-5',max_tokens:500,messages:[{role:'user',content:prompt}]});
+ return r?.content?.map(x=>x.text||'').join('')||null;
+}catch(e){return null}}
+$('#sendBtn').onclick=async()=>{let a=$('#answer').value.trim();if(!a||!state.started)return;addBubble('me',a);state.answers.push({text:a,round:state.round});$('#answer').value='';let specificity=Math.min(100,35+(a.length>100?25:0)+(/\d|%|\$|metric|result|because|decision|artifact|customer|user/i.test(a)?30:0));let evidence=Math.min(100,30+(/\d|%|before|after|proof|report|link|screenshot|data|feedback/i.test(a)?45:0)+(a.length>160?20:0));let confidence=Math.min(100,30+(a.length>80?25:0)+(a.split(/[.!?]/).length>3?25:0));state.scores.specificity=Math.round((state.scores.specificity*state.round+specificity)/(state.round+1));state.scores.evidence=Math.round((state.scores.evidence*state.round+evidence)/(state.round+1));state.scores.confidence=Math.round((state.scores.confidence*state.round+confidence)/(state.round+1));state.round++;let prompt=`Act as a skeptical senior interviewer. Context: ${state.context}; audience: ${state.audience}. Experience claims: ${JSON.stringify(state.claims)}. User's latest answer: ${a}. Ask exactly ONE concise personalized follow-up question. Focus on a missing evidence, ownership, trade-off, metric, constraint, or inconsistency. Do not give generic interview advice.`;let ai=await callAnthropic(prompt);addBubble('ai',ai||question());$('#roundChip').textContent='Round '+(state.round+1);updateUI();save();if(state.round>=6)toast('Six rounds completed — review your Defense Report.')};
+function updateUI(){let s=Math.round((state.scores.evidence+state.scores.specificity+state.scores.confidence)/3);$('#scoreNum').textContent=s+'%';$('#ring').style.setProperty('--score',s+'%');$('#readinessLabel').textContent=s<40?'Needs evidence':s<70?'Building defense':'Interview-ready practice';$('#claimCount').textContent=state.claims.length;$('#challengeCount').textContent=state.round;$('#evidenceVal').textContent=state.scores.evidence+'%';$('#specificityVal').textContent=state.scores.specificity+'%';$('#confidenceVal').textContent=state.scores.confidence+'%';$('#bars').innerHTML=['Evidence','Specificity','Confidence'].map((n,i)=>{let v=[state.scores.evidence,state.scores.specificity,state.scores.confidence][i];return `<div class="bar"><span>${n}</span><i><b style="width:${v}%"></b></i><b>${v}%</b></div>`}).join('');renderReport();$('#progress').style.width=(state.started?Math.min(100,34+state.round*6):0)+'%' }
+function renderReport(){let s=state.scores, weak=[];if(s.evidence<70)weak.push('Attach or remember concrete proof: metrics, artifacts, feedback, screenshots, links, or before/after evidence.');if(s.specificity<70)weak.push('Separate your personal contribution from team activity and explain the exact sequence of actions you took.');if(s.confidence<70)weak.push('Practice a 60–90 second answer structure: context → action → evidence → result → learning.');if(!weak.length)weak.push('Keep pressure-testing your strongest claims with alternative explanations and counterfactuals.');$('#reportBody').innerHTML=`<div class="report-grid"><div class="mini"><span class="muted">Evidence</span><strong>${s.evidence}%</strong></div><div class="mini"><span class="muted">Specificity</span><strong>${s.specificity}%</strong></div><div class="mini"><span class="muted">Confidence</span><strong>${s.confidence}%</strong></div></div><h3 style="margin-top:24px">Experiences reviewed</h3>${state.claims.map((c,i)=>`<div class="claim"><b>${c.title}</b><div class="muted">${c.text}</div></div>`).join('')}<h3 style="margin-top:24px">Priority improvements</h3>${weak.map(x=>`<div class="claim"><span class="warn">●</span> ${x}</div>`).join('')}<h3>Practice plan</h3><ol><li>Pick your three highest-value claims.</li><li>Write one proof point and one trade-off for each.</li><li>Practice defending ownership without using “we” unless the team action matters.</li><li>Run another six-round session and compare the exported reports.</li></ol>`}
+$('#reportExport').onclick=()=>download('defense-report-day50.md',`# Defend Your Experience — Defense Report\n\nContext: ${state.context}\nAudience: ${state.audience}\n\n## Scores\n- Evidence: ${state.scores.evidence}%\n- Specificity: ${state.scores.specificity}%\n- Confidence: ${state.scores.confidence}%\n\n## Claims reviewed\n${state.claims.map(c=>`- **${c.title}:** ${c.text}`).join('\n')}\n\n## Sessions\nChallenges completed: ${state.round}\n\n## Improvement focus\n- Add concrete evidence and measurable outcomes.\n- Make personal ownership explicit.\n- Explain decisions, trade-offs and constraints.\n- Practice concise evidence-first answers.\n`); 
+function download(name,text){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'text/plain'}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+$('#exportBtn').onclick=()=>download('defend-your-experience-session.json',JSON.stringify(state,null,2));
+$('#historyBtn').onclick=()=>{$('#historyModal').style.display='flex';let h=localStorage.getItem('defend50');$('#history').innerHTML=h?`<pre style="white-space:pre-wrap;color:#cbd2dc">${h}</pre>`:'<div class="empty">No saved session yet.</div>'};$('#closeHistory').onclick=()=>$('#historyModal').style.display='none';
+$('#resetBtn').onclick=()=>{if(confirm('Reset this session?')){localStorage.removeItem('defend50');location.reload()}};
+load();updateUI();
+</script>
+</body>
+</html>
